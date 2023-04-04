@@ -6,7 +6,7 @@ import { Platform } from 'react-native';
 import { Text, useThemeColor } from './Themed';
 
 export const ExternalLink = ({ hrefAttrs, children, ...props }: React.ComponentProps<typeof Link>) => {
-  const color = useThemeColor({}, 'text');
+  const color = useThemeColor('text');
 
   return (
     <Link

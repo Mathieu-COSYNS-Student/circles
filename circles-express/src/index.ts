@@ -2,10 +2,14 @@ import path from 'path';
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
+import http from 'http';
+import { Server } from 'ws';
 import { getConfig } from './config';
-import * as trpcExpress from '@trpc/server/adapters/express';
-import { appRouter } from './api/router';
+import { createExpressMiddleware } from '@trpc/server/adapters/express';
+import { applyWSSHandler } from '@trpc/server/adapters/ws';
+import { AppRouter, appRouter } from './api/router';
 import { createTRPCContext } from './api/trpc';
+import { getHealthStatus } from './api/routers/health';
 
 dotenv.config({ path: path.join(__dirname, '.env') });
 const config = getConfig();
@@ -21,12 +25,32 @@ app.use(
 
 app.use(
   '/trpc',
-  trpcExpress.createExpressMiddleware({
+  createExpressMiddleware({
     router: appRouter,
     createContext: createTRPCContext,
   })
 );
 
-app.listen(config.PORT, () => {
-  console.log(`Server is listening on port: ${config.PORT}`);
+app.get('/health', (req, res) => {
+  res.send(getHealthStatus());
+});
+
+const server = http.createServer(app);
+
+const wss = new Server({ server });
+const wsHandler = applyWSSHandler<AppRouter>({
+  wss,
+  router: appRouter,
+  createContext: createTRPCContext,
+});
+
+server.listen(config.PORT, () => {
+  console.log(`Server is listening at http://localhost:${config.PORT}`);
+});
+server.on('error', console.error);
+
+process.on('SIGTERM', () => {
+  wsHandler.broadcastReconnectNotification();
+  wss.close();
+  server.close();
 });
