@@ -3,7 +3,7 @@ import { Redirect, Stack } from 'expo-router';
 
 function AppStack() {
   const { isSignedIn } = useUser();
-  if (!isSignedIn) return <Redirect href="/sign-in" />;
+  if (!isSignedIn) return <Redirect href="/onboarding" />;
 
   return (
     <SignedIn>

@@ -28,7 +28,6 @@ const CirclesListPage = () => {
       <Text>A Random number for a websocket : {randomNumber?.toFixed(5)}</Text>
       <Button title="Sign out" onPress={onSignOutPress} />
       <Button title="Dev" onPress={() => router.push('/dev')} />
-      <Button title="Onboarding" onPress={() => router.push('/OnboardingScreen')} />
     </>
   );
 };
