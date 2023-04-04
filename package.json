@@ -1,0 +1,14 @@
+{
+  "name": "circles",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "circles-*"
+  ],
+  "scripts": {
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "prettier": "^2.8.7"
+  }
+}
