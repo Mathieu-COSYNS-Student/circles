@@ -22,6 +22,7 @@ const CirclesListPage = () => {
       {getAllCirclesQuery.data && <CirclesList circles={getAllCirclesQuery.data} />}
       <Text>A Random number for a websocket : {randomNumber?.toFixed(5)}</Text>
       <Button title="Dev" onPress={() => router.push('/dev')} />
+      <Button title="Onboarding" onPress={() => router.push('/OnboardingScreen')} />
     </>
   );
 };

@@ -52,6 +52,8 @@ function RootLayoutNav() {
 function AppStack() {
   return (
     <Stack>
+      <Stack.Screen name="OnboardingScreen" options={{ title: 'Circles Onboarding', headerShown: false }} />
+      <Stack.Screen name="LoginScreen" options={{ title: 'Circles Login', headerShown: false }} />
       <Stack.Screen name="index" options={{ title: 'Circles' }} />
       <Stack.Screen name="circles/[id]/index" options={{ title: 'Circles Messages' }} />
       <Stack.Screen name="circles/[id]/settings" options={{ title: 'Circles Messages Settings' }} />
