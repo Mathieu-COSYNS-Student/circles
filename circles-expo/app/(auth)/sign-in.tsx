@@ -1,8 +1,34 @@
 import React from 'react';
-import { StyleSheet, View, Text, TextInput, Platform } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Platform, Button } from 'react-native';
 import { FontAwesome, Feather } from '@expo/vector-icons';
+import { useSignIn } from '@clerk/clerk-expo';
+import { Link, useRouter } from 'expo-router';
 
 const LoginScreen = () => {
+  const router = useRouter();
+  const { signIn, setSession, isLoaded } = useSignIn();
+  const [emailAddress, setEmailAddress] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  const onSignInPress = async () => {
+    if (!isLoaded) {
+      return;
+    }
+
+    try {
+      const completeSignIn = await signIn.create({
+        identifier: emailAddress,
+        password,
+      });
+
+      await setSession(completeSignIn.createdSessionId);
+      router.push('/');
+    } catch (err) {
+      // @ts-ignore
+      console.log('Error:> ' + (err.errors ? err.errors[0].message : err));
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -12,9 +38,32 @@ const LoginScreen = () => {
         <Text style={styles.text_footer}>Email</Text>
         <View style={styles.action}>
           <FontAwesome name="user-o" color="#05375a" size={20} />
-          <TextInput placeholder="Your Email" style={styles.textInput} autoCapitalize="none" />
+          <TextInput
+            placeholder="Your Email"
+            style={styles.textInput}
+            autoCapitalize="none"
+            value={emailAddress}
+            onChangeText={setEmailAddress}
+          />
           <Feather name="check-circle" color="green" size={2} />
         </View>
+        <Text style={styles.text_footer}>Password</Text>
+        <View style={styles.action}>
+          <FontAwesome name="key" color="#05375a" size={20} />
+          <TextInput
+            placeholder="Your password"
+            style={styles.textInput}
+            autoCapitalize="none"
+            secureTextEntry={true}
+            value={password}
+            onChangeText={setPassword}
+          />
+          <Feather name="check-circle" color="green" size={2} />
+        </View>
+        <Button onPress={onSignInPress} title="Sign in" />
+        <Link href="SignUpScreen" replace={true}>
+          Sign up
+        </Link>
       </View>
     </View>
   );

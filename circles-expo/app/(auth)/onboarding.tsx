@@ -21,7 +21,7 @@ const OnboardingScreen = () => {
         <Animatable.Image
           duration={1500}
           animation="bounceIn"
-          source={require('../assets/images/Circles_logo_round.png')}
+          source={require('../../assets/images/Circles_logo_round.png')}
           style={styles.logo}
           resizeMode="stretch"
         />
