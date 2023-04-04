@@ -7,7 +7,7 @@ import * as trpcExpress from '@trpc/server/adapters/express';
 import { appRouter } from './api/router';
 import { createTRPCContext } from './api/trpc';
 
-dotenv.config({ path: path.join(__dirname, './.env') });
+dotenv.config({ path: path.join(__dirname, '.env') });
 const config = getConfig();
 console.debug(config);
 
