@@ -1,11 +1,23 @@
-import * as trpcExpress from '@trpc/server/adapters/express';
+import path from 'path';
+import dotenv from 'dotenv';
 import express from 'express';
+import cors from 'cors';
+import { getConfig } from './config';
+import * as trpcExpress from '@trpc/server/adapters/express';
 import { appRouter } from './api/router';
 import { createTRPCContext } from './api/trpc';
 
-const PORT = 4000;
+dotenv.config({ path: path.join(__dirname, './.env') });
+const config = getConfig();
+console.debug(config);
 
 const app = express();
+
+app.use(
+  cors({
+    origin: config.CORS_ORIGIN,
+  })
+);
 
 app.use(
   '/trpc',
@@ -15,6 +27,6 @@ app.use(
   })
 );
 
-app.listen(PORT, () => {
-  console.log(`Server is listening on port: ${PORT}`);
+app.listen(config.PORT, () => {
+  console.log(`Server is listening on port: ${config.PORT}`);
 });
