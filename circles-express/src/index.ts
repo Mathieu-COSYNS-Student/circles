@@ -13,7 +13,7 @@ import { getHealthStatus } from './api/routers/health';
 
 dotenv.config({ path: path.join(__dirname, '.env') });
 const config = getConfig();
-console.debug(config);
+console.debug('Config:\n' + JSON.stringify(config, undefined, 2));
 
 const app = express();
 

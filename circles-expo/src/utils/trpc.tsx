@@ -12,9 +12,9 @@ export const TRPCProvider = ({ children }: { children: ReactNode }) => {
     trpc.createClient({
       transformer: SuperJSON,
       links: [
-        httpBatchLink({
-          url: 'http://192.168.1.62:4000/trpc',
-        }),
+        // httpBatchLink({
+        //   url: 'http://192.168.1.62:4000/trpc',
+        // }),
         wsLink<AppRouter>({
           client: createWSClient({
             url: 'ws://192.168.1.62:4000/trpc',
