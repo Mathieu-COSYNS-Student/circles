@@ -1,13 +1,13 @@
-import React from 'react';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Dimensions, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
+import { RootStackParamList } from '@navigators/root';
 
-const OnboardingScreen = () => {
-  const router = useRouter();
+type OnboardingScreenProps = NativeStackScreenProps<RootStackParamList, 'Onboarding'>;
 
+const OnboardingScreen = ({ navigation }: OnboardingScreenProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -30,7 +30,7 @@ const OnboardingScreen = () => {
         <Text style={styles.title}>Stay connected and organized with Circles</Text>
         <Text style={styles.text}>Sign in with an account</Text>
         <View style={styles.button}>
-          <TouchableOpacity onPress={() => router.push('/LoginScreen')}>
+          <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
             <LinearGradient colors={['#3c7aad', '#aea4d3']} style={styles.signIn}>
               <Text style={styles.textSign}>Get Started</Text>
               <MaterialIcons name="navigate-next" color="#fff" size={20} />

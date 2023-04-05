@@ -1,14 +1,16 @@
-import React from 'react';
+import { useState } from 'react';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, View, Text, TextInput, Platform, Button } from 'react-native';
 import { FontAwesome, Feather } from '@expo/vector-icons';
 import { useSignIn } from '@clerk/clerk-expo';
-import { Link, useRouter } from 'expo-router';
+import { RootStackParamList } from '@navigators/root';
 
-const LoginScreen = () => {
-  const router = useRouter();
+type SignInScreenProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
+
+const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const { signIn, setSession, isLoaded } = useSignIn();
-  const [emailAddress, setEmailAddress] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [emailAddress, setEmailAddress] = useState('');
+  const [password, setPassword] = useState('');
 
   const onSignInPress = async () => {
     if (!isLoaded) {
@@ -22,7 +24,7 @@ const LoginScreen = () => {
       });
 
       await setSession(completeSignIn.createdSessionId);
-      router.push('/');
+      navigation.navigate('Circles');
     } catch (err) {
       // @ts-ignore
       console.log('Error:> ' + (err.errors ? err.errors[0].message : err));
@@ -61,15 +63,15 @@ const LoginScreen = () => {
           <Feather name="check-circle" color="green" size={2} />
         </View>
         <Button onPress={onSignInPress} title="Sign in" />
-        <Link href="SignUpScreen" replace={true}>
+        {/* <Link href="SignUpScreen" replace={true}>
           Sign up
-        </Link>
+        </Link> */}
       </View>
     </View>
   );
 };
 
-export default LoginScreen;
+export default SignInScreen;
 
 const styles = StyleSheet.create({
   container: {

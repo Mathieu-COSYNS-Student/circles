@@ -3,7 +3,6 @@ module.exports = function (api) {
   return {
     presets: ['babel-preset-expo'],
     plugins: [
-      require.resolve('expo-router/babel'),
       [
         'module-resolver',
         {
@@ -11,7 +10,9 @@ module.exports = function (api) {
             '@components': './src/components',
             '@constants': './src/constants',
             '@hooks': './src/hooks/',
+            '@navigators': './src/navigators/',
             '@utils': './src/utils/',
+            '@screens': './src/screens/',
           },
         },
       ],

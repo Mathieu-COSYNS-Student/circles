@@ -1,7 +1,10 @@
-import React from 'react';
+import { RootStackParamList } from '@navigators/root';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, Text, View } from 'react-native';
 
-const SignUpScreen = () => {
+type SignUpScreenProps = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
+
+const SignUpScreen = ({}: SignUpScreenProps) => {
   return (
     <View style={styles.container}>
       <Text>Signup Screen</Text>

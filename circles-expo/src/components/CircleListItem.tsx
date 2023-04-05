@@ -1,12 +1,13 @@
-import { useRouter } from 'expo-router';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { View, Text } from './Themed';
 import { Circle, circleSchema } from '@circles/shared';
+import { useRootNavigation } from '@navigators/useRootNavigation';
 
 export const CirclesListItem = ({ circle }: { circle: Circle }) => {
-  const router = useRouter();
+  const navigation = useRootNavigation();
+
   const onPress = () => {
-    router.push('/circles/1');
+    navigation.navigate('Circle', { id: circle.id });
   };
 
   const result = circleSchema.safeParse(circle);
