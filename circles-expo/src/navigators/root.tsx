@@ -42,7 +42,7 @@ export const RootNavigator = () => {
             options={{ title: 'Onboarding', headerShown: false }}
           />
           <Stack.Screen name="SignIn" component={SignInScreen} options={{ title: 'Sign In', headerShown: false }} />
-          <Stack.Screen name="SignUp" component={SignUpScreen} options={{ title: 'Sign Up', headerShown: true }} />
+          <Stack.Screen name="SignUp" component={SignUpScreen} options={{ title: 'Sign Up', headerShown: false }} />
         </>
       )}
     </Stack.Navigator>
