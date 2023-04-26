@@ -1,40 +1,28 @@
-import type { ConfigContext, ExpoConfig } from "@expo/config";
+import { type ConfigContext, type ExpoConfig } from "expo/config";
+import { z } from "zod";
 
-const CLERK_PUBLISHABLE_KEY = "your-clerk-publishable-key";
+const CLERK_PUBLISHABLE_KEY =
+  "pk_test_c3R1bm5pbmctcmFtLTU0LmNsZXJrLmFjY291bnRzLmRldiQ";
 
-const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
-  name: "expo",
-  slug: "expo",
-  version: "1.0.0",
-  orientation: "portrait",
-  icon: "./assets/icon.png",
-  userInterfaceStyle: "light",
-  splash: {
-    image: "./assets/icon.png",
-    resizeMode: "contain",
-    backgroundColor: "#1F104A",
-  },
-  updates: {
-    fallbackToCacheTimeout: 0,
-  },
-  assetBundlePatterns: ["**/*"],
-  ios: {
-    supportsTablet: true,
-    bundleIdentifier: "your.bundle.identifier",
-  },
-  android: {
-    adaptiveIcon: {
-      foregroundImage: "./assets/icon.png",
-      backgroundColor: "#1F104A",
+const defineConfig = ({ config }: ConfigContext): ExpoConfig => {
+  const configSchema = z.object({
+    name: z.string(),
+    slug: z.string(),
+  });
+
+  return {
+    ...configSchema.parse(config),
+    ...config,
+    android: {
+      ...config.android,
+      googleServicesFile:
+        process.env.GOOGLE_SERVICES_JSON || "./google-services.json",
     },
-  },
-  extra: {
-    eas: {
-      // projectId: "your-project-id",
+    extra: {
+      ...config.extra,
+      CLERK_PUBLISHABLE_KEY,
     },
-    CLERK_PUBLISHABLE_KEY,
-  },
-  plugins: ["./expo-plugins/with-modify-gradle.js"],
-});
+  };
+};
 
 export default defineConfig;

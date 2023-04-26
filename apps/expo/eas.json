@@ -1,6 +1,6 @@
 {
   "cli": {
-    "version": ">= 3.3.0"
+    "version": ">= 3.8.1"
   },
   "build": {
     "development": {
@@ -12,12 +12,18 @@
     },
     "preview": {
       "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
       "ios": {
-        "simulator": true,
         "resourceClass": "m-medium"
       }
     },
     "production": {
+      "distribution": "store",
+      "android": {
+        "buildType": "app-bundle"
+      },
       "ios": {
         "resourceClass": "m-medium"
       }

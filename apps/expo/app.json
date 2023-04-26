@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "Circles",
+    "slug": "circles-react-native",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#4B44FA"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "be.uclouvain.tfe.circles",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#4B44FA"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ad2cfab7-4dd0-40fd-a8b9-f3c481e40f22"
+      },
+      "prodServerBaseUrl": "http://localhost:4000"
+    },
+    "plugins": ["@react-native-firebase/app", "@notifee/react-native"]
+  }
+}
