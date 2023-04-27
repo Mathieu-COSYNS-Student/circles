@@ -1,6 +1,7 @@
 import type {
   SignedInAuthObject,
   SignedOutAuthObject,
+  User,
 } from "@clerk/nextjs/api";
 import { getAuth } from "@clerk/nextjs/server";
 import { type inferAsyncReturnType } from "@trpc/server";
@@ -12,7 +13,9 @@ import { prisma, type PrismaClient } from "@acme/db";
  * Replace this with an object if you want to pass things to createContextInner
  */
 type AuthContextProps = {
-  auth?: SignedInAuthObject | SignedOutAuthObject;
+  auth?: Pick<SignedInAuthObject | SignedOutAuthObject, "userId"> & {
+    user?: Pick<User, "id" | "username" | "firstName" | "lastName"> | null;
+  };
   prisma?: PrismaClient;
 };
 
