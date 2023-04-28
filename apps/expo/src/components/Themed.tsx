@@ -1,6 +1,7 @@
 import {
   Text as DefaultText,
   View as DefaultView,
+  StyleSheet,
   useColorScheme,
 } from "react-native";
 
@@ -26,3 +27,15 @@ export function View(props: DefaultView["props"]) {
 
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
 }
+
+export function Separator() {
+  return <View style={styles.separator} />;
+}
+
+const styles = StyleSheet.create({
+  separator: {
+    height: 1,
+    width: "100%",
+    backgroundColor: "#777",
+  },
+});

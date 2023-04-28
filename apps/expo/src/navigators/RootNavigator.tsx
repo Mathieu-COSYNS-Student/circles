@@ -14,7 +14,7 @@ export type RootStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
   Circles: undefined;
-  Circle: { id: string };
+  Circle: { id: string; name: string };
   CircleSettings: { id: string };
   Test: undefined;
 };
@@ -36,7 +36,7 @@ export const RootNavigator = () => {
           <Stack.Screen
             name="Circle"
             component={CircleScreen}
-            options={{ title: "Circles Messages" }}
+            options={({ route }) => ({ title: route.params.name })}
           />
           <Stack.Screen
             name="CircleSettings"

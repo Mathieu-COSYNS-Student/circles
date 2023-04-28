@@ -1,5 +1,5 @@
 export const authMock = {
-  userId: "user_test_1",
+  userId: "test-user-id_00000000001",
   user: {
     id: "user_test_1",
     username: "test",

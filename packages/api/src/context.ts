@@ -9,14 +9,21 @@ import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 
 import { prisma, type PrismaClient } from "@acme/db";
 
+import { firestore } from "./firebase";
+
+export type AuthObject<
+  T extends Pick<SignedInAuthObject | SignedOutAuthObject, "userId">,
+> = Pick<T, "userId"> & {
+  user?: Pick<User, "id" | "username" | "firstName" | "lastName"> | null;
+};
+
 /**
  * Replace this with an object if you want to pass things to createContextInner
  */
 type AuthContextProps = {
-  auth?: Pick<SignedInAuthObject | SignedOutAuthObject, "userId"> & {
-    user?: Pick<User, "id" | "username" | "firstName" | "lastName"> | null;
-  };
+  auth?: AuthObject<SignedInAuthObject | SignedOutAuthObject>;
   prisma?: PrismaClient;
+  useFirestore?: boolean;
 };
 
 /** Use this helper for:
@@ -28,6 +35,7 @@ export const createInnerTRPCContext = (opts?: AuthContextProps) => {
   return {
     auth: opts?.auth,
     prisma: opts?.prisma ?? prisma,
+    firestore: firestore,
   };
 };
 

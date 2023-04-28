@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { GiftedChat, type IMessage } from "react-native-gifted-chat";
-import firestore from "@react-native-firebase/firestore";
+import { useUser } from "@clerk/clerk-expo";
+import firestore, {
+  type FirebaseFirestoreTypes,
+} from "@react-native-firebase/firestore";
 
+import { trpc } from "~/utils/trpc";
 import {
   renderActions,
   renderComposer,
@@ -14,73 +18,108 @@ import {
   renderMessageText,
 } from "./MessageContainer";
 
-const Chat = () => {
-  const [messages, setMessages] = useState<IMessage[]>([]);
-  const [isTyping, setIsTyping] = useState(false);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsTyping(true);
-    }, 1000);
-    setTimeout(() => {
-      setIsTyping(false);
-    }, 5000);
-  }, []);
-
-  const onSend = (newMessages: IMessage[] = []) => {
-    setMessages((prevMessages) => GiftedChat.append(prevMessages, newMessages));
-    for (const newMessage of newMessages) {
-      firestore()
-        .collection("chats")
-        .doc("nHf3EwoqraQNUxIK2EMk")
-        .collection("messages")
-        .add({
-          userId: newMessage.user._id,
-          text: newMessage.text,
-          createdAt: newMessage.createdAt,
-        })
-        .catch(() => console.log("Message Added"));
-    }
+const convertFirebaseDocumentToIMessage = (
+  id: string,
+  data: FirebaseFirestoreTypes.DocumentData,
+  options?: {
+    rawDate: boolean;
+  },
+) => {
+  return {
+    _id: id,
+    user: {
+      _id: data.userId as string,
+    },
+    text: data.text as string,
+    createdAt: options?.rawDate
+      ? (data.createdAt as Date | number)
+      : (data.createdAt as FirebaseFirestoreTypes.Timestamp).toDate(),
+    sent: true,
   };
+};
+
+export interface ChatProps {
+  chatId: string;
+}
+
+const Chat = ({ chatId }: ChatProps) => {
+  const [loadingMessages, setLoadingMessages] = useState<IMessage[]>([]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
+  const [usersIds, setUsersIds] = useState<string[]>([]);
+  const { user } = useUser();
+  const { data: usersData } = trpc.users.getByIds.useQuery(usersIds);
 
   useEffect(() => {
     const subscriber = firestore()
       .collection("chats")
-      .doc("nHf3EwoqraQNUxIK2EMk")
+      .doc(chatId)
       .collection("messages")
       .orderBy("createdAt", "desc")
       .onSnapshot((documentSnapshot) => {
+        if (!documentSnapshot) return;
+
         console.log("firebase chat messages read");
-        setMessages(
-          documentSnapshot.docs.map((doc) => {
-            const data = doc.data();
-            return {
-              _id: doc.id,
-              user: {
-                _id: data.userId,
-              },
-              text: data.text,
-              createdAt: data.createdAt.toDate(),
-            };
-          }),
-        );
+        const messages = documentSnapshot.docs.map((doc) => {
+          return convertFirebaseDocumentToIMessage(doc.id, doc.data());
+        });
+        setLoadingMessages(messages);
+        setUsersIds(messages.map((message) => message.user._id));
       });
 
     return () => subscriber();
-  }, []);
+  }, [chatId]);
 
-  useEffect(() => console.log(messages), [messages]);
+  useEffect(() => {
+    setMessages(
+      loadingMessages.map((message) => ({
+        ...message,
+        user: {
+          _id: message.user._id,
+          name: usersData ? usersData[message.user._id]?.username ?? "" : "",
+          avatar: usersData
+            ? usersData[message.user._id]?.profileImageUrl ?? ""
+            : "",
+        },
+      })),
+    );
+  }, [loadingMessages, usersData]);
+
+  const onSend = (newMessages: IMessage[] = []) => {
+    setMessages((messages) =>
+      GiftedChat.append(
+        messages,
+        newMessages.map((newMessage) => ({ ...newMessage, pending: true })),
+      ),
+    );
+    for (const newMessage of newMessages) {
+      const newDoc = {
+        userId: newMessage.user._id,
+        text: newMessage.text,
+        createdAt: newMessage.createdAt,
+      };
+      firestore()
+        .collection("chats")
+        .doc(chatId)
+        .collection("messages")
+        .add(newDoc)
+        .catch((e) => console.error(e));
+    }
+  };
 
   return (
     <GiftedChat
-      isTyping={isTyping}
+      isTyping={false}
       messages={messages}
       onSend={onSend}
-      user={{
-        _id: "user_2NyBVbUsdM5KZnXC0O2cjH3h5JG",
-        name: "Aaron",
-        avatar: "https://placeimg.com/150/150/any",
-      }}
+      user={
+        user
+          ? {
+              _id: user.id,
+              name: user.username ?? "",
+              avatar: user.profileImageUrl,
+            }
+          : undefined
+      }
       alwaysShowSend
       scrollToBottom
       renderUsernameOnMessage

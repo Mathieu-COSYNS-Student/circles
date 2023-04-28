@@ -4,7 +4,11 @@
   "engines": {
     "node": ">=v18.16.0"
   },
-  "workspaces": ["packages/*", "packages/config/*", "apps/*"],
+  "workspaces": [
+    "packages/*",
+    "packages/config/*",
+    "apps/*"
+  ],
   "scripts": {
     "build": "turbo build",
     "clean": "git clean -xdf node_modules",
@@ -15,7 +19,8 @@
     "format": "prettier --write \"**/*.{js,cjs,mjs,ts,tsx,md,json}\" --ignore-path .gitignore",
     "lint": "turbo lint && manypkg check",
     "lint:fix": "turbo lint:fix && manypkg fix",
-    "type-check": "turbo type-check"
+    "type-check": "turbo type-check",
+    "test": "turbo test"
   },
   "dependencies": {
     "@acme/eslint-config": "^0.1.0",

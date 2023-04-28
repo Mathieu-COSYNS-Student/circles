@@ -11,6 +11,30 @@ datasource db {
 }
 
 model Circle {
-    id   String @id @default(auto()) @map("_id") @db.ObjectId
-    name String
+    id         String         @id @default(auto()) @map("_id") @db.ObjectId
+    name       String
+    pictureUrl String?
+    chatId     String         @unique
+    members    CircleMember[]
+}
+
+model CircleMember {
+    id       String             @id @default(auto()) @map("_id") @db.ObjectId
+    userId   String
+    circleId String             @db.ObjectId
+    circle   Circle             @relation(fields: [circleId], references: [id])
+    role     CircleMemberRole   @default(USER)
+    status   CircleMemberStatus
+
+    @@unique([userId, circleId])
+}
+
+enum CircleMemberStatus {
+    INVITED
+    JOINED
+}
+
+enum CircleMemberRole {
+    USER
+    ADMIN
 }

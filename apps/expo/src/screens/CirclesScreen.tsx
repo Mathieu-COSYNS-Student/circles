@@ -22,7 +22,7 @@ const CirclesScreen = ({ navigation }: CirclesScreenProps) => {
       {getAllCirclesQuery.data && (
         <CirclesList circles={getAllCirclesQuery.data} />
       )}
-      <Button title="Sign out" onPress={onSignOutPress} />
+      <Button title="Sign out" onPress={void onSignOutPress} />
       <Button title="Test" onPress={() => navigation.navigate("Test")} />
     </>
   );

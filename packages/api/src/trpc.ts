@@ -1,8 +1,9 @@
+import { type SignedInAuthObject } from "@clerk/nextjs/api";
 import { TRPCError, initTRPC } from "@trpc/server";
 import { ZodError } from "zod";
 
 import { transformer } from "../transformer";
-import type { Context } from "./context";
+import type { AuthObject, Context } from "./context";
 
 const t = initTRPC.context<Context>().create({
   transformer,
@@ -24,7 +25,7 @@ const isAuthed = t.middleware(({ ctx, next }) => {
   }
   return next({
     ctx: {
-      auth: ctx.auth,
+      auth: ctx.auth as AuthObject<SignedInAuthObject>,
     },
   });
 });

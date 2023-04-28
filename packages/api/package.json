@@ -10,13 +10,15 @@
     "lint:fix": "pnpm lint --fix",
     "type-check": "tsc --noEmit",
     "with-env": "dotenv -e ../../.env --",
-    "test": "pnpm with-env jest"
+    "test": "pnpm with-env jest",
+    "test:watch": "pnpm run test --watch"
   },
   "dependencies": {
     "@acme/db": "*",
     "@acme/schema": "*",
     "@clerk/nextjs": "^4.16.4",
     "@trpc/server": "^10.21.1",
+    "firebase-admin": "^11.7.0",
     "superjson": "1.12.3",
     "zod": "^3.21.4"
   },
