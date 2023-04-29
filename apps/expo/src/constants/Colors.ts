@@ -5,6 +5,7 @@ const theme = {
   light: {
     text: "#000",
     background: "#fff",
+    statusBarStyle: "dark",
     tint: tintColorLight,
     tabIconDefault: "#ccc",
     tabIconSelected: tintColorLight,
@@ -24,6 +25,7 @@ const theme = {
   dark: {
     text: "#fff",
     background: "#000",
+    statusBarStyle: "light",
     tint: tintColorDark,
     tabIconDefault: "#ccc",
     tabIconSelected: tintColorDark,

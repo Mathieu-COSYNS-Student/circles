@@ -1,5 +1,3 @@
-import { Button } from "react-native";
-import { useAuth } from "@clerk/clerk-expo";
 import { type NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { trpc } from "~/utils/trpc";
@@ -8,22 +6,14 @@ import { type RootStackParamList } from "~/navigators/RootNavigator";
 
 type CirclesScreenProps = NativeStackScreenProps<RootStackParamList, "Circles">;
 
-const CirclesScreen = ({ navigation }: CirclesScreenProps) => {
+const CirclesScreen = ({}: CirclesScreenProps) => {
   const getAllCirclesQuery = trpc.circles.getAll.useQuery();
-
-  const { signOut } = useAuth();
-
-  async function onSignOutPress() {
-    await signOut();
-  }
 
   return (
     <>
       {getAllCirclesQuery.data && (
         <CirclesList circles={getAllCirclesQuery.data} />
       )}
-      <Button title="Sign out" onPress={void onSignOutPress} />
-      <Button title="Test" onPress={() => navigation.navigate("Test")} />
     </>
   );
 };

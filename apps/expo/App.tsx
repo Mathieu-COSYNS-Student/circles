@@ -13,6 +13,7 @@ import {
   DefaultTheme,
   NavigationContainer,
 } from "@react-navigation/native";
+import { OverflowMenuProvider } from "react-navigation-header-buttons";
 
 import { AuthProvider } from "~/utils/AuthProvider";
 import { TRPCProvider } from "~/utils/trpc";
@@ -148,7 +149,9 @@ const App = () => {
         <NavigationContainer
           theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
         >
-          <RootNavigator />
+          <OverflowMenuProvider>
+            <RootNavigator />
+          </OverflowMenuProvider>
         </NavigationContainer>
       </SafeAreaProvider>
     </TRPCProvider>
