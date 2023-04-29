@@ -5,7 +5,7 @@ import { trpc } from "~/utils/trpc";
 import { Text, View } from "~/components/Themed";
 
 export default function TestScreen() {
-  const testQuery = trpc.health.check.useQuery();
+  const testQuery = trpc.health.check.useQuery({ firebase: true });
   const testAuthQuery = trpc.auth.getSession.useQuery();
   const usersQuery = trpc.users.getByIds.useQuery([
     "user_2P150vExXFgPZQJEkwBkfHAJl8n",
@@ -13,6 +13,12 @@ export default function TestScreen() {
   ]);
 
   const reload = () => {
+    void testQuery.refetch().then(() => {
+      console.log("testQuery reloaded");
+    });
+    void testAuthQuery.refetch().then(() => {
+      console.log("testAuthQuery reloaded");
+    });
     void usersQuery.refetch().then(() => {
       console.log("usersQuery reloaded");
     });
