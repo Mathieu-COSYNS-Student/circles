@@ -44,6 +44,8 @@ export const createInnerTRPCContext = (opts?: AuthContextProps) => {
  * @link https://trpc.io/docs/context
  **/
 export const createTRPCContext = (opts: CreateNextContextOptions) => {
+  console.log({ authorization: opts.req.headers.authorization });
+  console.log(getAuth(opts.req));
   return createInnerTRPCContext({ auth: getAuth(opts.req) });
 };
 
