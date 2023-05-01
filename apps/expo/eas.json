@@ -19,7 +19,7 @@
         "resourceClass": "m-medium"
       }
     },
-    "production": {
+    "release": {
       "distribution": "store",
       "android": {
         "buildType": "app-bundle"
