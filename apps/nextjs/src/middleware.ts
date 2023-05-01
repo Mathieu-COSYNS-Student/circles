@@ -1,9 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { getAuth, withClerkMiddleware } from "@clerk/nextjs/server";
+import { withClerkMiddleware } from "@clerk/nextjs/server";
 
 export default withClerkMiddleware((_req: NextRequest) => {
-  console.log({ authorization: _req.headers.get("authorization") });
-  console.log(getAuth(_req));
   return NextResponse.next();
 });
 

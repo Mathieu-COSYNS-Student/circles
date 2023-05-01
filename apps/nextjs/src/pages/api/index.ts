@@ -11,8 +11,6 @@ export default function handler(
 ) {
   const auth = getAuth(req);
 
-  console.log(`Hello ${auth.userId || "world"}`);
-
   res.status(200).json({
     message: `Hello ${auth.userId || "world"}`,
   });
