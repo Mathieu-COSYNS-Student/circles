@@ -7,7 +7,7 @@ import {
   type MessageTextProps,
 } from "react-native-gifted-chat";
 
-import { useThemeColor } from "../Themed";
+import { useThemeColor } from "../../hooks/Theme";
 import TypingIndicator from "./TypingIndicator";
 
 export const renderBubble = <TMessage extends IMessage>(

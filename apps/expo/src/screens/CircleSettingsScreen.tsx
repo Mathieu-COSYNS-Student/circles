@@ -1,6 +1,6 @@
 import { type NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { Text } from "~/components/Themed";
+import { Text } from "~/components/ui";
 import { type RootStackParamList } from "~/navigators/RootNavigator";
 
 type CircleSettingsScreenProps = NativeStackScreenProps<

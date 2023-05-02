@@ -8,7 +8,7 @@ import {
   OverflowMenu,
 } from "react-navigation-header-buttons";
 
-import { useThemeColor } from "~/components/Themed";
+import { useThemeColor } from "~/hooks/Theme";
 import AccountScreen from "~/screens/AccountScreen";
 import CircleScreen from "~/screens/CircleScreen";
 import CircleSettingsScreen from "~/screens/CircleSettingsScreen";

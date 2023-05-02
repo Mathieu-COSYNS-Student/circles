@@ -4,6 +4,9 @@ module.exports = function (api) {
 
   return {
     presets: ["babel-preset-expo"],
-    plugins: [["module-resolver", { alias: { "~": "./src" } }]],
+    plugins: [
+      "nativewind/babel",
+      ["module-resolver", { alias: { "~": "./src" } }],
+    ],
   };
 };

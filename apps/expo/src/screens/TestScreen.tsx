@@ -1,8 +1,8 @@
-import { Button, ScrollView } from "react-native";
+import { ScrollView, View } from "react-native";
 import Constants from "expo-constants";
 
 import { trpc } from "~/utils/trpc";
-import { Text, View } from "~/components/Themed";
+import { Button, Text } from "~/components/ui";
 
 export default function TestScreen() {
   const testQuery = trpc.health.check.useQuery({ firebase: true });
@@ -25,8 +25,10 @@ export default function TestScreen() {
   };
 
   return (
-    <ScrollView>
-      <Button onPress={reload} title="Reload" />
+    <ScrollView className="p-2">
+      <View className="mb-2">
+        <Button onPress={reload}>Reload</Button>
+      </View>
       <View>
         <Text>Tests : </Text>
         <Text>

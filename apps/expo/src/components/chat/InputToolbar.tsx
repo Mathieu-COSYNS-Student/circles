@@ -14,7 +14,7 @@ import {
 import { FontAwesome } from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
-import { useThemeColor } from "~/components/Themed";
+import { useThemeColor } from "~/hooks/Theme";
 
 export const renderInputToolbar = <TMessage extends IMessage>(
   props: InputToolbarProps<TMessage>,

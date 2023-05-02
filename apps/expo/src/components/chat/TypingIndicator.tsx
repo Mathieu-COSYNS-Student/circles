@@ -2,7 +2,7 @@ import * as React from "react";
 import { Animated, StyleSheet } from "react-native";
 import { TypingAnimation } from "react-native-typing-animation";
 
-import { useThemeColor } from "~/components/Themed";
+import { useThemeColor } from "~/hooks/Theme";
 import { useUpdateLayoutEffect } from "~/hooks/useUpdateLayoutEffect";
 
 interface Props {

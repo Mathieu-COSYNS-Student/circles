@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Alert, useColorScheme } from "react-native";
+import { Alert, View, useColorScheme } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useFonts } from "expo-font";
 import { hideAsync } from "expo-splash-screen";
@@ -16,7 +16,7 @@ import { OverflowMenuProvider } from "react-navigation-header-buttons";
 
 import { AuthProvider } from "~/utils/AuthProvider";
 import { TRPCProvider } from "~/utils/trpc";
-import { View, useThemeColor } from "~/components/Themed";
+import { useThemeColor } from "~/hooks/Theme";
 import { RootNavigator } from "~/navigators/RootNavigator";
 
 export default function RootLayout() {
