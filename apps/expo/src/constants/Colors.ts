@@ -41,6 +41,8 @@ const theme = {
     chatToolbarInput: "#000",
     chatToolbarInputBackgound: "#eee",
     chatToolbarInputBorder: "#999",
+    refreshControlBackground: "#fff",
+    refreshControlForground: "#000",
   },
   dark: {
     text: "#fff",
@@ -60,6 +62,8 @@ const theme = {
     chatToolbarInput: "#fff",
     chatToolbarInputBackgound: "#444",
     chatToolbarInputBorder: "#444",
+    refreshControlBackground: "#333",
+    refreshControlForground: "#fff",
   },
 };
 
