@@ -31,7 +31,7 @@
       "eas": {
         "projectId": "ad2cfab7-4dd0-40fd-a8b9-f3c481e40f22"
       },
-      "prodServerBaseUrl": "http://localhost:4000"
+      "prodServerBaseUrl": "https://circles-ucl.vercel.app"
     },
     "plugins": ["@react-native-firebase/app", "@notifee/react-native"]
   }
