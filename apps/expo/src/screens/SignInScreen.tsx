@@ -1,12 +1,14 @@
 import { useState } from "react";
 import {
-  Button,
   Platform,
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
+import * as Animatable from "react-native-animatable";
+import { LinearGradient } from "expo-linear-gradient";
 import { useSignIn } from "@clerk/clerk-expo";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 import { type NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -17,8 +19,15 @@ type SignInScreenProps = NativeStackScreenProps<RootStackParamList, "SignIn">;
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const { signIn, setSession, isLoaded } = useSignIn();
-  const [emailAddress, setEmailAddress] = useState("");
-  const [password, setPassword] = useState("");
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+    check_EmailChange: false,
+    secureTextEntry: true,
+    isValidEmail: true,
+    isValidPassword: true,
+    invalidCredentialPostSubmission: false,
+  });
 
   const onSignInPress = async () => {
     if (!isLoaded) {
@@ -27,15 +36,69 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
     try {
       const completeSignIn = await signIn.create({
-        identifier: emailAddress,
-        password,
+        identifier: data.email,
+        password: data.password,
       });
 
       await setSession(completeSignIn.createdSessionId);
       navigation.navigate("Circles");
     } catch (err) {
-      console.log("Error:> " + (err.errors ? err.errors[0].message : err));
+      console.log(
+        `Error:> ${
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          err && Object.hasOwn(err, "errors") ? err.errors[0].message : err
+        }`,
+      );
+      setData({
+        ...data,
+        invalidCredentialPostSubmission: true,
+      });
     }
+  };
+
+  const handleEmailChange = (val: string) => {
+    const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/;
+    if (emailRegex.test(val)) {
+      setData({
+        ...data,
+        email: val,
+        check_EmailChange: true,
+        isValidEmail: true,
+      });
+    } else {
+      setData({
+        ...data,
+        email: val,
+        check_EmailChange: false,
+        isValidEmail: false,
+      });
+    }
+  };
+
+  const handlePasswordChange = (passwordInput: string) => {
+    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+    if (passwordRegex.test(passwordInput)) {
+      setData({
+        ...data,
+        password: passwordInput,
+        isValidPassword: true,
+      });
+    } else {
+      setData({
+        ...data,
+        password: passwordInput,
+        isValidPassword: false,
+      });
+    }
+  };
+
+  const updateSecureTextEntry = () => {
+    setData({
+      ...data,
+      secureTextEntry: !data.secureTextEntry,
+    });
   };
 
   return (
@@ -43,7 +106,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
       <View style={styles.header}>
         <Text style={styles.text_header}>Stay Connected!</Text>
       </View>
-      <View style={styles.footer}>
+      <Animatable.View style={styles.footer} animation="fadeInUpBig">
         <Text style={styles.text_footer}>Email</Text>
         <View style={styles.action}>
           <FontAwesome name="user-o" color="#05375a" size={20} />
@@ -51,29 +114,102 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
             placeholder="Your Email"
             style={styles.textInput}
             autoCapitalize="none"
-            value={emailAddress}
-            onChangeText={setEmailAddress}
+            value={data.email}
+            //onChangeText={setEmailAddress}
+            onChangeText={(email) => handleEmailChange(email)}
           />
-          <Feather name="check-circle" color="green" size={2} />
+          {data.check_EmailChange ? (
+            <Animatable.View animation="bounceIn">
+              <Feather name="check-circle" color="green" size={20} />
+            </Animatable.View>
+          ) : (
+            <Animatable.View animation="bounceIn">
+              <Feather name="alert-circle" color="red" size={20} />
+            </Animatable.View>
+          )}
         </View>
-        <Text style={styles.text_footer}>Password</Text>
+        {data.isValidEmail ? null : (
+          <Animatable.View animation="fadeInLeft" duration={500}>
+            <Text style={styles.errorMsg}>Email must be valid</Text>
+          </Animatable.View>
+        )}
+        <Text
+          style={[
+            styles.text_footer,
+            {
+              marginTop: 35,
+            },
+          ]}
+        >
+          Password
+        </Text>
         <View style={styles.action}>
-          <FontAwesome name="key" color="#05375a" size={20} />
+          <FontAwesome name="lock" color="#05375a" size={20} />
           <TextInput
-            placeholder="Your password"
+            placeholder="Your Password"
             style={styles.textInput}
             autoCapitalize="none"
-            secureTextEntry={true}
-            value={password}
-            onChangeText={setPassword}
+            secureTextEntry={data.secureTextEntry ? true : false}
+            value={data.password}
+            onChangeText={(password) => handlePasswordChange(password)}
           />
-          <Feather name="check-circle" color="green" size={2} />
+          <TouchableOpacity onPress={updateSecureTextEntry}>
+            {data.secureTextEntry ? (
+              <Feather name="eye-off" color="grey" size={20} />
+            ) : (
+              <Feather name="eye" color="grey" size={20} />
+            )}
+          </TouchableOpacity>
         </View>
-        <Button onPress={onSignInPress} title="Sign in" />
-        {/* <Link href="SignUpScreen" replace={true}>
-          Sign up
-        </Link> */}
-      </View>
+        {data.isValidPassword ? null : (
+          <Animatable.View animation="fadeInLeft" duration={500}>
+            <Text style={styles.errorMsg}>
+              Password must be at least 6 characters long and contain at least
+              one uppercase letter, one lowercase letter, and one digit
+            </Text>
+          </Animatable.View>
+        )}
+        <Text
+          style={[{ fontSize: 15, paddingTop: 10 }]}
+          onPress={() => navigation.navigate("ForgotPassword")}
+        >
+          Forgot your password?
+        </Text>
+
+        {data.invalidCredentialPostSubmission ? (
+          <Animatable.View animation="fadeInLeft" duration={500}>
+            <Text style={[styles.errorMsg, { marginTop: 35 }]}>
+              Invalid credentials, please try again
+            </Text>
+          </Animatable.View>
+        ) : null}
+
+        <View style={styles.button}>
+          <LinearGradient colors={["#3c7aad", "#aea4d3"]} style={styles.signIn}>
+            <TouchableOpacity onPress={onSignInPress} style={styles.signIn}>
+              <Text
+                style={[
+                  styles.textSign,
+                  {
+                    color: "#fff",
+                  },
+                ]}
+              >
+                Sign In
+              </Text>
+            </TouchableOpacity>
+          </LinearGradient>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("SignUp")}
+            style={[
+              styles.signIn,
+              { borderColor: "#3c7aad", borderWidth: 1, marginTop: 15 },
+            ]}
+          >
+            <Text style={[styles.textSign, { color: "#3c7aad" }]}>Sign Up</Text>
+          </TouchableOpacity>
+        </View>
+      </Animatable.View>
     </View>
   );
 };
@@ -143,5 +279,16 @@ const styles = StyleSheet.create({
   },
   color_textPrivate: {
     color: "grey",
+  },
+  signIn: {
+    width: "100%",
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+  },
+  errorMsg: {
+    color: "#FF0000",
+    fontSize: 14,
   },
 });

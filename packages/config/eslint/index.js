@@ -23,6 +23,7 @@ const config = {
       { prefer: "type-imports", fixStyle: "inline-type-imports" },
     ],
     "@typescript-eslint/no-misused-promises": ["off"],
+    "@typescript-eslint/no-floating-promises": ["off"],
   },
   ignorePatterns: ["**/*.config.js", "**/*.config.cjs", "packages/config/**"],
   reportUnusedDisableDirectives: true,

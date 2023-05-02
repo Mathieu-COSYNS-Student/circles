@@ -13,67 +13,48 @@ import { type NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { type RootStackParamList } from "~/navigators/RootNavigator";
 
-type SignUpScreenProps = NativeStackScreenProps<RootStackParamList, "SignUp">;
+type ResetPasswordScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  "ResetPassword"
+>;
 
-const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
+const ResetPasswordScreen = ({ navigation }: ResetPasswordScreenProps) => {
   const [data, setData] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-    check_EmailChange: false,
+    newPassword: "",
+    confirmNewPassword: "",
     secureTextEntry: true,
     confirmSecureTextEntry: true,
-    isValidEmail: true,
     isValidPassword: true,
     IsValidConfirmPassword: true,
   });
-
-  const handleEmailChange = (val: string) => {
-    const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/;
-    if (emailRegex.test(val)) {
-      setData({
-        ...data,
-        email: val,
-        check_EmailChange: true,
-        isValidEmail: true,
-      });
-    } else {
-      setData({
-        ...data,
-        email: val,
-        check_EmailChange: false,
-        isValidEmail: false,
-      });
-    }
-  };
 
   const handlePasswordChange = (passwordInput: string) => {
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
     if (passwordRegex.test(passwordInput)) {
       setData({
         ...data,
-        password: passwordInput,
+        newPassword: passwordInput,
         isValidPassword: true,
       });
     } else {
       setData({
         ...data,
-        password: passwordInput,
+        newPassword: passwordInput,
         isValidPassword: false,
       });
     }
   };
   const handleConfirmPasswordChange = (confirmInput: string) => {
-    if (data.password == confirmInput) {
+    if (data.newPassword == confirmInput) {
       setData({
         ...data,
-        confirmPassword: confirmInput,
+        confirmNewPassword: confirmInput,
         IsValidConfirmPassword: true,
       });
     } else {
       setData({
         ...data,
-        confirmPassword: confirmInput,
+        confirmNewPassword: confirmInput,
         IsValidConfirmPassword: false,
       });
     }
@@ -95,54 +76,18 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.text_header}>Stay Connected!</Text>
+        <Text style={styles.text_header}>Reset Your Password</Text>
       </View>
       <Animatable.View style={styles.footer} animation="fadeInUpBig">
-        <Text style={styles.text_footer}>Email</Text>
-        <View style={styles.action}>
-          <FontAwesome name="user-o" color="#05375a" size={20} />
-          <TextInput
-            placeholder="Your Email"
-            style={styles.textInput}
-            autoCapitalize="none"
-            value={data.email}
-            //onChangeText={setEmailAddress}
-            onChangeText={(email) => handleEmailChange(email)}
-          />
-          {data.check_EmailChange ? (
-            <Animatable.View animation="bounceIn">
-              <Feather name="check-circle" color="green" size={20} />
-            </Animatable.View>
-          ) : (
-            <Animatable.View animation="bounceIn">
-              <Feather name="alert-circle" color="red" size={20} />
-            </Animatable.View>
-          )}
-        </View>
-        {data.isValidEmail ? null : (
-          <Animatable.View animation="fadeInLeft" duration={500}>
-            <Text style={styles.errorMsg}>Email must be valid</Text>
-          </Animatable.View>
-        )}
-        <Text
-          style={[
-            styles.text_footer,
-            {
-              marginTop: 35,
-            },
-          ]}
-        >
-          Password
-        </Text>
+        <Text style={[styles.text_footer]}>Type your new password</Text>
         <View style={styles.action}>
           <FontAwesome name="lock" color="#05375a" size={20} />
           <TextInput
-            placeholder="Your Password"
+            placeholder="Your New Password"
             style={styles.textInput}
             autoCapitalize="none"
             secureTextEntry={data.secureTextEntry ? true : false}
-            value={data.password}
-            //onChangeText={setPassword}
+            value={data.newPassword}
             onChangeText={(password) => handlePasswordChange(password)}
           />
           <TouchableOpacity onPress={updateSecureTextEntry}>
@@ -170,17 +115,15 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
             },
           ]}
         >
-          Confirm Password
+          Confirm New Password
         </Text>
         <View style={styles.action}>
           <FontAwesome name="lock" color="#05375a" size={20} />
           <TextInput
-            placeholder="Retype your password"
+            placeholder="Retype your new password"
             style={styles.textInput}
             autoCapitalize="none"
             secureTextEntry={data.confirmSecureTextEntry ? true : false}
-            //value={password}
-            //onChangeText={setPassword}
             onChangeText={(val) => handleConfirmPasswordChange(val)}
           />
           <TouchableOpacity onPress={updateConfirmSecureTextEntry}>
@@ -205,7 +148,9 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
               { borderColor: "#3c7aad", borderWidth: 1, marginTop: 15 },
             ]}
           >
-            <Text style={[styles.textSign, { color: "#3c7aad" }]}>Sign Up</Text>
+            <Text style={[styles.textSign, { color: "#3c7aad" }]}>
+              Change & Sign in
+            </Text>
           </TouchableOpacity>
         </View>
       </Animatable.View>
@@ -290,4 +235,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUpScreen;
+export default ResetPasswordScreen;

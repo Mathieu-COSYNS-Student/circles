@@ -13,7 +13,9 @@ import AccountScreen from "~/screens/AccountScreen";
 import CircleScreen from "~/screens/CircleScreen";
 import CircleSettingsScreen from "~/screens/CircleSettingsScreen";
 import CirclesScreen from "~/screens/CirclesScreen";
+import ForgotPasswordScreen from "~/screens/ForgotPasswordScreen";
 import OnboardingScreen from "~/screens/OnboardingScreen";
+import ResetPasswordScreen from "~/screens/ResetPasswordScreen";
 import SignInScreen from "~/screens/SignInScreen";
 import SignUpScreen from "~/screens/SignUpScreen";
 import TestScreen from "~/screens/TestScreen";
@@ -23,6 +25,8 @@ export type RootStackParamList = {
   Onboarding: undefined;
   SignIn: undefined;
   SignUp: undefined;
+  ForgotPassword: undefined;
+  ResetPassword: undefined;
   Circles: undefined;
   Circle: { id: string; name: string };
   CircleSettings: { id: string };
@@ -107,7 +111,17 @@ export const RootNavigator = () => {
           <Stack.Screen
             name="SignUp"
             component={SignUpScreen}
-            options={{ title: "Sign Up", headerShown: true }}
+            options={{ title: "Sign Up", headerShown: false }}
+          />
+          <Stack.Screen
+            name="ForgotPassword"
+            component={ForgotPasswordScreen}
+            options={{ title: "ForgotPassword", headerShown: false }}
+          />
+          <Stack.Screen
+            name="ResetPassword"
+            component={ResetPasswordScreen}
+            options={{ title: "ResetPassword", headerShown: false }}
           />
           <Stack.Screen name="Test" component={TestScreen} />
         </>
