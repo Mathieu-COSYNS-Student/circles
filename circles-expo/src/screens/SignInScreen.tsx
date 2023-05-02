@@ -3,17 +3,15 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, View, Text, TextInput, Platform, Button, TouchableOpacity, Alert } from 'react-native';
 import { FontAwesome, Feather } from '@expo/vector-icons';
 import { useSignIn } from '@clerk/clerk-expo';
+import { EmailLinkFactor } from '@clerk/types';
 import { RootStackParamList } from '@navigators/root';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Animatable from 'react-native-animatable';
 
 type SignInScreenProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
-
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const { signIn, setSession, isLoaded } = useSignIn();
-  //const [emailAddress, setEmailAddress] = useState('');
-  //const [password, setPassword] = useState('');
   const [data, setData] = useState({
     email: '',
     password: '',
@@ -21,9 +19,11 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
     secureTextEntry: true,
     isValidEmail: true,
     isValidPassword: true,
+    invalidCredentialPostSubmission: false,
   });
 
   const onSignInPress = async () => {
+    console.log("Hello I'm here !");
     if (!isLoaded) {
       return;
     }
@@ -39,8 +39,12 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
     } catch (err) {
       // @ts-ignore
       console.log('Error:> ' + (err.errors ? err.errors[0].message : err));
+      setData({
+        ...data,
+        invalidCredentialPostSubmission: true,
+      });
     }
-  };
+  }; 
 
   const handleEmailChange = (val: string) => {
     const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/;
@@ -135,7 +139,6 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
             autoCapitalize="none"
             secureTextEntry={data.secureTextEntry ? true : false}
             value={data.password}
-            //onChangeText={setPassword}
             onChangeText={(password) => handlePasswordChange(password)}
           />
           <TouchableOpacity onPress={updateSecureTextEntry}>
@@ -154,10 +157,19 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
             </Text>
           </Animatable.View>
         )}
+        <Text style={[{ fontSize: 15, paddingTop:10 }]} onPress={() => navigation.navigate('ForgotPassword')}>
+          Forgot your password?
+        </Text>
+
+        {data.invalidCredentialPostSubmission ? (
+          <Animatable.View animation="fadeInLeft" duration={500}>
+            <Text style={[styles.errorMsg, { marginTop: 35 }]}>Invalid credentials, please try again</Text>
+          </Animatable.View>
+        ) : null}
 
         <View style={styles.button}>
           <LinearGradient colors={['#3c7aad', '#aea4d3']} style={styles.signIn}>
-            <TouchableOpacity style={styles.signIn} onPress={() => onSignInPress}>
+            <TouchableOpacity onPress={onSignInPress} style={styles.signIn}>
               <Text
                 style={[
                   styles.textSign,
