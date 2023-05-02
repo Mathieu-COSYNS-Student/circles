@@ -3,10 +3,9 @@ import { Alert, useColorScheme } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useFonts } from "expo-font";
 import { hideAsync } from "expo-splash-screen";
-import { useAuth, useUser } from "@clerk/clerk-expo";
+import { useUser } from "@clerk/clerk-expo";
 import { FontAwesome } from "@expo/vector-icons";
 import notifee from "@notifee/react-native";
-import auth from "@react-native-firebase/auth";
 import messaging from "@react-native-firebase/messaging";
 import {
   DarkTheme,
@@ -35,23 +34,11 @@ const LoadingOrNot = () => {
     ...FontAwesome.font,
   });
 
-  const { getToken } = useAuth();
   const { isLoaded: userLoaded } = useUser();
 
   useEffect(() => {
     if (fontError) throw fontError;
   }, [fontError]);
-
-  useEffect(() => {
-    const firebaseSignInWithClerk = async () => {
-      const token = await getToken({ template: "integration_firebase" });
-      if (token) await auth().signInWithCustomToken(token);
-    };
-
-    firebaseSignInWithClerk().catch(() =>
-      console.log("firebaseSignInWithClerk OK!"),
-    );
-  }, [getToken]);
 
   useEffect(() => {
     if (fontLoaded && userLoaded) {

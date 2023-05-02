@@ -1,7 +1,8 @@
-import { type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import Constants from "expo-constants";
 import { getItemAsync, setItemAsync } from "expo-secure-store";
-import { ClerkProvider } from "@clerk/clerk-expo";
+import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
+import auth from "@react-native-firebase/auth";
 import { z } from "zod";
 
 const stringSchema = z.string();
@@ -27,10 +28,37 @@ const tokenCache = {
   },
 };
 
+const Firebase = ({ children }: { children: ReactNode }) => {
+  const { getToken, userId } = useAuth();
+
+  useEffect(() => {
+    const firebaseSignInWithClerk = async () => {
+      const token = await getToken({ template: "integration_firebase" });
+      if (token) await auth().signInWithCustomToken(token);
+      else await auth().signOut();
+    };
+
+    firebaseSignInWithClerk()
+      .then(() =>
+        console.log(`firebaseSignInWithClerk ${auth().currentUser?.uid}`),
+      )
+      .catch(() => console.log("error in firebaseSignInWithClerk"));
+  }, [userId, getToken]);
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged((user) => {
+      console.log(`firebase_user=${user?.uid}`);
+    });
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  return <>{children}</>;
+};
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   return (
     <ClerkProvider tokenCache={tokenCache} publishableKey={publishableKey}>
-      {children}
+      <Firebase>{children}</Firebase>
     </ClerkProvider>
   );
 };
