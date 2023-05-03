@@ -1,4 +1,5 @@
-import { type ConfigContext, type ExpoConfig } from "expo/config";
+// prettier-ignore
+import type { ConfigContext, ExpoConfig } from "expo/config";
 import { z } from "zod";
 
 const CLERK_PUBLISHABLE_KEY =
