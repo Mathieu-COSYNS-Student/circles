@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import resolveConfig from "tailwindcss/resolveConfig";
 
 import tailwindConfig from "../../tailwind.config";
@@ -5,7 +7,7 @@ import tailwindConfig from "../../tailwind.config";
 const fullConfig = resolveConfig(tailwindConfig);
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-export const brandColors: {
+const brandColors: {
   50: string;
   100: string;
   200: string;
@@ -17,17 +19,16 @@ export const brandColors: {
   800: string;
   900: string;
   950: string;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 } = fullConfig.theme.colors.brand;
 
 const theme = {
   light: {
-    text: "#000",
+    // @ts-ignore
+    text: fullConfig.theme.colors.gray[900] as string,
     background: "#fff",
     statusBarStyle: "dark",
-    tabIconDefault: "#ccc",
+    tabIconDefault: "#777",
     tabIconSelected: brandColors[700],
     chatLeftBubble: "#000",
     chatLeftBubbleBackground: "#eee",
@@ -43,6 +44,10 @@ const theme = {
     chatToolbarInputBorder: "#999",
     refreshControlBackground: "#fff",
     refreshControlForground: "#000",
+    // @ts-ignore
+    inputPlaceholder: fullConfig.theme.colors.gray[500] as string,
+    inputCursor: brandColors[500],
+    activityIndicatorColor: brandColors[700],
   },
   dark: {
     text: "#fff",
@@ -64,6 +69,10 @@ const theme = {
     chatToolbarInputBorder: "#444",
     refreshControlBackground: "#333",
     refreshControlForground: "#fff",
+    // @ts-ignore
+    inputPlaceholder: fullConfig.theme.colors.zinc[400] as string,
+    inputCursor: brandColors[500],
+    activityIndicatorColor: brandColors[700],
   },
 };
 

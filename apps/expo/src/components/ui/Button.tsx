@@ -13,7 +13,8 @@ const Button: FC<ButtonProps> = ({ children, type = "normal", ...props }) => {
   let classForType = "";
   if (type === "normal") {
     classForType =
-      "bg-brand-700 hover:bg-brand-800 focus:ring-brand-300 dark:bg-brand-600 dark:hover:bg-brand-700 dark:focus:ring-brand-800";
+      "bg-brand-700 hover:bg-brand-800 focus:ring-brand-300 " +
+      "dark:bg-brand-600 dark:hover:bg-brand-700 dark:focus:ring-brand-800";
   }
   if (type === "danger") {
     classForType =
@@ -29,9 +30,13 @@ const Button: FC<ButtonProps> = ({ children, type = "normal", ...props }) => {
         }}
         {...props}
       >
-        <Text className="text-center text-sm font-semibold uppercase text-white">
-          {children}
-        </Text>
+        {typeof children === "string" ? (
+          <Text className="text-center text-sm font-semibold uppercase text-white">
+            {children}
+          </Text>
+        ) : (
+          children
+        )}
       </Pressable>
     </View>
   );

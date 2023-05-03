@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AccountScreen from "~/screens/AccountScreen";
 import CircleScreen from "~/screens/CircleScreen";
 import CircleSettingsScreen from "~/screens/CircleSettingsScreen";
+import CreateCircleScreen from "~/screens/CreateCircleScreen";
 import ForgotPasswordScreen from "~/screens/ForgotPasswordScreen";
 import OnboardingScreen from "~/screens/OnboardingScreen";
 import ResetPasswordScreen from "~/screens/ResetPasswordScreen";
@@ -19,6 +20,7 @@ export type RootStackParamList = {
   ForgotPassword: undefined;
   ResetPassword: undefined;
   Circles: undefined;
+  CreateCircle: undefined;
   Circle: { id: string; name: string };
   CircleSettings: { id: string };
   Test: undefined;
@@ -39,6 +41,11 @@ export const RootNavigator = () => {
             name="MainTabNavigator"
             component={MainTabNavigator}
             options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="CreateCircle"
+            component={CreateCircleScreen}
+            options={{ title: "Create a new circle" }}
           />
           <Stack.Screen
             name="Circle"

@@ -17,7 +17,12 @@ const Text: FC<TextProps> = ({ className, type = "normal", ...props }) => {
       className += " text-2xl font-semibold";
       break;
   }
-  return <DefaultText className={`dark:text-white ${className}`} {...props} />;
+  return (
+    <DefaultText
+      className={`text-gray-900 dark:text-white ${className}`}
+      {...props}
+    />
+  );
 };
 
 export default Text;

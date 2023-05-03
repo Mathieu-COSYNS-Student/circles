@@ -1,6 +1,6 @@
 import { Image, TouchableOpacity, View } from "react-native";
 
-import { circleSchema, type Circle } from "@acme/schema";
+import { type Circle } from "@acme/schema";
 
 import { Text } from "~/components/ui";
 import { useRootNavigation } from "~/navigators/useRootNavigation";
@@ -12,10 +12,6 @@ export const CirclesListItem = ({ circle }: { circle: Circle }) => {
     navigation.navigate("Circle", { ...circle });
   };
 
-  const result = circleSchema.safeParse(circle);
-  if (!result.success) {
-    console.log(result.error.message);
-  }
   return (
     <TouchableOpacity
       className="border-b-2 border-zinc-200 dark:border-zinc-800"

@@ -9,5 +9,12 @@
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   },
-  "cSpell.words": ["Ionicons"]
+  "cSpell.words": [
+    "chatbubbles",
+    "firestore",
+    "Formik",
+    "Ionicons",
+    "Pressable",
+    "trpc"
+  ]
 }
