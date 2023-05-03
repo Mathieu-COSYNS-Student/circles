@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Alert, View, useColorScheme } from "react-native";
+import { Alert, StatusBar, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useFonts } from "expo-font";
 import { hideAsync } from "expo-splash-screen";
@@ -7,16 +7,12 @@ import { useUser } from "@clerk/clerk-expo";
 import { FontAwesome } from "@expo/vector-icons";
 import notifee from "@notifee/react-native";
 import messaging from "@react-native-firebase/messaging";
-import {
-  DarkTheme,
-  DefaultTheme,
-  NavigationContainer,
-} from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { OverflowMenuProvider } from "react-navigation-header-buttons";
 
 import { AuthProvider } from "~/utils/AuthProvider";
 import { TRPCProvider } from "~/utils/trpc";
-import { useThemeColor } from "~/hooks/Theme";
+import { useNavigationTheme, useThemeColor } from "~/hooks/Theme";
 import { RootNavigator } from "~/navigators/RootNavigator";
 
 export default function RootLayout() {
@@ -28,6 +24,8 @@ export default function RootLayout() {
 }
 
 const LoadingOrNot = () => {
+  const statusBarStyle = useThemeColor("statusBarStyle");
+  const navigationTheme = useNavigationTheme();
   const [appIsReady, setAppIsReady] = useState(false);
 
   const [fontLoaded, fontError] = useFonts({
@@ -55,6 +53,11 @@ const LoadingOrNot = () => {
   return appIsReady ? (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <App />
+      <StatusBar
+        barStyle={statusBarStyle as never}
+        backgroundColor={navigationTheme.colors.card}
+        translucent={true}
+      />
     </View>
   ) : (
     <View />
@@ -62,7 +65,7 @@ const LoadingOrNot = () => {
 };
 
 const App = () => {
-  const colorScheme = useColorScheme();
+  const navigationTheme = useNavigationTheme();
   const backgroundColor = useThemeColor("background");
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -134,9 +137,7 @@ const App = () => {
   return (
     <TRPCProvider>
       <SafeAreaProvider style={{ backgroundColor }}>
-        <NavigationContainer
-          theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
+        <NavigationContainer theme={navigationTheme}>
           <OverflowMenuProvider>
             <RootNavigator />
           </OverflowMenuProvider>

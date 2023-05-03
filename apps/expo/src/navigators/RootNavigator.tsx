@@ -1,7 +1,6 @@
 import { useUser } from "@clerk/clerk-expo";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { useThemeColor } from "~/hooks/Theme";
 import AccountScreen from "~/screens/AccountScreen";
 import CircleScreen from "~/screens/CircleScreen";
 import CircleSettingsScreen from "~/screens/CircleSettingsScreen";
@@ -31,15 +30,9 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const RootNavigator = () => {
   const { isSignedIn } = useUser();
-  const statusBarStyle = useThemeColor("statusBarStyle");
 
   return (
-    <Stack.Navigator
-      screenOptions={{
-        statusBarStyle: statusBarStyle as never,
-        statusBarTranslucent: true,
-      }}
-    >
+    <Stack.Navigator>
       {isSignedIn ? (
         <>
           <Stack.Screen
