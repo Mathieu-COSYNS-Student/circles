@@ -11,8 +11,7 @@ import {
   type InputToolbarProps,
   type SendProps,
 } from "react-native-gifted-chat";
-import { FontAwesome } from "@expo/vector-icons";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { Ionicons } from "@expo/vector-icons";
 
 import { useThemeColor } from "~/hooks/Theme";
 
@@ -61,10 +60,10 @@ export const MyActions = <TMessage extends IMessage>(
         alignItems: "center",
         justifyContent: "center",
         marginLeft: 4,
-        marginRight: 4,
+        //marginRight: 4,
         marginBottom: 0,
       }}
-      icon={() => <FontAwesome size={30} name="plus" color={color} />}
+      icon={() => <Ionicons size={38} name="add" color={color} />}
       options={
         props.onSend
           ? {
@@ -121,7 +120,7 @@ export const MyComposer = (props: ComposerProps) => {
         borderRadius: Platform.OS === "web" ? 15 : 22,
         paddingVertical: 8.5,
         paddingHorizontal: 16,
-        marginLeft: 0,
+        marginLeft: 4,
       }}
     />
   );
@@ -150,7 +149,7 @@ export const MySend = <TMessage extends IMessage>(
         opacity: props.text ? 1 : 0.5,
       }}
     >
-      <MaterialIcons size={30} color={color} name={"send"} />
+      <Ionicons size={30} color={color} name="send" />
     </Send>
   );
 };

@@ -126,7 +126,7 @@ const Chat = ({ chatId }: ChatProps) => {
       onPressAvatar={console.log}
       keyboardShouldPersistTaps="never"
       renderInputToolbar={renderInputToolbar}
-      renderActions={renderActions}
+      // renderActions={renderActions}
       renderComposer={renderComposer}
       renderSend={renderSend}
       renderBubble={renderBubble}

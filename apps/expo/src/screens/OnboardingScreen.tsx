@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { type NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { type RootStackParamList } from "~/navigators/RootNavigator";
@@ -50,7 +50,7 @@ const OnboardingScreen = ({ navigation }: OnboardingScreenProps) => {
               style={styles.signIn}
             >
               <Text style={styles.textSign}>Get Started</Text>
-              <MaterialIcons name="navigate-next" color="#fff" size={20} />
+              <Ionicons name="chevron-forward-outline" color="#fff" size={20} />
             </LinearGradient>
           </TouchableOpacity>
         </View>

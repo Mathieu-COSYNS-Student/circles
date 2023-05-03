@@ -4,7 +4,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useFonts } from "expo-font";
 import { hideAsync } from "expo-splash-screen";
 import { useUser } from "@clerk/clerk-expo";
-import { FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import notifee from "@notifee/react-native";
 import messaging from "@react-native-firebase/messaging";
 import { NavigationContainer } from "@react-navigation/native";
@@ -29,7 +29,7 @@ const LoadingOrNot = () => {
   const [appIsReady, setAppIsReady] = useState(false);
 
   const [fontLoaded, fontError] = useFonts({
-    ...FontAwesome.font,
+    ...Ionicons.font,
   });
 
   const { isLoaded: userLoaded } = useUser();

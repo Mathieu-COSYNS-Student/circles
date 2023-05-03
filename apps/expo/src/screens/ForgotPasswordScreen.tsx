@@ -10,7 +10,7 @@ import {
 import * as Animatable from "react-native-animatable";
 import { useSignIn } from "@clerk/clerk-expo";
 import { type EmailLinkFactor } from "@clerk/types";
-import { FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { type NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { type RootStackParamList } from "~/navigators/RootNavigator";
@@ -100,7 +100,7 @@ const ForgotPasswordScreen = ({ navigation }: ForgotPasswordScreenProps) => {
       <Animatable.View style={styles.footer} animation="fadeInUpBig">
         <Text style={styles.text_footer}>Email</Text>
         <View style={styles.action}>
-          <FontAwesome name="user-o" color="#05375a" size={20} />
+          <Ionicons name="person-outline" color="#05375a" size={20} />
           <TextInput
             placeholder="Your Email"
             style={styles.textInput}

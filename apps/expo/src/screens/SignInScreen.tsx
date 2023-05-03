@@ -10,7 +10,7 @@ import {
 import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSignIn } from "@clerk/clerk-expo";
-import { Feather, FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { type NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { type RootStackParamList } from "~/navigators/RootNavigator";
@@ -109,7 +109,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
       <Animatable.View style={styles.footer} animation="fadeInUpBig">
         <Text style={styles.text_footer}>Email</Text>
         <View style={styles.action}>
-          <FontAwesome name="user-o" color="#05375a" size={20} />
+          <Ionicons name="person-outline" color="#05375a" size={20} />
           <TextInput
             placeholder="Your Email"
             style={styles.textInput}
@@ -120,11 +120,15 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
           />
           {data.check_EmailChange ? (
             <Animatable.View animation="bounceIn">
-              <Feather name="check-circle" color="green" size={20} />
+              <Ionicons
+                name="checkmark-circle-outline"
+                color="green"
+                size={20}
+              />
             </Animatable.View>
           ) : (
             <Animatable.View animation="bounceIn">
-              <Feather name="alert-circle" color="red" size={20} />
+              <Ionicons name="alert-circle-outline" color="red" size={20} />
             </Animatable.View>
           )}
         </View>
@@ -144,7 +148,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
           Password
         </Text>
         <View style={styles.action}>
-          <FontAwesome name="lock" color="#05375a" size={20} />
+          <Ionicons name="lock-closed-outline" color="#05375a" size={20} />
           <TextInput
             placeholder="Your Password"
             style={styles.textInput}
@@ -155,9 +159,9 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
           />
           <TouchableOpacity onPress={updateSecureTextEntry}>
             {data.secureTextEntry ? (
-              <Feather name="eye-off" color="grey" size={20} />
+              <Ionicons name="eye-off-outline" color="grey" size={20} />
             ) : (
-              <Feather name="eye" color="grey" size={20} />
+              <Ionicons name="eye-outline" color="grey" size={20} />
             )}
           </TouchableOpacity>
         </View>

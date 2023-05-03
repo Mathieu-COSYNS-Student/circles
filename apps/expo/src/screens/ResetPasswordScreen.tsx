@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
-import { Feather, FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { type NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { type RootStackParamList } from "~/navigators/RootNavigator";
@@ -81,7 +81,7 @@ const ResetPasswordScreen = ({ navigation }: ResetPasswordScreenProps) => {
       <Animatable.View style={styles.footer} animation="fadeInUpBig">
         <Text style={[styles.text_footer]}>Type your new password</Text>
         <View style={styles.action}>
-          <FontAwesome name="lock" color="#05375a" size={20} />
+          <Ionicons name="lock-closed-outline" color="#05375a" size={20} />
           <TextInput
             placeholder="Your New Password"
             style={styles.textInput}
@@ -92,9 +92,9 @@ const ResetPasswordScreen = ({ navigation }: ResetPasswordScreenProps) => {
           />
           <TouchableOpacity onPress={updateSecureTextEntry}>
             {data.secureTextEntry ? (
-              <Feather name="eye-off" color="grey" size={20} />
+              <Ionicons name="eye-off-outline" color="grey" size={20} />
             ) : (
-              <Feather name="eye" color="grey" size={20} />
+              <Ionicons name="eye-outline" color="grey" size={20} />
             )}
           </TouchableOpacity>
         </View>
@@ -118,7 +118,7 @@ const ResetPasswordScreen = ({ navigation }: ResetPasswordScreenProps) => {
           Confirm New Password
         </Text>
         <View style={styles.action}>
-          <FontAwesome name="lock" color="#05375a" size={20} />
+          <Ionicons name="lock-closed-outline" color="#05375a" size={20} />
           <TextInput
             placeholder="Retype your new password"
             style={styles.textInput}
@@ -128,9 +128,9 @@ const ResetPasswordScreen = ({ navigation }: ResetPasswordScreenProps) => {
           />
           <TouchableOpacity onPress={updateConfirmSecureTextEntry}>
             {data.confirmSecureTextEntry ? (
-              <Feather name="eye-off" color="grey" size={20} />
+              <Ionicons name="eye-off-outline" color="grey" size={20} />
             ) : (
-              <Feather name="eye" color="grey" size={20} />
+              <Ionicons name="eye-off" color="grey" size={20} />
             )}
           </TouchableOpacity>
         </View>
