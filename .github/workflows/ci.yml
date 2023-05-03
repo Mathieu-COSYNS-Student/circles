@@ -23,8 +23,8 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.4
+      # - name: Setup pnpm
+      #   uses: pnpm/action-setup@v2.2.4
 
       - name: Setup Node 18
         uses: actions/setup-node@v3
@@ -51,12 +51,15 @@ jobs:
       # Normally, this would be done as part of the turbo pipeline - however since the Expo app doesn't depend on `@acme/db` it doesn't care.
       # TODO: Free for all to find a better solution here.
       - name: Generate Prisma Client
-        run: pnpm turbo db:generate
+        # run: pnpm turbo db:generate
+        run: npx turbo db:generate
 
       - name: Build, lint and type-check
-        run: pnpm turbo build lint type-check
+        # run: pnpm turbo build lint type-check
+        run: npx turbo build lint type-check
         env:
           SKIP_ENV_VALIDATION: true
 
       - name: Check workspaces
-        run: pnpm manypkg check
+        # run: pnpm manypkg check
+        run: npm run manypkg check

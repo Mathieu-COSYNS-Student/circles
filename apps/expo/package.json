@@ -8,10 +8,10 @@
     "dev:android": "expo start --android --dev-client",
     "dev:ios": "expo start --ios --dev-client",
     "lint": "eslint .",
-    "lint:fix": "pnpm lint --fix",
+    "lint:fix": "npm run lint --fix",
     "type-check": "tsc --noEmit",
     "build:android:development": "npx eas build -p android --profile development",
-    "build:android:development:local": "pnpm run build:android:development --local",
+    "build:android:development:local": "npm run build:android:development -- --local",
     "build:android:preview": "npx eas build -p android --profile preview",
     "build:android:release": "npx eas build -p android --profile release",
     "test": "jest --watchAll"

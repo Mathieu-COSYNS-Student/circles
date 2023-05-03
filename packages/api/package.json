@@ -7,11 +7,11 @@
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint .",
-    "lint:fix": "pnpm lint --fix",
+    "lint:fix": "npm run lint --fix",
     "type-check": "tsc --noEmit",
     "with-env": "dotenv -e ../../.env --",
-    "test": "pnpm with-env jest",
-    "test:watch": "pnpm run test --watch"
+    "test": "npm run with-env jest",
+    "test:watch": "npm run test --watch"
   },
   "dependencies": {
     "@acme/db": "*",
