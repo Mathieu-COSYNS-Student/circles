@@ -44,7 +44,7 @@ jobs:
       #     restore-keys: |
       #       ${{ runner.os }}-pnpm-store-
 
-      - name: Install deps (with cache)
+      - name: Install dependencies
         # run: pnpm install
         run: npm ci
 
@@ -62,4 +62,4 @@ jobs:
 
       - name: Check workspaces
         # run: pnpm manypkg check
-        run: npm run manypkg check
+        run: npx manypkg check
