@@ -32,6 +32,7 @@ const OnboardingScreen = ({ navigation }: OnboardingScreenProps) => {
         <Animatable.Image
           duration={1500}
           animation="bounceIn"
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           source={require("../../assets/images/Circles_logo_round.png")}
           style={styles.logo}
           resizeMode="stretch"

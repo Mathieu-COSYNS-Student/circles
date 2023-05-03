@@ -65,6 +65,7 @@ const App = () => {
   const colorScheme = useColorScheme();
   const backgroundColor = useThemeColor("background");
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState(true);
 
   const onDisplayNotification = async () => {
@@ -91,7 +92,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+    const unsubscribe = messaging().onMessage((remoteMessage) => {
       Alert.alert("A new FCM message arrived!", JSON.stringify(remoteMessage));
       console.log("A new FCM message arrived!", JSON.stringify(remoteMessage));
       onDisplayNotification();
