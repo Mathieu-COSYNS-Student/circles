@@ -57,6 +57,10 @@
       },
       "prodServerBaseUrl": "https://circles-ucl.vercel.app"
     },
-    "plugins": ["@react-native-firebase/app", "@notifee/react-native"]
+    "plugins": [
+      "./plugins/withAndroidVerifiedLinksWorkaround",
+      "@react-native-firebase/app",
+      "@notifee/react-native"
+    ]
   }
 }
