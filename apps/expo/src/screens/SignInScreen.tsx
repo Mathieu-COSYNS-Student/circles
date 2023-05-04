@@ -111,8 +111,9 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
               </Text>
 
               <Button
-                title="Sign In"
+                title={isSubmitting ? "" : "Sign In"}
                 disabled={isSubmitting}
+                iconEnd={isSubmitting ? "loading" : undefined}
                 onPress={() => handleSubmit()}
               />
             </>
@@ -123,7 +124,11 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
           <Text className="mx-1 pb-1">or</Text>
           <View className="h-0.5 flex-grow  border-b border-b-brand-200" />
         </View>
-        <Button title="Sign Up" onPress={() => navigation.navigate("SignUp")} />
+        <Button
+          variant="normal-outline"
+          title="Sign Up"
+          onPress={() => navigation.navigate("SignUp")}
+        />
       </Animatable.View>
     </SafeAreaView>
   );

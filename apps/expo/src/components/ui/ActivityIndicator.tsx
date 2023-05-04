@@ -1,4 +1,4 @@
-import React, { type FC } from "react";
+import { type FC } from "react";
 import {
   ActivityIndicator as DefaultActivityIndicator,
   type ActivityIndicatorProps as DefaultActivityIndicatorProps,

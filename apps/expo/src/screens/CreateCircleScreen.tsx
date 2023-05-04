@@ -36,7 +36,8 @@ const CreateCircleScreen = () => {
             <Button
               disabled={isSubmitting}
               onPress={() => handleSubmit()}
-              title={isSubmitting ? "..." : "Create"}
+              title={isSubmitting ? "" : "Create"}
+              iconEnd={isSubmitting ? "loading" : undefined}
             />
           </View>
         )}
