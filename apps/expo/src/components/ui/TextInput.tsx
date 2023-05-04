@@ -1,42 +1,123 @@
-import React, { useId, type FC } from "react";
+import React, { useId, useState, type FC, type ReactNode } from "react";
 import {
   TextInput as DefaultTextInput,
+  Pressable,
   View,
   type TextInputProps as DefaultTextInputProps,
+  type PressableProps,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 import { useThemeColors } from "~/hooks/Theme";
 import Text from "./Text";
 
-export type TextInputProps = DefaultTextInputProps & { label?: string };
+export type TextInputProps = Omit<DefaultTextInputProps, "className"> & {
+  type?: "text" | "password";
+  label?: string;
+  iconStart?: keyof typeof Ionicons.glyphMap;
+  touched?: boolean;
+  errors?: string;
+  containerClassName?: string;
+};
 
-const TextInput: FC<TextInputProps> = ({ label, className, ...props }) => {
-  const { inputPlaceholder, inputCursor } = useThemeColors([
+export const TextInput: FC<TextInputProps> = ({
+  type = "text",
+  label,
+  touched,
+  errors,
+  iconStart,
+  containerClassName,
+  ...props
+}) => {
+  const { text, inputPlaceholder, inputCursor, error, valid } = useThemeColors([
     "inputPlaceholder",
     "inputCursor",
+    "text",
+    "error",
+    "valid",
   ]);
   const labelId = useId();
+  const [hidden, setHidden] = useState(true);
+
+  let iconStatus: keyof typeof Ionicons.glyphMap | undefined = undefined;
+  let iconStatusColor = text;
+
+  if (touched && !errors) {
+    iconStatus = "checkmark-circle-outline";
+    iconStatusColor = valid;
+  } else if (touched && errors) {
+    iconStatus = "alert-circle-outline";
+    iconStatusColor = error;
+  }
+
+  const onPressEye = () => {
+    setHidden((hidden) => !hidden);
+  };
 
   return (
-    <View className={className}>
+    <View className={containerClassName}>
       {label && (
-        <Text nativeID={labelId} className="mb-2 ml-2 text-sm">
+        <Text nativeID={labelId} className="mb-2 ml-2">
           {label}
         </Text>
       )}
-      <DefaultTextInput
-        className={`w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900
-      focus:border-brand-500 focus:ring-brand-500  
-      dark:border-zinc-700 dark:bg-zinc-800 dark:text-white
+      <View
+        className={`flex w-full flex-row items-center rounded-lg border border-gray-300 bg-gray-50
+        focus:border-brand-500 focus:ring-brand-500
+        dark:border-zinc-800 dark:bg-zinc-900
       dark:focus:border-brand-500 dark:focus:ring-brand-500`}
-        accessibilityLabel={label}
-        accessibilityLabelledBy={labelId}
-        placeholderTextColor={inputPlaceholder}
-        selectionColor={inputCursor}
-        {...props}
-      />
+      >
+        {iconStart && (
+          <IconContainer className="p-2.5 pr-0">
+            <Ionicons name={iconStart} color={text} size={20} />
+          </IconContainer>
+        )}
+        <DefaultTextInput
+          className="flex-grow p-2.5 text-sm text-gray-900 dark:text-white"
+          accessibilityLabel={label}
+          accessibilityLabelledBy={labelId}
+          placeholderTextColor={inputPlaceholder}
+          selectionColor={inputCursor}
+          {...props}
+          autoCapitalize={type === "password" ? "none" : undefined}
+          autoComplete={type === "password" ? "password" : undefined}
+          autoCorrect={type === "password" ? false : undefined}
+          secureTextEntry={type === "password" && hidden}
+        />
+        {iconStatus && (
+          <View className="p-2.5 pl-0">
+            <Ionicons name={iconStatus} color={iconStatusColor} size={20} />
+          </View>
+        )}
+        {type === "password" && (
+          <IconContainer className="p-2.5 pl-0" onPress={onPressEye}>
+            <Ionicons
+              name={hidden ? "eye-off-outline" : "eye-outline"}
+              color={text}
+              size={20}
+            />
+          </IconContainer>
+        )}
+      </View>
+      {touched && errors && (
+        <Text style={{ color: error }} className="mx-3 mb-2 mt-1 text-sm">
+          {touched && errors}
+        </Text>
+      )}
     </View>
   );
 };
 
-export default TextInput;
+const IconContainer = ({
+  onPress,
+  ...props
+}: {
+  className?: string;
+  onPress?: PressableProps["onPress"];
+  children: ReactNode;
+}) => {
+  if (onPress) {
+    return <Pressable onPress={onPress} {...props} />;
+  }
+  return <View {...props} />;
+};

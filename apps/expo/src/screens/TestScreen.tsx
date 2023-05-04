@@ -27,7 +27,7 @@ export default function TestScreen() {
   return (
     <ScrollView className="p-2">
       <View className="mb-2">
-        <Button onPress={reload}>Reload</Button>
+        <Button onPress={reload} title="Reload" />
       </View>
       <View>
         <Text>Tests : </Text>

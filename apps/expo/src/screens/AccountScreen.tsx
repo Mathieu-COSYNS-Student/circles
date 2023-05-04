@@ -39,9 +39,7 @@ export default function AccountScreen({}: AccountScreenProps) {
 
       <View>
         <View className="mb-2">
-          <Button type="danger" onPress={onSignOutPress}>
-            Sign out
-          </Button>
+          <Button type="danger" onPress={onSignOutPress} title="Sign out" />
         </View>
       </View>
     </View>

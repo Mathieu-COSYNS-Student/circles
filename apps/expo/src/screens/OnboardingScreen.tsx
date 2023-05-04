@@ -24,7 +24,7 @@ const OnboardingScreen = ({ navigation }: OnboardingScreenProps) => {
         </Animatable.View>
       </View>
       <Animatable.View
-        className="flex h-2/5 justify-between rounded-t-3xl bg-brand-50 p-8 dark:bg-brand-950"
+        className="flex h-2/5 justify-between rounded-t-3xl bg-brand-50 p-8 dark:bg-zinc-950"
         animation="fadeInUpBig"
       >
         <View>

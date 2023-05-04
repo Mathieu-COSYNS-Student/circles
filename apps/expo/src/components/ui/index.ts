@@ -7,6 +7,6 @@ export { default as FullLoading } from "./FullLoading";
 export * from "./RefreshControl";
 export { default as RefreshControl } from "./RefreshControl";
 export * from "./TextInput";
-export { default as TextInput } from "./TextInput";
 export * from "./ActivityIndicator";
 export { default as ActivityIndicator } from "./ActivityIndicator";
+export * from "./SafeAreaView";

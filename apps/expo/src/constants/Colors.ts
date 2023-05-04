@@ -12,6 +12,8 @@ const tailwindColors = fullConfig.theme.colors as {
   brand: TailwindColorPallette;
   gray: TailwindColorPallette;
   zinc: TailwindColorPallette;
+  red: TailwindColorPallette;
+  green: TailwindColorPallette;
 };
 
 const theme = {
@@ -38,6 +40,8 @@ const theme = {
     inputPlaceholder: tailwindColors.gray[500],
     inputCursor: tailwindColors.brand[500],
     activityIndicatorColor: tailwindColors.brand[700],
+    error: tailwindColors.red[500],
+    valid: tailwindColors.green[500],
   },
   dark: {
     text: "#fff",
@@ -62,6 +66,8 @@ const theme = {
     inputPlaceholder: tailwindColors.zinc[400],
     inputCursor: tailwindColors.brand[500],
     activityIndicatorColor: tailwindColors.brand[700],
+    error: tailwindColors.red[500],
+    valid: tailwindColors.green[500],
   },
 };
 

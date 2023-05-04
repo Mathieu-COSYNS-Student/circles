@@ -24,17 +24,20 @@ const CreateCircleScreen = () => {
       <Formik initialValues={initialValues} onSubmit={onSubmit}>
         {({ handleChange, handleBlur, handleSubmit, values, isSubmitting }) => (
           <View>
-            <TextInput
-              className="mb-2"
-              onChangeText={handleChange("name")}
-              onBlur={handleBlur("name")}
-              value={values.name}
-              label="Circle name"
-            />
+            <View className="mb-2">
+              <TextInput
+                onChangeText={handleChange("name")}
+                onBlur={handleBlur("name")}
+                value={values.name}
+                label="Circle name"
+              />
+            </View>
 
-            <Button disabled={isSubmitting} onPress={() => handleSubmit()}>
-              {isSubmitting ? "..." : "Create"}
-            </Button>
+            <Button
+              disabled={isSubmitting}
+              onPress={() => handleSubmit()}
+              title={isSubmitting ? "..." : "Create"}
+            />
           </View>
         )}
       </Formik>
