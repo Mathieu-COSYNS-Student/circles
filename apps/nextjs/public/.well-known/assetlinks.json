@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "be.uclouvain.tfe.circles_ucl",
+      "sha256_cert_fingerprints": [
+        "12:D0:B4:31:E7:02:E8:0B:D0:4E:8A:59:7F:4E:74:DB:EF:76:AF:3F:9B:7C:0C:69:B2:49:8F:F2:39:35:5C:3F"
+      ]
+    }
+  }
+]

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Alert, StatusBar, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useFonts } from "expo-font";
+import { parse, useURL } from "expo-linking";
 import { hideAsync } from "expo-splash-screen";
 import { useUser } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
@@ -16,6 +17,16 @@ import { useNavigationTheme, useThemeColor } from "~/hooks/Theme";
 import { RootNavigator } from "~/navigators/RootNavigator";
 
 export default function RootLayout() {
+  const url = useURL();
+
+  useEffect(() => {
+    console.log(url);
+    if (url) {
+      const { hostname, path, queryParams } = parse(url);
+      console.log(hostname, path, queryParams);
+    }
+  }, [url]);
+
   return (
     <AuthProvider>
       <LoadingOrNot />

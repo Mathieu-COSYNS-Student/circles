@@ -10,11 +10,14 @@
     "editor.defaultFormatter": "Prisma.prisma"
   },
   "cSpell.words": [
+    "BROWSABLE",
     "chatbubbles",
     "firestore",
     "Formik",
     "Ionicons",
+    "notifee",
     "Pressable",
-    "trpc"
+    "trpc",
+    "uclouvain"
   ]
 }

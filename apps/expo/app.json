@@ -1,11 +1,11 @@
 {
   "expo": {
     "name": "Circles",
-    "slug": "circles-react-native",
+    "slug": "circles-ucl",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "circles-ucl",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -17,11 +17,35 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "be.uclouvain.tfe.circles",
+      "package": "be.uclouvain.tfe.circles_ucl",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#4B44FA"
-      }
+      },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "http",
+              "host": "circles-ucl.vercel.app"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        },
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "circles-ucl.vercel.app"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -29,7 +53,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "ad2cfab7-4dd0-40fd-a8b9-f3c481e40f22"
+        "projectId": "496479d0-6099-4f2f-9dc5-c3dfa84a7b80"
       },
       "prodServerBaseUrl": "https://circles-ucl.vercel.app"
     },
