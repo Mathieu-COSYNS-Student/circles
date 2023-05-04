@@ -6,7 +6,7 @@ module.exports = function (api) {
     presets: ["babel-preset-expo"],
     plugins: [
       "nativewind/babel",
-      ["module-resolver", { alias: { "~": "./src" } }],
+      ["module-resolver", { alias: { "~": "./src", "~assets": "./assets" } }],
     ],
   };
 };

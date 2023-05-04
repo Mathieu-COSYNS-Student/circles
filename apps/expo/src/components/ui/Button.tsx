@@ -1,15 +1,22 @@
-import React, { type FC, type ReactNode } from "react";
+import React, { type FC } from "react";
 import { Pressable, Text, View, type PressableProps } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 export type ButtonProps = Omit<
   PressableProps,
   "children" | "className" | "android_ripple"
 > & {
-  children: ReactNode;
+  title: string;
+  iconEnd?: keyof typeof Ionicons.glyphMap;
   type?: "normal" | "danger";
 };
 
-const Button: FC<ButtonProps> = ({ children, type = "normal", ...props }) => {
+const Button: FC<ButtonProps> = ({
+  title,
+  iconEnd,
+  type = "normal",
+  ...props
+}) => {
   let classForType = "";
   if (type === "normal") {
     classForType =
@@ -23,20 +30,17 @@ const Button: FC<ButtonProps> = ({ children, type = "normal", ...props }) => {
   return (
     <View className="justify-center self-stretch rounded-lg">
       <Pressable
-        className={`px-4 py-3 focus:outline-none focus:ring-4 ${classForType}`}
+        className={`flex flex-row justify-center px-4 py-3 focus:outline-none focus:ring-4 ${classForType}`}
         android_ripple={{
           color: "rgba(0,0,0,0.15)",
           borderless: true,
         }}
         {...props}
       >
-        {typeof children === "string" ? (
-          <Text className="text-center text-sm font-semibold uppercase text-white">
-            {children}
-          </Text>
-        ) : (
-          children
-        )}
+        <Text className="text-center text-sm font-semibold uppercase text-white">
+          {title}
+        </Text>
+        {iconEnd && <Ionicons name={iconEnd} color="#fff" size={20} />}
       </Pressable>
     </View>
   );
