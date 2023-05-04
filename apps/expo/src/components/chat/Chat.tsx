@@ -6,12 +6,7 @@ import firestore, {
 } from "@react-native-firebase/firestore";
 
 import { trpc } from "~/utils/trpc";
-import {
-  renderActions,
-  renderComposer,
-  renderInputToolbar,
-  renderSend,
-} from "./InputToolbar";
+import { renderComposer, renderInputToolbar, renderSend } from "./InputToolbar";
 import {
   renderBubble,
   renderFooter,
