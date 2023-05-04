@@ -9,7 +9,6 @@ import {
   type HeaderButtonProps,
 } from "react-navigation-header-buttons";
 
-import { useThemeColors } from "~/hooks/Theme";
 import CirclesScreen from "~/screens/CirclesScreen";
 import TestScreen from "~/screens/TestScreen";
 import { useRootNavigation } from "./useRootNavigation";
@@ -27,10 +26,6 @@ const IoniconsHeaderButton = (props: HeaderButtonProps) => (
 
 const MainTabNavigator = () => {
   const navigation = useRootNavigation();
-  const { tabIconDefault, tabIconSelected } = useThemeColors([
-    "tabIconDefault",
-    "tabIconSelected",
-  ]);
 
   return (
     <Tab.Navigator
@@ -49,8 +44,6 @@ const MainTabNavigator = () => {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: tabIconSelected,
-        tabBarInactiveTintColor: tabIconDefault,
       })}
     >
       <Tab.Screen

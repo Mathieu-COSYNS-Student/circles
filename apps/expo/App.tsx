@@ -10,10 +10,15 @@ import notifee from "@notifee/react-native";
 import messaging from "@react-native-firebase/messaging";
 import { NavigationContainer } from "@react-navigation/native";
 import { OverflowMenuProvider } from "react-navigation-header-buttons";
+import { z } from "zod";
 
 import { AuthProvider } from "~/utils/AuthProvider";
 import { TRPCProvider } from "~/utils/trpc";
-import { useNavigationTheme, useThemeColor } from "~/hooks/Theme";
+import {
+  useNavigationTheme,
+  useThemeColor,
+  useThemeColors,
+} from "~/hooks/Theme";
 import { RootNavigator } from "~/navigators/RootNavigator";
 
 export default function RootLayout() {
@@ -35,8 +40,10 @@ export default function RootLayout() {
 }
 
 const LoadingOrNot = () => {
-  const statusBarStyle = useThemeColor("statusBarStyle");
-  const navigationTheme = useNavigationTheme();
+  const { statusBarStyle, statusBarColor } = useThemeColors([
+    "statusBarStyle",
+    "statusBarColor",
+  ]);
   const [appIsReady, setAppIsReady] = useState(false);
 
   const [fontLoaded, fontError] = useFonts({
@@ -65,8 +72,10 @@ const LoadingOrNot = () => {
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <App />
       <StatusBar
-        barStyle={statusBarStyle as never}
-        backgroundColor={navigationTheme.colors.card}
+        barStyle={z
+          .enum(["light-content", "dark-content", "default"])
+          .parse(statusBarStyle)}
+        backgroundColor={statusBarColor}
         translucent={true}
       />
     </View>

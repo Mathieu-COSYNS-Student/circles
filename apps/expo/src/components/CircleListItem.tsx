@@ -14,7 +14,7 @@ export const CirclesListItem = ({ circle }: { circle: Circle }) => {
 
   return (
     <TouchableOpacity
-      className="border-b-2 border-zinc-200 dark:border-zinc-800"
+      className="border-b-2 border-gray-100 dark:border-zinc-950"
       onPress={onPress}
     >
       <View className="flex-row items-center p-3">

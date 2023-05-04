@@ -1,5 +1,5 @@
 import { useColorScheme } from "react-native";
-import { DarkTheme, DefaultTheme } from "@react-navigation/native";
+import { DefaultTheme, type Theme } from "@react-navigation/native";
 
 import Colors from "~/constants/Colors";
 
@@ -19,7 +19,26 @@ export function useThemeColors(colorsNames: ColorName[]) {
   return result;
 }
 
-export function useNavigationTheme() {
+export function useNavigationTheme(): Theme {
   const theme = useColorScheme() ?? "light";
-  return theme === "dark" ? DarkTheme : DefaultTheme;
+  const { primary, background, card, text, border, notification } =
+    useThemeColors([
+      "primary",
+      "background",
+      "card",
+      "text",
+      "border",
+      "notification",
+    ]);
+  return {
+    dark: theme === "dark",
+    colors: {
+      primary: primary ?? DefaultTheme.colors.primary,
+      background: background ?? DefaultTheme.colors.background,
+      card: card ?? DefaultTheme.colors.card,
+      text: text ?? DefaultTheme.colors.text,
+      border: border ?? DefaultTheme.colors.border,
+      notification: notification ?? DefaultTheme.colors.notification,
+    },
+  };
 }

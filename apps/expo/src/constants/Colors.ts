@@ -9,20 +9,29 @@ import tailwindConfig from "../../tailwind.config";
 const fullConfig = resolveConfig(tailwindConfig) as unknown;
 // @ts-ignore
 const tailwindColors = fullConfig.theme.colors as {
+  inherit: "inherit";
+  current: "currentColor";
+  transparent: "transparent";
+  black: string;
+  white: string;
   brand: TailwindColorPallette;
   gray: TailwindColorPallette;
   zinc: TailwindColorPallette;
   red: TailwindColorPallette;
+  orange: TailwindColorPallette;
   green: TailwindColorPallette;
 };
 
 const theme = {
   light: {
+    primary: tailwindColors.brand[700],
+    background: "#fafaff", //tailwindColors.brand[50],
+    card: tailwindColors.brand[50],
     text: tailwindColors.gray["900"],
-    background: "#fff",
-    statusBarStyle: "dark",
-    tabIconDefault: "#777",
-    tabIconSelected: tailwindColors.brand[700],
+    border: "#ebebff",
+    notification: "orange",
+    statusBarStyle: "dark-content",
+    statusBarColor: tailwindColors.brand[400],
     chatLeftBubble: "#000",
     chatLeftBubbleBackground: "#eee",
     chatLeftBubbleBorder: "#999",
@@ -44,11 +53,14 @@ const theme = {
     valid: tailwindColors.green[500],
   },
   dark: {
-    text: "#fff",
+    primary: tailwindColors.brand[700],
     background: "#000",
-    statusBarStyle: "light",
-    tabIconDefault: "#ccc",
-    tabIconSelected: tailwindColors.brand[600],
+    card: tailwindColors.zinc[950],
+    text: "#fff",
+    border: tailwindColors.zinc[900],
+    notification: tailwindColors.orange[400],
+    statusBarStyle: "light-content",
+    statusBarColor: tailwindColors.zinc[950],
     chatLeftBubble: "#fff",
     chatLeftBubbleBackground: "#444",
     chatLeftBubbleBorder: "#444",
