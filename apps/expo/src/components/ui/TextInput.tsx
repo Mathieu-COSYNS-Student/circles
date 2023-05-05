@@ -54,6 +54,17 @@ export const TextInput: FC<TextInputProps> = ({
     setHidden((hidden) => !hidden);
   };
 
+  let passwordProps = {};
+
+  if (type === "password") {
+    passwordProps = {
+      autoCapitalize: "none",
+      autoComplete: "password",
+      autoCorrect: false,
+      secureTextEntry: hidden,
+    };
+  }
+
   return (
     <View className={containerClassName}>
       {label && (
@@ -79,10 +90,7 @@ export const TextInput: FC<TextInputProps> = ({
           placeholderTextColor={inputPlaceholder}
           selectionColor={inputCursor}
           {...props}
-          autoCapitalize={type === "password" ? "none" : undefined}
-          autoComplete={type === "password" ? "password" : undefined}
-          autoCorrect={type === "password" ? false : undefined}
-          secureTextEntry={type === "password" && hidden}
+          {...passwordProps}
         />
         {iconStatus && (
           <View className="p-2.5 pl-0">
