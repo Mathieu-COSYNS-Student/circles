@@ -19,7 +19,7 @@ export const getServerBaseUrl = () => {
     Constants.manifest2?.extra?.expoGo?.debuggerHost;
   const localhost = debuggerHost?.split(":")[0];
   if (localhost) {
-    // return `http://${localhost}:3000`;
+    return `http://${localhost}:3000`;
   }
 
   const prodServerBaseUrlSchema = z.string().optional();
