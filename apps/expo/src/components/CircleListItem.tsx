@@ -1,29 +1,96 @@
-import { Image, TouchableOpacity, View } from "react-native";
+import { useEffect, useMemo, useState } from "react";
+import { Image, PixelRatio, TouchableOpacity, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import firestore from "@react-native-firebase/firestore";
 
 import { type Circle } from "@acme/schema";
 
+import { getRelativeTime } from "~/utils/date";
+import {
+  convertFirebaseDocumentToMessage,
+  type Message,
+} from "~/utils/messages";
 import { Text } from "~/components/ui";
+import { useThemeColors } from "~/hooks/Theme";
 import { useRootNavigation } from "~/navigators/useRootNavigation";
 
 export const CirclesListItem = ({ circle }: { circle: Circle }) => {
+  const { text } = useThemeColors(["text"]);
+  const dotIconSize = useMemo(() => PixelRatio.getFontScale() * 4, []);
   const navigation = useRootNavigation();
+  const [lastMessage, setLastMessage] = useState<Message | undefined | false>(
+    undefined,
+  );
 
   const onPress = () => {
     navigation.navigate("Circle", { ...circle });
   };
+
+  const { chatId } = circle;
+
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection("chats")
+      .doc(chatId)
+      .collection("messages")
+      .orderBy("createdAt", "desc")
+      .limit(1)
+      .onSnapshot((documentSnapshot) => {
+        if (!documentSnapshot) return;
+        const docs = documentSnapshot.docs;
+
+        if (docs.length > 0 && docs[0] !== undefined) {
+          const doc = docs[0];
+          const message = convertFirebaseDocumentToMessage(doc.id, doc.data());
+          setLastMessage(message);
+        } else {
+          setLastMessage(false);
+        }
+
+        console.log("firebase chat messages read");
+      });
+
+    return () => subscriber();
+  }, [chatId]);
 
   return (
     <TouchableOpacity
       className="border-b-2 border-gray-100 dark:border-zinc-950"
       onPress={onPress}
     >
-      <View className="flex-row items-center p-3">
-        <Image
-          className="mr-3 h-14 w-14 rounded-full"
-          source={{ uri: circle.pictureUrl }}
-          alt={`${circle.name} icon`}
-        />
-        <Text>{circle.name}</Text>
+      <View className="flex-row p-3">
+        <View className="w-1/6 pr-3">
+          <Image
+            className="w-100 aspect-square rounded-full"
+            source={{ uri: circle.pictureUrl }}
+            alt={`${circle.name} icon`}
+          />
+        </View>
+        <View className="flex w-5/6 justify-evenly">
+          <Text className="font-semibold" numberOfLines={1}>
+            {circle.name}
+          </Text>
+          <View className="flex max-w-full flex-row items-center">
+            {lastMessage ? (
+              <>
+                <Text className="flex-shrink" numberOfLines={1}>
+                  {lastMessage?.text}
+                </Text>
+                <View className="mx-1 mt-1">
+                  <Ionicons name="ellipse" size={dotIconSize} color={text} />
+                </View>
+                <Text>
+                  {lastMessage?.createdAt &&
+                    getRelativeTime(lastMessage.createdAt)}
+                </Text>
+              </>
+            ) : (
+              <Text>
+                {lastMessage === false ? "No messages yet. Say hello 👋" : ""}
+              </Text>
+            )}
+          </View>
+        </View>
       </View>
     </TouchableOpacity>
   );

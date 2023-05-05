@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { GiftedChat, type IMessage } from "react-native-gifted-chat";
 import { useUser } from "@clerk/clerk-expo";
-import firestore, {
-  type FirebaseFirestoreTypes,
-} from "@react-native-firebase/firestore";
+import firestore from "@react-native-firebase/firestore";
 
+import {
+  convertFirebaseDocumentToMessage,
+  type Message,
+} from "~/utils/messages";
 import { trpc } from "~/utils/trpc";
 import { renderComposer, renderInputToolbar, renderSend } from "./InputToolbar";
 import {
@@ -13,33 +15,13 @@ import {
   renderMessageText,
 } from "./MessageContainer";
 
-const convertFirebaseDocumentToIMessage = (
-  id: string,
-  data: FirebaseFirestoreTypes.DocumentData,
-  options?: {
-    rawDate: boolean;
-  },
-) => {
-  return {
-    _id: id,
-    user: {
-      _id: data.userId as string,
-    },
-    text: data.text as string,
-    createdAt: options?.rawDate
-      ? (data.createdAt as Date | number)
-      : (data.createdAt as FirebaseFirestoreTypes.Timestamp).toDate(),
-    sent: true,
-  };
-};
-
 export interface ChatProps {
   chatId: string;
 }
 
 const Chat = ({ chatId }: ChatProps) => {
-  const [loadingMessages, setLoadingMessages] = useState<IMessage[]>([]);
-  const [messages, setMessages] = useState<IMessage[]>([]);
+  const [loadingMessages, setLoadingMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [usersIds, setUsersIds] = useState<string[]>([]);
   const { user } = useUser();
   const { data: usersData } = trpc.users.getByIds.useQuery(usersIds);
@@ -55,10 +37,10 @@ const Chat = ({ chatId }: ChatProps) => {
 
         console.log("firebase chat messages read");
         const messages = documentSnapshot.docs.map((doc) => {
-          return convertFirebaseDocumentToIMessage(doc.id, doc.data());
+          return convertFirebaseDocumentToMessage(doc.id, doc.data());
         });
         setLoadingMessages(messages);
-        setUsersIds(messages.map((message) => message.user._id));
+        setUsersIds(messages.map((message) => `${message.user._id}`));
       });
 
     return () => subscriber();
