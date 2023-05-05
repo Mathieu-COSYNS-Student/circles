@@ -73,7 +73,8 @@ export const TextInput: FC<TextInputProps> = ({
         </Text>
       )}
       <View
-        className={`flex w-full flex-row items-center rounded-lg border border-gray-300 bg-gray-50
+        className={`flex w-full flex-row items-center overflow-hidden rounded-lg
+        border border-gray-300 bg-gray-50
         focus:border-brand-500 focus:ring-brand-500
         dark:border-zinc-800 dark:bg-zinc-900
       dark:focus:border-brand-500 dark:focus:ring-brand-500`}
@@ -84,7 +85,7 @@ export const TextInput: FC<TextInputProps> = ({
           </IconContainer>
         )}
         <DefaultTextInput
-          className="flex-grow p-2.5 text-sm text-gray-900 dark:text-white"
+          className="w-0 flex-grow p-2.5 text-sm text-gray-900 dark:text-white"
           accessibilityLabel={label}
           accessibilityLabelledBy={labelId}
           placeholderTextColor={inputPlaceholder}
