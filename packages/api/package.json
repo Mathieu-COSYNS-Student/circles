@@ -16,9 +16,9 @@
   "dependencies": {
     "@acme/db": "*",
     "@acme/schema": "*",
-    "@clerk/nextjs": "^4.16.4",
-    "@trpc/server": "^10.21.1",
-    "firebase-admin": "^11.7.0",
+    "@clerk/nextjs": "^4.17.1",
+    "@trpc/server": "^10.25.0",
+    "firebase-admin": "^11.8.0",
     "superjson": "^1.12.3",
     "zod": "^3.21.4"
   },
