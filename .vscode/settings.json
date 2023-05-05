@@ -15,6 +15,7 @@
     "firestore",
     "Formik",
     "Ionicons",
+    "nextjs",
     "notifee",
     "Pressable",
     "trpc",

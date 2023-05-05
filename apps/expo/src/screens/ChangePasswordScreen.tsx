@@ -3,10 +3,12 @@ import { View } from "react-native";
 import { useUser } from "@clerk/clerk-expo";
 import { type NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Formik } from "formik";
-import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
-import { passwordSchema } from "@acme/schema";
+import {
+  updatePasswordFormSchema,
+  type UpdatePasswordFormSchema,
+} from "@acme/schema";
 
 import { formikToInputProps } from "~/utils/formikToInputProps";
 import { Button, FullLoading, Text, TextInput } from "~/components/ui";
@@ -17,20 +19,6 @@ type AccountScreenProps = NativeStackScreenProps<
   RootStackParamList,
   "ChangePassword"
 >;
-
-const updatePasswordFormSchema = z
-  .object({
-    currentPassword: passwordSchema,
-    newPassword: passwordSchema,
-    confirmNewPassword: passwordSchema,
-    signOutOfOtherSessions: z.boolean(),
-  })
-  .refine((data) => data.newPassword === data.confirmNewPassword, {
-    message: "Passwords don't match",
-    path: ["confirmNewPassword"],
-  });
-
-type UpdatePasswordFormValues = z.infer<typeof updatePasswordFormSchema>;
 
 export default function ChangePasswordScreen({
   navigation,
@@ -45,14 +33,14 @@ export default function ChangePasswordScreen({
     setSignInError(undefined);
   };
 
-  const initialValues: UpdatePasswordFormValues = {
+  const initialValues: UpdatePasswordFormSchema = {
     currentPassword: "",
     newPassword: "",
     confirmNewPassword: "",
     signOutOfOtherSessions: false,
   };
 
-  const onSubmit = async (values: UpdatePasswordFormValues) => {
+  const onSubmit = async (values: UpdatePasswordFormSchema) => {
     try {
       await user.updatePassword({
         currentPassword: values.currentPassword,
