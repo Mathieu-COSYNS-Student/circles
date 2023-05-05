@@ -13,6 +13,7 @@ import { type EmailLinkFactor } from "@clerk/types";
 import { Ionicons } from "@expo/vector-icons";
 import { type NativeStackScreenProps } from "@react-navigation/native-stack";
 
+import { getServerBaseUrl } from "~/utils/server";
 import { type RootStackParamList } from "~/navigators/RootNavigator";
 
 type ForgotPasswordScreenProps = NativeStackScreenProps<
@@ -37,7 +38,7 @@ const ForgotPasswordScreen = ({ navigation }: ForgotPasswordScreenProps) => {
     await signIn?.create({
       strategy: "email_link",
       identifier: data.email,
-      redirectUrl: `http://192.168.0.242:19000/ResetPassword`,
+      redirectUrl: `${getServerBaseUrl()}/ResetPassword`,
     });
     console.log("Look at the signIn hook : ", signIn);
     // Make sure that email magic links are supported on this user.
@@ -53,7 +54,7 @@ const ForgotPasswordScreen = ({ navigation }: ForgotPasswordScreenProps) => {
       if (MagicLinkFlow) {
         const response = await MagicLinkFlow.startMagicLinkFlow({
           emailAddressId,
-          redirectUrl: `http://192.168.0.242:19000/ResetPassword`,
+          redirectUrl: `${getServerBaseUrl()}/ResetPassword`,
         });
 
         setData({

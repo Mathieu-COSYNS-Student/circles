@@ -1,6 +1,6 @@
 import { type FormikProps } from "formik";
 
-export const formikToInputProps = <T extends object>(
+export const formikToInputProps = <T extends Record<string, unknown>, Value>(
   {
     handleChange,
     handleBlur,
@@ -16,7 +16,7 @@ export const formikToInputProps = <T extends object>(
   return {
     onChangeText: handleChange(key),
     onBlur: handleBlur(key),
-    value: values[key],
+    value: values[key] as Value,
     touched: touched[key],
     errors: errors[key],
   };

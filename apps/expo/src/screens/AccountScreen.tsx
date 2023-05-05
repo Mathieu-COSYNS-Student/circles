@@ -7,9 +7,13 @@ import { type RootStackParamList } from "~/navigators/RootNavigator";
 
 type AccountScreenProps = NativeStackScreenProps<RootStackParamList, "Account">;
 
-export default function AccountScreen({}: AccountScreenProps) {
+export default function AccountScreen({ navigation }: AccountScreenProps) {
   const { signOut } = useAuth();
   const { user } = useUser();
+
+  const onChangePasswordPress = () => {
+    navigation.navigate("ChangePassword");
+  };
 
   const onSignOutPress = async () => {
     await signOut();
@@ -38,6 +42,9 @@ export default function AccountScreen({}: AccountScreenProps) {
       </View>
 
       <View>
+        <View className="mb-2">
+          <Button onPress={onChangePasswordPress} title="Change password" />
+        </View>
         <View className="mb-2">
           <Button variant="danger" onPress={onSignOutPress} title="Sign out" />
         </View>

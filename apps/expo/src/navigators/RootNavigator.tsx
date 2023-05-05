@@ -2,6 +2,7 @@ import { useUser } from "@clerk/clerk-expo";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import AccountScreen from "~/screens/AccountScreen";
+import ChangePasswordScreen from "~/screens/ChangePasswordScreen";
 import CircleScreen from "~/screens/CircleScreen";
 import CircleSettingsScreen from "~/screens/CircleSettingsScreen";
 import CreateCircleScreen from "~/screens/CreateCircleScreen";
@@ -26,6 +27,7 @@ export type RootStackParamList = {
   Test: undefined;
   Account: undefined;
   MainTabNavigator: undefined;
+  ChangePassword: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -58,6 +60,10 @@ export const RootNavigator = () => {
             options={{ title: "Circles Messages Settings" }}
           />
           <Stack.Screen name="Account" component={AccountScreen} />
+          <Stack.Screen
+            name="ChangePassword"
+            component={ChangePasswordScreen}
+          />
         </>
       ) : (
         <>

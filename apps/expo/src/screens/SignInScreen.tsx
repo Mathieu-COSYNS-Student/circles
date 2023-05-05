@@ -7,6 +7,8 @@ import { Formik } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
+import { passwordSchema } from "@acme/schema";
+
 import { formikToInputProps } from "~/utils/formikToInputProps";
 import { Button, SafeAreaView, Text, TextInput } from "~/components/ui";
 import { useThemeColor } from "~/hooks/Theme";
@@ -16,13 +18,7 @@ type SignInScreenProps = NativeStackScreenProps<RootStackParamList, "SignIn">;
 
 const signInFormSchema = z.object({
   email: z.string().email(),
-  password: z
-    .string()
-    .regex(
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/,
-      "Password must be at least 6 characters long and contain at " +
-        "least one uppercase letter, one lowercase letter, and one digit",
-    ),
+  password: passwordSchema,
 });
 
 type SignInFormValues = z.infer<typeof signInFormSchema>;
@@ -88,6 +84,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
                 placeholder="Your Email"
                 iconStart="person-outline"
                 autoCapitalize="none"
+                autoComplete="email"
                 {...formikToInputProps(formik, "email")}
               />
               <TextInput
