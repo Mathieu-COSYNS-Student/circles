@@ -9,12 +9,16 @@ import {
   type HeaderButtonProps,
 } from "react-navigation-header-buttons";
 
-import CirclesScreen from "~/screens/CirclesScreen";
+import { ChatsScreen } from "~/screens/MainTabNavigator/ChatsScreen";
+import { HomeScreen } from "~/screens/MainTabNavigator/HomeScreen";
+import { TasksScreen } from "~/screens/MainTabNavigator/TasksScreen";
 import TestScreen from "~/screens/TestScreen";
 import { useRootNavigation } from "./useRootNavigation";
 
 export type MainTabParamList = {
-  Circles: undefined;
+  Home: undefined;
+  Chats: undefined;
+  Tasks: undefined;
   Test: undefined;
 };
 
@@ -34,8 +38,14 @@ const MainTabNavigator = () => {
           let iconName: keyof typeof Ionicons.glyphMap;
 
           switch (route.name) {
-            case "Circles":
-              iconName = focused ? "people-circle" : "people-circle-outline";
+            case "Home":
+              iconName = focused ? "home" : "home-outline";
+              break;
+            case "Chats":
+              iconName = focused ? "chatbubbles" : "chatbubbles-outline";
+              break;
+            case "Tasks":
+              iconName = focused ? "checkbox" : "checkbox-outline";
               break;
             default:
               iconName = focused ? "help-circle" : "help-circle-outline";
@@ -46,9 +56,10 @@ const MainTabNavigator = () => {
         },
       })}
     >
+      <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen
-        name="Circles"
-        component={CirclesScreen}
+        name="Chats"
+        component={ChatsScreen}
         options={{
           headerRight: () => (
             <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
@@ -76,6 +87,7 @@ const MainTabNavigator = () => {
           ),
         }}
       />
+      <Tab.Screen name="Tasks" component={TasksScreen} />
       <Tab.Screen name="Test" component={TestScreen} />
     </Tab.Navigator>
   );

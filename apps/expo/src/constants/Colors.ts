@@ -53,7 +53,7 @@ const theme = {
     valid: tailwindColors.green[500],
   },
   dark: {
-    primary: tailwindColors.brand[700],
+    primary: tailwindColors.brand[600],
     background: "#000",
     card: tailwindColors.zinc[950],
     text: "#fff",

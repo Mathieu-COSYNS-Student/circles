@@ -49,7 +49,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
       });
 
       await setSession(completeSignIn.createdSessionId);
-      navigation.navigate("Circles");
+      navigation.navigate("MainTabNavigator");
     } catch (err) {
       setSignInError(
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment

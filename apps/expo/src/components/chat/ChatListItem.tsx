@@ -3,7 +3,7 @@ import { Image, PixelRatio, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import firestore from "@react-native-firebase/firestore";
 
-import { type Circle } from "@acme/schema";
+import { type ChatListObject } from "@acme/schema";
 
 import { getRelativeTime } from "~/utils/date";
 import {
@@ -14,7 +14,7 @@ import { Text } from "~/components/ui";
 import { useThemeColors } from "~/hooks/Theme";
 import { useRootNavigation } from "~/navigators/useRootNavigation";
 
-export const CirclesListItem = ({ circle }: { circle: Circle }) => {
+export const ChatListItem = ({ chat }: { chat: ChatListObject }) => {
   const { text } = useThemeColors(["text"]);
   const dotIconSize = useMemo(() => PixelRatio.getFontScale() * 4, []);
   const navigation = useRootNavigation();
@@ -23,15 +23,15 @@ export const CirclesListItem = ({ circle }: { circle: Circle }) => {
   );
 
   const onPress = () => {
-    navigation.navigate("Circle", { ...circle });
+    navigation.navigate("Circle", { ...chat });
   };
 
-  const { chatId } = circle;
+  const { id } = chat;
 
   useEffect(() => {
     const subscriber = firestore()
       .collection("chats")
-      .doc(chatId)
+      .doc(id)
       .collection("messages")
       .orderBy("createdAt", "desc")
       .limit(1)
@@ -51,7 +51,7 @@ export const CirclesListItem = ({ circle }: { circle: Circle }) => {
       });
 
     return () => subscriber();
-  }, [chatId]);
+  }, [id]);
 
   return (
     <TouchableOpacity
@@ -62,13 +62,13 @@ export const CirclesListItem = ({ circle }: { circle: Circle }) => {
         <View className="w-1/6 pr-3">
           <Image
             className="w-100 aspect-square rounded-full"
-            source={{ uri: circle.pictureUrl }}
-            alt={`${circle.name} icon`}
+            source={{ uri: chat.pictureUrl }}
+            alt={`${chat.name} icon`}
           />
         </View>
         <View className="flex w-5/6 justify-evenly">
           <Text className="font-semibold" numberOfLines={1}>
-            {circle.name}
+            {chat.name}
           </Text>
           <View className="flex max-w-full flex-row items-center">
             {lastMessage ? (
