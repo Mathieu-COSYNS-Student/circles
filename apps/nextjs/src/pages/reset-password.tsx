@@ -1,8 +1,7 @@
 import { useState, type FC } from "react";
-import { type GetServerSideProps } from "next";
+import { type GetStaticProps } from "next";
 import Image from "next/image";
 import { useUser } from "@clerk/nextjs";
-import { getAuth } from "@clerk/nextjs/server";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
@@ -11,23 +10,29 @@ import {
   type ResetPasswordFormSchema,
 } from "@acme/schema";
 
-// eslint-disable-next-line @typescript-eslint/require-await
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const { userId } = getAuth(req);
-
-  if (!userId) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-
+export const getStaticProps: GetStaticProps = () => {
   return {
-    props: {},
+    notFound: true,
   };
 };
+
+// // eslint-disable-next-line @typescript-eslint/require-await
+// export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+//   const { userId } = getAuth(req);
+
+//   if (!userId) {
+//     return {
+//       redirect: {
+//         destination: "/",
+//         permanent: false,
+//       },
+//     };
+//   }
+
+//   return {
+//     props: {},
+//   };
+// };
 
 const ResetPasswordPage: FC = () => {
   const [signInError, setSignInError] = useState<string | undefined>();
