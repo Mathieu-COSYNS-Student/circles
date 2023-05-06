@@ -15,6 +15,7 @@
   "dependencies": {
     "@acme/api": "*",
     "@acme/db": "*",
+    "@acme/schema": "*",
     "@clerk/nextjs": "^4.17.1",
     "@t3-oss/env-nextjs": "^0.2.2",
     "@trpc/server": "^10.25.0",
