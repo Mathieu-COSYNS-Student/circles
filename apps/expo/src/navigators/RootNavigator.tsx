@@ -1,9 +1,12 @@
 import { useUser } from "@clerk/clerk-expo";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import { type ChatListObject } from "@acme/schema";
+
+import { renderChatHeaderTitle } from "~/components/chat/ChatHeaderTitle";
 import AccountScreen from "~/screens/AccountScreen";
 import ChangePasswordScreen from "~/screens/ChangePasswordScreen";
-import CircleScreen from "~/screens/CircleScreen";
+import { ChatScreen } from "~/screens/ChatScreen";
 import CircleSettingsScreen from "~/screens/CircleSettingsScreen";
 import CreateCircleScreen from "~/screens/CreateCircleScreen";
 import ForgotPasswordScreen from "~/screens/ForgotPasswordScreen";
@@ -22,7 +25,7 @@ export type RootStackParamList = {
   ResetPassword: undefined;
   Circles: undefined;
   CreateCircle: undefined;
-  Circle: { id: string; name: string };
+  Chat: ChatListObject;
   CircleSettings: { id: string };
   Test: undefined;
   Account: undefined;
@@ -50,9 +53,13 @@ export const RootNavigator = () => {
             options={{ title: "Create a new circle" }}
           />
           <Stack.Screen
-            name="Circle"
-            component={CircleScreen}
-            options={({ route }) => ({ title: route.params.name })}
+            name="Chat"
+            component={ChatScreen}
+            options={({ route }) => ({
+              title: route.params.name,
+              headerBackTitleVisible: false,
+              headerTitle: renderChatHeaderTitle(route),
+            })}
           />
           <Stack.Screen
             name="CircleSettings"

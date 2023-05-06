@@ -23,7 +23,7 @@ export const ChatListItem = ({ chat }: { chat: ChatListObject }) => {
   );
 
   const onPress = () => {
-    navigation.navigate("Circle", { ...chat });
+    navigation.navigate("Chat", { ...chat });
   };
 
   const { id } = chat;
