@@ -24,7 +24,7 @@ export const renderInputToolbar = <TMessage extends IMessage>(
 export const MyInputToolbar = <TMessage extends IMessage>(
   props: InputToolbarProps<TMessage>,
 ) => {
-  const backgroundColor = useThemeColor("chatToolbarBackgound");
+  const backgroundColor = useThemeColor("chatToolbarBackground");
   const borderColor = useThemeColor("chatToolbarBorder");
   return (
     <InputToolbar
@@ -33,7 +33,7 @@ export const MyInputToolbar = <TMessage extends IMessage>(
         backgroundColor,
         paddingVertical: 5,
         borderTopWidth: 0.5,
-        borderColor,
+        borderTopColor: borderColor,
       }}
       primaryStyle={{ alignItems: "center" }}
     />
@@ -108,7 +108,7 @@ export const renderComposer = (props: ComposerProps) => {
 export const MyComposer = (props: ComposerProps) => {
   const color = useThemeColor("chatToolbarInput");
   const borderColor = useThemeColor("chatToolbarInputBorder");
-  const backgroundColor = useThemeColor("chatToolbarInputBackgound");
+  const backgroundColor = useThemeColor("chatToolbarInputBackground");
   return (
     <Composer
       {...props}
@@ -120,7 +120,7 @@ export const MyComposer = (props: ComposerProps) => {
         borderRadius: Platform.OS === "web" ? 15 : 22,
         paddingVertical: 8.5,
         paddingHorizontal: 16,
-        marginLeft: 4,
+        marginLeft: 8,
       }}
     />
   );

@@ -9,14 +9,13 @@ import { useThemeColors } from "~/hooks/Theme";
 export type RefreshControlProps = Omit<DefaultRefreshControlProps, "className">;
 
 const RefreshControl: FC<RefreshControlProps> = ({ ...props }) => {
-  const { refreshControlBackground, refreshControlForground } = useThemeColors([
-    "refreshControlBackground",
-    "refreshControlForground",
-  ]);
+  const { refreshControlBackground, refreshControlForeground } = useThemeColors(
+    ["refreshControlBackground", "refreshControlForeground"],
+  );
   return (
     <DefaultRefreshControl
       {...props}
-      colors={[refreshControlForground || "black"]}
+      colors={[refreshControlForeground || "black"]}
       progressBackgroundColor={refreshControlBackground}
     />
   );
