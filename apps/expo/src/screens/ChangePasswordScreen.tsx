@@ -2,8 +2,6 @@ import { useState } from "react";
 import { View } from "react-native";
 import { useUser } from "@clerk/clerk-expo";
 import { type NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Formik } from "formik";
-import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import {
   updatePasswordFormSchema,
@@ -11,7 +9,7 @@ import {
 } from "@acme/schema";
 
 import { formikToInputProps } from "~/utils/formikToInputProps";
-import { Button, FullLoading, Text, TextInput } from "~/components/ui";
+import { Form, FullLoading, Text, TextInput } from "~/components/ui";
 import { useThemeColor } from "~/hooks/Theme";
 import { type RootStackParamList } from "~/navigators/RootNavigator";
 
@@ -60,55 +58,46 @@ export default function ChangePasswordScreen({
 
   return (
     <View className="h-full justify-between p-2">
-      <Formik
+      <Form
         initialValues={initialValues}
         onSubmit={onSubmit}
-        validationSchema={toFormikValidationSchema(updatePasswordFormSchema)}
+        validationSchema={updatePasswordFormSchema}
         validate={removeSignInError}
+        submitTitle="Change password"
+        submitClassName="mx-3 mb-4"
       >
-        {({ handleSubmit, isSubmitting, ...formik }) => (
-          <>
-            <View>
-              <TextInput
-                containerClassName="mt-6"
-                type="password"
-                label="Current password"
-                placeholder="Your current Password"
-                iconStart="lock-closed-outline"
-                {...formikToInputProps(formik, "currentPassword")}
-              />
-              <TextInput
-                containerClassName="mt-2"
-                type="password"
-                label="New password"
-                placeholder="Your new Password"
-                iconStart="lock-closed-outline"
-                {...formikToInputProps(formik, "newPassword")}
-              />
-              <TextInput
-                containerClassName="mt-2"
-                type="password"
-                label="Confirm new password"
-                placeholder="Your new Password"
-                iconStart="lock-closed-outline"
-                {...formikToInputProps(formik, "confirmNewPassword")}
-              />
-              <Text style={{ color: errorColor }} className="mb-4">
-                {signInError}
-              </Text>
-            </View>
-            <View>
-              <View className="mx-3 mb-4">
-                <Button
-                  title={isSubmitting ? "" : "Change password"}
-                  isLoading={isSubmitting}
-                  onPress={() => handleSubmit()}
-                />
-              </View>
-            </View>
-          </>
+        {(formik) => (
+          <View>
+            <TextInput
+              containerClassName="mt-6"
+              type="password"
+              label="Current password"
+              placeholder="Your current Password"
+              iconStart="lock-closed-outline"
+              {...formikToInputProps(formik, "currentPassword")}
+            />
+            <TextInput
+              containerClassName="mt-2"
+              type="password"
+              label="New password"
+              placeholder="Your new Password"
+              iconStart="lock-closed-outline"
+              {...formikToInputProps(formik, "newPassword")}
+            />
+            <TextInput
+              containerClassName="mt-2"
+              type="password"
+              label="Confirm new password"
+              placeholder="Your new Password"
+              iconStart="lock-closed-outline"
+              {...formikToInputProps(formik, "confirmNewPassword")}
+            />
+            <Text style={{ color: errorColor }} className="mb-4">
+              {signInError}
+            </Text>
+          </View>
         )}
-      </Formik>
+      </Form>
     </View>
   );
 }

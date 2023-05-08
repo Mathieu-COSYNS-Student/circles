@@ -3,14 +3,12 @@ import { View } from "react-native";
 import * as Animatable from "react-native-animatable";
 import { useSignIn } from "@clerk/clerk-expo";
 import { type NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Formik } from "formik";
 import { z } from "zod";
-import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import { passwordSchema } from "@acme/schema";
 
 import { formikToInputProps } from "~/utils/formikToInputProps";
-import { Button, SafeAreaView, Text, TextInput } from "~/components/ui";
+import { Button, Form, SafeAreaView, Text, TextInput } from "~/components/ui";
 import { useThemeColor } from "~/hooks/Theme";
 import { type RootStackParamList } from "~/navigators/RootNavigator";
 
@@ -71,13 +69,14 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
         className="flex rounded-t-3xl bg-brand-50 p-8 dark:bg-zinc-950"
         animation="fadeInUpBig"
       >
-        <Formik
+        <Form
           initialValues={initialValues}
           onSubmit={onSubmit}
-          validationSchema={toFormikValidationSchema(signInFormSchema)}
+          validationSchema={signInFormSchema}
           validate={removeSignInError}
+          submitTitle="Sign In"
         >
-          {({ handleSubmit, isSubmitting, ...formik }) => (
+          {(formik) => (
             <>
               <TextInput
                 label="Email"
@@ -106,15 +105,9 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
               <Text style={{ color: errorColor }} className="mb-4">
                 {signInError}
               </Text>
-
-              <Button
-                title={isSubmitting ? "" : "Sign In"}
-                isLoading={isSubmitting}
-                onPress={() => handleSubmit()}
-              />
             </>
           )}
-        </Formik>
+        </Form>
         <View className="my-3 flex flex-row items-center">
           <View className="flex-grow border-b border-b-brand-200"></View>
           <Text className="mx-1 pb-1">or</Text>
