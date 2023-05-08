@@ -15,14 +15,16 @@ export type ButtonProps = Omit<
   "children" | "className" | "android_ripple"
 > & {
   title: string;
-  iconEnd?: keyof typeof Ionicons.glyphMap | "loading";
+  iconEnd?: keyof typeof Ionicons.glyphMap;
   variant?: "normal" | "normal-outline" | "danger";
+  isLoading?: boolean;
 };
 
 const Button: FC<ButtonProps> = ({
   title,
   iconEnd,
   variant = "normal",
+  isLoading,
   ...props
 }) => {
   let pressableClass = "";
@@ -51,28 +53,30 @@ const Button: FC<ButtonProps> = ({
   return (
     <View className="justify-center self-stretch rounded-lg">
       <Pressable
-        className={`flex flex-row justify-center rounded-lg px-4 py-3 focus:outline-none focus:ring-4 ${pressableClass}`}
+        className={`flex flex-row items-center justify-center rounded-lg px-4 py-3 focus:outline-none focus:ring-4 ${pressableClass}`}
         android_ripple={{
           color: "rgba(0,0,0,0.15)",
           borderless: true,
         }}
         {...props}
+        disabled={isLoading || props.disabled}
       >
         <Text
           className={`${
             useBorder ? "" : "m-[1px] "
-          }text-center text-sm font-semibold uppercase ${textClass}`}
+          }text-center text-sm font-semibold uppercase ${textClass} ${
+            isLoading ? "opacity-0" : ""
+          }`}
         >
           {title}
         </Text>
-        {iconEnd && (
-          <>
-            {iconEnd === "loading" ? (
-              <ActivityIndicator color={"#fff"} />
-            ) : (
-              <Ionicons name={iconEnd} color="#fff" size={iconSize} />
-            )}
-          </>
+        {isLoading && (
+          <View className="absolute">
+            <ActivityIndicator color={"#fff"} />
+          </View>
+        )}
+        {!isLoading && iconEnd && (
+          <Ionicons name={iconEnd} color="#fff" size={iconSize} />
         )}
       </Pressable>
     </View>

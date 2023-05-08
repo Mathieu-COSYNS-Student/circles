@@ -1,47 +1,47 @@
-import React from "react";
+import React, { type FC } from "react";
 import { View } from "react-native";
-import { Formik } from "formik";
+import { type NativeStackScreenProps } from "@react-navigation/native-stack";
 
+import { createCircleSchema, type CreateCircleValues } from "@acme/schema";
+
+import { formikToInputProps } from "~/utils/formikToInputProps";
 import { trpc } from "~/utils/trpc";
-import { Button, TextInput } from "~/components/ui";
+import { TextInput } from "~/components/ui";
+import { Form } from "~/components/ui/Form";
+import { type RootStackParamList } from "~/navigators/RootNavigator";
 
-interface FormValues {
-  name: string;
-}
+type ChatScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  "CreateCircle"
+>;
 
-const CreateCircleScreen = () => {
+const CreateCircleScreen: FC<ChatScreenProps> = ({ navigation }) => {
   const createNewCircleMutation = trpc.circles.create.useMutation();
 
-  const onSubmit = async (values: FormValues) => {
-    await new Promise((r) => setTimeout(r, 5000));
+  const onSubmit = async (values: CreateCircleValues) => {
     await createNewCircleMutation.mutateAsync(values);
+    navigation.goBack();
   };
 
-  const initialValues: FormValues = { name: "" };
+  const initialValues: CreateCircleValues = { name: "" };
 
   return (
     <View className="p-2">
-      <Formik initialValues={initialValues} onSubmit={onSubmit}>
-        {({ handleChange, handleBlur, handleSubmit, values, isSubmitting }) => (
-          <View>
-            <View className="mb-2">
-              <TextInput
-                onChangeText={handleChange("name")}
-                onBlur={handleBlur("name")}
-                value={values.name}
-                label="Circle name"
-              />
-            </View>
-
-            <Button
-              disabled={isSubmitting}
-              onPress={() => handleSubmit()}
-              title={isSubmitting ? "" : "Create"}
-              iconEnd={isSubmitting ? "loading" : undefined}
+      <Form
+        initialValues={initialValues}
+        onSubmit={onSubmit}
+        validationSchema={createCircleSchema}
+        submitTitle="Create"
+      >
+        {(formik) => (
+          <View className="mb-2">
+            <TextInput
+              label="Circle name"
+              {...formikToInputProps(formik, "name")}
             />
           </View>
         )}
-      </Formik>
+      </Form>
     </View>
   );
 };

@@ -101,8 +101,7 @@ export default function ChangePasswordScreen({
               <View className="mx-3 mb-4">
                 <Button
                   title={isSubmitting ? "" : "Change password"}
-                  disabled={isSubmitting}
-                  iconEnd={isSubmitting ? "loading" : undefined}
+                  isLoading={isSubmitting}
                   onPress={() => handleSubmit()}
                 />
               </View>

@@ -1,14 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
-  HeaderButton,
-  HeaderButtons,
   HiddenItem,
   Item,
   OverflowMenu,
-  type HeaderButtonProps,
 } from "react-navigation-header-buttons";
 
+import { HeaderButtons } from "~/components/ui";
 import { ChatsScreen } from "~/screens/MainTabNavigator/ChatsScreen";
 import { HomeScreen } from "~/screens/MainTabNavigator/HomeScreen";
 import { TasksScreen } from "~/screens/MainTabNavigator/TasksScreen";
@@ -23,10 +21,6 @@ export type MainTabParamList = {
 };
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
-
-const IoniconsHeaderButton = (props: HeaderButtonProps) => (
-  <HeaderButton IconComponent={Ionicons} iconSize={23} {...props} />
-);
 
 const MainTabNavigator = () => {
   const navigation = useRootNavigation();
@@ -62,7 +56,7 @@ const MainTabNavigator = () => {
         component={ChatsScreen}
         options={{
           headerRight: () => (
-            <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
+            <HeaderButtons>
               <Item
                 title="create a new circle"
                 iconName="chatbubbles"

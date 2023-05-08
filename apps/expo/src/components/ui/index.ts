@@ -10,3 +10,7 @@ export * from "./TextInput";
 export * from "./ActivityIndicator";
 export { default as ActivityIndicator } from "./ActivityIndicator";
 export * from "./SafeAreaView";
+export * from "./HeaderButtons";
+export * from "./Form";
+export * from "./Modal";
+export * from "./ModalForm";

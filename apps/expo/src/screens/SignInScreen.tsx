@@ -109,8 +109,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
               <Button
                 title={isSubmitting ? "" : "Sign In"}
-                disabled={isSubmitting}
-                iconEnd={isSubmitting ? "loading" : undefined}
+                isLoading={isSubmitting}
                 onPress={() => handleSubmit()}
               />
             </>

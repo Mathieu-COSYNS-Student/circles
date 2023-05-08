@@ -1,7 +1,14 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { type Circle as DbCircle } from "@acme/db";
-import { circleSchema, newCircleSchema, type ChatRole } from "@acme/schema";
+import { Prisma, type Circle as DbCircle } from "@acme/db";
+import {
+  circleSchema,
+  createCircleSchema,
+  getCircleSchema,
+  updateCircleSchema,
+  type ChatRole,
+} from "@acme/schema";
 
 import { protectedProcedure, router } from "../trpc";
 
@@ -32,22 +39,30 @@ export const circlesRouter = router({
       });
       return z.array(circleSchema).parse(circles);
     }),
-  get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    const circle = await ctx.prisma.circle.findFirstOrThrow({
-      where: {
-        id: input,
-        members: {
-          some: {
-            userId: ctx.auth?.userId,
+  get: protectedProcedure
+    .input(getCircleSchema)
+    .query(async ({ ctx, input }) => {
+      const { id, chatId } = input;
+      const circle = await ctx.prisma.circle.findFirst({
+        where: {
+          OR: [{ id: id }, { chatId: chatId }],
+          members: {
+            some: {
+              userId: ctx.auth?.userId,
+            },
           },
         },
-      },
-    });
-    circle.pictureUrl = getCirclePictureOrDefault(circle);
-    return circleSchema.omit({ members: true }).parse(circle);
-  }),
+      });
+      if (!circle) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+        });
+      }
+      circle.pictureUrl = getCirclePictureOrDefault(circle);
+      return circleSchema.omit({ members: true }).parse(circle);
+    }),
   create: protectedProcedure
-    .input(newCircleSchema)
+    .input(createCircleSchema)
     .mutation(async ({ ctx, input }) => {
       const chatRoles: ChatRole = {};
       chatRoles[ctx.auth.userId] = "writer";
@@ -60,7 +75,6 @@ export const circlesRouter = router({
       const newCircle = await ctx.prisma.circle.create({
         data: {
           name: input.name,
-          pictureUrl: input.pictureUrl,
           chatId: chatFirebaseDocument.id,
           members: {
             create: [
@@ -78,5 +92,34 @@ export const circlesRouter = router({
       });
       newCircle.pictureUrl = getCirclePictureOrDefault(newCircle);
       return circleSchema.omit({ members: true }).parse(newCircle);
+    }),
+  update: protectedProcedure
+    .input(updateCircleSchema)
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const updatedCircle = await ctx.prisma.circle.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            name: input.name,
+          },
+        });
+        updatedCircle.pictureUrl = getCirclePictureOrDefault(updatedCircle);
+        return circleSchema.omit({ members: true }).parse(updatedCircle);
+      } catch (err) {
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
+          if (err.code === "P2025" || err.code === "P2023") {
+            throw new TRPCError({
+              code: "NOT_FOUND",
+            });
+          }
+
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            cause: err,
+          });
+        }
+      }
     }),
 });

@@ -5,7 +5,7 @@ import {
 } from "react-native";
 
 export type TextProps = DefaultTextProps & {
-  type?: "normal" | "heading1" | "heading2" | "link";
+  type?: "normal" | "heading1" | "heading2" | "heading3" | "heading4" | "link";
 };
 
 const Text: FC<TextProps> = ({ className, type = "normal", ...props }) => {
@@ -15,6 +15,12 @@ const Text: FC<TextProps> = ({ className, type = "normal", ...props }) => {
       break;
     case "heading2":
       className += " text-2xl font-semibold";
+      break;
+    case "heading3":
+      className += " text-xl font-medium";
+      break;
+    case "heading4":
+      className += " text-lg text-gray-800 dark:text-zinc-50";
       break;
     case "link":
       className +=
