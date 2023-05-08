@@ -86,6 +86,7 @@ export const Modal: FC<ModalProps> = ({
           flexGrow: 1,
           justifyContent: "center",
         }}
+        keyboardShouldPersistTaps="handled"
       >
         <TouchableWithoutFeedback>
           <View
