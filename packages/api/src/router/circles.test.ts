@@ -53,13 +53,13 @@ describe("circles get test", () => {
       chatId: "1",
     };
 
-    prismaMock.circle.findFirstOrThrow.mockResolvedValue(mockOutput);
+    prismaMock.circle.findFirst.mockResolvedValue(mockOutput);
 
     const caller = appRouter.createCaller(
       createInnerTRPCContext({ prisma: prismaMock, auth: authMock }),
     );
 
-    const result = await caller.circles.get(mockOutput.id);
+    const result = await caller.circles.get({ id: mockOutput.id });
 
     expect(result).toStrictEqual(mockOutput);
   });
