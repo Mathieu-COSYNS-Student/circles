@@ -15,6 +15,7 @@ export type TextInputProps = Omit<DefaultTextInputProps, "className"> & {
   type?: "text" | "password";
   variant?: "normal" | "modal";
   label?: string;
+  hint?: string;
   iconStart?: keyof typeof Ionicons.glyphMap;
   touched?: boolean;
   errors?: string;
@@ -25,6 +26,7 @@ export const TextInput: FC<TextInputProps> = ({
   type = "text",
   variant = "normal",
   label,
+  hint,
   touched,
   errors,
   iconStart,
@@ -115,8 +117,13 @@ export const TextInput: FC<TextInputProps> = ({
         )}
       </View>
       {touched && errors && (
-        <Text style={{ color: error }} className="mx-3 mb-2 mt-1 text-sm">
+        <Text style={{ color: error }} className="mx-3 mt-1 text-sm">
           {touched && errors}
+        </Text>
+      )}
+      {hint && (
+        <Text className="mx-3 mt-1 text-sm text-gray-500 dark:text-zinc-400">
+          {hint}
         </Text>
       )}
     </View>

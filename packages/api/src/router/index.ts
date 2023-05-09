@@ -3,6 +3,7 @@ import { authRouter } from "./auth";
 import { chatsRouter } from "./chats";
 import { circlesRouter } from "./circles";
 import { healthRouter } from "./health";
+import { networksRouter } from "./networks";
 import { usersRouter } from "./users";
 
 export const appRouter = router({
@@ -11,6 +12,7 @@ export const appRouter = router({
   circles: circlesRouter,
   users: usersRouter,
   chats: chatsRouter,
+  networks: networksRouter,
 });
 
 // export type definition of API

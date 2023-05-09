@@ -1,3 +1,4 @@
+import "react-native-gesture-handler";
 import { registerRootComponent } from "expo";
 import { preventAutoHideAsync } from "expo-splash-screen";
 import messaging from "@react-native-firebase/messaging";

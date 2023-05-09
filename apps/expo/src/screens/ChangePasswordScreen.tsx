@@ -64,7 +64,7 @@ export default function ChangePasswordScreen({
         validationSchema={updatePasswordFormSchema}
         validate={removeSignInError}
         submitTitle="Change password"
-        submitClassName="mx-3 mb-4"
+        submitClassName="mx-3 mb-4 mt-2"
       >
         {(formik) => (
           <View>
@@ -92,7 +92,7 @@ export default function ChangePasswordScreen({
               iconStart="lock-closed-outline"
               {...formikToInputProps(formik, "confirmNewPassword")}
             />
-            <Text style={{ color: errorColor }} className="mb-4">
+            <Text style={{ color: errorColor }} className="mb-2">
               {signInError}
             </Text>
           </View>

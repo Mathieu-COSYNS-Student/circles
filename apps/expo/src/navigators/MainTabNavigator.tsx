@@ -1,16 +1,16 @@
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  HiddenItem,
-  Item,
-  OverflowMenu,
-} from "react-navigation-header-buttons";
+import { type DrawerScreenProps } from "@react-navigation/drawer";
+import { Item } from "react-navigation-header-buttons";
 
 import { HeaderButtons } from "~/components/ui";
+import { DrawerToggleButton } from "~/components/ui/DrawerToggleButton";
+import { useThemeColors } from "~/hooks/Theme";
 import { ChatsScreen } from "~/screens/MainTabNavigator/ChatsScreen";
 import { HomeScreen } from "~/screens/MainTabNavigator/HomeScreen";
 import { TasksScreen } from "~/screens/MainTabNavigator/TasksScreen";
 import TestScreen from "~/screens/TestScreen";
+import { type DrawerParamList } from "./DrawerNavigator";
 import { useRootNavigation } from "./useRootNavigation";
 
 export type MainTabParamList = {
@@ -22,12 +22,25 @@ export type MainTabParamList = {
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
-const MainTabNavigator = () => {
+type MainTabNavigatorProps = DrawerScreenProps<DrawerParamList, "Main">;
+
+const MainTabNavigator = ({}: MainTabNavigatorProps) => {
   const navigation = useRootNavigation();
+  const { text } = useThemeColors(["text"]);
 
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+        headerLeft: ({ pressColor, pressOpacity, tintColor }) => {
+          return (
+            <DrawerToggleButton
+              pressColor={pressColor}
+              pressOpacity={pressOpacity}
+              tintColor={tintColor ?? text}
+              accessibilityLabel="Open Network Menu"
+            />
+          );
+        },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: keyof typeof Ionicons.glyphMap;
 
@@ -62,21 +75,6 @@ const MainTabNavigator = () => {
                 iconName="chatbubbles"
                 onPress={() => navigation.navigate("CreateCircle")}
               />
-              <OverflowMenu
-                OverflowIcon={({ color }) => (
-                  <Ionicons
-                    name="ellipsis-vertical"
-                    size={23}
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                    color={color}
-                  />
-                )}
-              >
-                <HiddenItem
-                  title="Account"
-                  onPress={() => navigation.navigate("Account")}
-                />
-              </OverflowMenu>
             </HeaderButtons>
           ),
         }}

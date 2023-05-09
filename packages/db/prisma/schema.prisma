@@ -10,6 +10,35 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+model Network {
+    id         String          @id @default(auto()) @map("_id") @db.ObjectId
+    name       String          @unique
+    pictureUrl String?
+    members    NetworkMember[]
+}
+
+model NetworkMember {
+    id        String              @id @default(auto()) @map("_id") @db.ObjectId
+    userId    String
+    networkId String              @db.ObjectId
+    network   Network             @relation(fields: [networkId], references: [id])
+    role      NetworkMemberRole   @default(USER)
+    status    NetworkMemberStatus
+
+    @@unique([userId, networkId])
+}
+
+enum NetworkMemberStatus {
+    INVITED
+    JOINED
+}
+
+enum NetworkMemberRole {
+    USER
+    ADMIN
+    OWNER
+}
+
 model Circle {
     id         String         @id @default(auto()) @map("_id") @db.ObjectId
     name       String

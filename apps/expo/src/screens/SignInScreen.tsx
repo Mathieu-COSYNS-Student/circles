@@ -47,7 +47,10 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
       });
 
       await setSession(completeSignIn.createdSessionId);
-      navigation.navigate("MainTabNavigator");
+      navigation.navigate("DrawerNavigator", {
+        screen: "Main",
+        params: { screen: "Home" },
+      });
     } catch (err) {
       setSignInError(
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment

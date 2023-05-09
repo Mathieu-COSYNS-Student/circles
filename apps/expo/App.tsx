@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Alert, StatusBar, View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useFonts } from "expo-font";
 import { parse, useURL } from "expo-linking";
@@ -14,6 +15,7 @@ import { z } from "zod";
 
 import { AuthProvider } from "~/utils/AuthProvider";
 import { TRPCProvider } from "~/utils/trpc";
+import { NetworksContextProvider } from "~/contexts/NetworksContext";
 import {
   useNavigationTheme,
   useThemeColor,
@@ -33,9 +35,11 @@ export default function RootLayout() {
   }, [url]);
 
   return (
-    <AuthProvider>
-      <LoadingOrNot />
-    </AuthProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AuthProvider>
+        <LoadingOrNot />
+      </AuthProvider>
+    </GestureHandlerRootView>
   );
 }
 
@@ -156,13 +160,15 @@ const App = () => {
 
   return (
     <TRPCProvider>
-      <SafeAreaProvider style={{ backgroundColor }}>
-        <NavigationContainer theme={navigationTheme}>
-          <OverflowMenuProvider>
-            <RootNavigator />
-          </OverflowMenuProvider>
-        </NavigationContainer>
-      </SafeAreaProvider>
+      <NetworksContextProvider>
+        <SafeAreaProvider style={{ backgroundColor }}>
+          <NavigationContainer theme={navigationTheme}>
+            <OverflowMenuProvider>
+              <RootNavigator />
+            </OverflowMenuProvider>
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </NetworksContextProvider>
     </TRPCProvider>
   );
 };

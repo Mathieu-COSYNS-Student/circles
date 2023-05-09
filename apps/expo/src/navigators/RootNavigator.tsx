@@ -1,4 +1,5 @@
 import { useUser } from "@clerk/clerk-expo";
+import { type NavigatorScreenParams } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Item } from "react-navigation-header-buttons";
 
@@ -11,12 +12,15 @@ import { ChatScreen } from "~/screens/ChatScreen";
 import { ChatSettingsScreen } from "~/screens/ChatSettingsScreen";
 import CreateCircleScreen from "~/screens/CreateCircleScreen";
 import ForgotPasswordScreen from "~/screens/ForgotPasswordScreen";
+import { NetworkCreateOrJoinScreen } from "~/screens/NetworkCreateOrJoinScreen";
+import { NetworkCreateScreen } from "~/screens/NetworkCreateScreen";
+import { NetworkJoinScreen } from "~/screens/NetworkJoinScreen";
 import OnboardingScreen from "~/screens/OnboardingScreen";
 import ResetPasswordScreen from "~/screens/ResetPasswordScreen";
 import SignInScreen from "~/screens/SignInScreen";
 import SignUpScreen from "~/screens/SignUpScreen";
 import TestScreen from "~/screens/TestScreen";
-import MainTabNavigator from "./MainTabNavigator";
+import { DrawerNavigator, type DrawerParamList } from "./DrawerNavigator";
 import { useRootNavigation } from "./useRootNavigation";
 
 export type RootStackParamList = {
@@ -31,8 +35,11 @@ export type RootStackParamList = {
   ChatSettings: ChatListObject;
   Test: undefined;
   Account: undefined;
-  MainTabNavigator: undefined;
+  DrawerNavigator: NavigatorScreenParams<DrawerParamList>;
   ChangePassword: undefined;
+  NetworkCreate: undefined;
+  NetworkJoin: undefined;
+  NetworkCreateOrJoin: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -46,8 +53,8 @@ export const RootNavigator = () => {
       {isSignedIn ? (
         <>
           <Stack.Screen
-            name="MainTabNavigator"
-            component={MainTabNavigator}
+            name="DrawerNavigator"
+            component={DrawerNavigator}
             options={{ headerShown: false }}
           />
           <Stack.Screen
@@ -85,6 +92,16 @@ export const RootNavigator = () => {
             name="ChangePassword"
             component={ChangePasswordScreen}
           />
+          <Stack.Screen
+            name="NetworkCreateOrJoin"
+            component={NetworkCreateOrJoinScreen}
+          />
+          <Stack.Screen
+            name="NetworkCreate"
+            component={NetworkCreateScreen}
+            options={{ title: "" }}
+          />
+          <Stack.Screen name="NetworkJoin" component={NetworkJoinScreen} />
         </>
       ) : (
         <>

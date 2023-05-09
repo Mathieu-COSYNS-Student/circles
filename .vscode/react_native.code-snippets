@@ -1,0 +1,24 @@
+{
+  "rns": {
+    "prefix": "rns",
+    "body": [
+      "import { View } from \"react-native\";",
+      "import { type NativeStackScreenProps } from \"@react-navigation/native-stack\";",
+      "",
+      "import { Text } from \"~/components/ui\";",
+      "import { type RootStackParamList } from \"~/navigators/RootNavigator\";",
+      "",
+      "type ${1:${TM_FILENAME_BASE}}Props = NativeStackScreenProps<RootStackParamList, \"${2}\">;",
+      "",
+      "export const ${1:first} = ({}: ${1:first}Props) => {",
+      "  return (",
+      "    <View className=\"p-2\">",
+      "      <Text>${1:first}</Text>",
+      "    </View>",
+      "  );",
+      "};",
+      ""
+    ],
+    "description": "Creates a React Native Arrow Function Component for a Screen with ES7 module system and TypeScript interface"
+  }
+}
