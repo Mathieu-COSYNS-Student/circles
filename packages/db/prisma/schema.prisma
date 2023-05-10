@@ -16,10 +16,11 @@ datasource db {
 }
 
 model Network {
-    id         String          @id @default(auto()) @map("_id") @db.ObjectId
-    name       String          @unique
-    pictureUrl String?
-    members    NetworkMember[]
+    id            String          @id @default(auto()) @map("_id") @db.ObjectId
+    name          String          @unique
+    pictureUrl    String?
+    members       NetworkMember[]
+    NetwortInvite NetworkInvite[]
 }
 
 model NetworkMember {
@@ -42,6 +43,17 @@ enum NetworkMemberRole {
     USER
     ADMIN
     OWNER
+}
+
+model NetworkInvite {
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
+    networkId String   @db.ObjectId
+    network   Network  @relation(fields: [networkId], references: [id])
+    code      Int
+    expireAt  DateTime
+    used      Boolean  @default(false)
+
+    @@unique([code, networkId])
 }
 
 model Circle {

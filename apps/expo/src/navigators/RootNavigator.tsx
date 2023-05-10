@@ -14,6 +14,7 @@ import CreateCircleScreen from "~/screens/CreateCircleScreen";
 import ForgotPasswordScreen from "~/screens/ForgotPasswordScreen";
 import { NetworkCreateOrJoinScreen } from "~/screens/NetworkCreateOrJoinScreen";
 import { NetworkCreateScreen } from "~/screens/NetworkCreateScreen";
+import { NetworkInviteScreen } from "~/screens/NetworkInviteScreen";
 import { NetworkJoinScreen } from "~/screens/NetworkJoinScreen";
 import OnboardingScreen from "~/screens/OnboardingScreen";
 import ResetPasswordScreen from "~/screens/ResetPasswordScreen";
@@ -39,6 +40,7 @@ export type RootStackParamList = {
   ChangePassword: undefined;
   NetworkCreate: undefined;
   NetworkJoin: undefined;
+  NetworkInvite: undefined;
   NetworkCreateOrJoin: undefined;
 };
 
@@ -99,6 +101,11 @@ export const RootNavigator = () => {
           <Stack.Screen
             name="NetworkCreate"
             component={NetworkCreateScreen}
+            options={{ title: "" }}
+          />
+          <Stack.Screen
+            name="NetworkInvite"
+            component={NetworkInviteScreen}
             options={{ title: "" }}
           />
           <Stack.Screen name="NetworkJoin" component={NetworkJoinScreen} />

@@ -1,0 +1,21 @@
+{
+  "name": "@acme/accesscontrol",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "types": "./index.ts",
+  "private": true,
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint --fix",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "accesscontrol": "^2.2.1",
+    "lodash.merge": "^4.6.2"
+  },
+  "devDependencies": {
+    "@types/lodash.merge": "^4.6.7",
+    "typescript": "^5.0.4"
+  }
+}

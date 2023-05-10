@@ -14,11 +14,13 @@
     "test:watch": "npm run test --watch"
   },
   "dependencies": {
+    "@acme/accesscontrol": "*",
     "@acme/db": "*",
     "@acme/schema": "*",
     "@clerk/nextjs": "^4.17.1",
     "@trpc/server": "^10.25.0",
     "firebase-admin": "^11.8.0",
+    "moment": "^2.29.4",
     "superjson": "^1.12.3",
     "zod": "^3.21.4"
   },

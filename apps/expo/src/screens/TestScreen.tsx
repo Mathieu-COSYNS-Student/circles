@@ -35,6 +35,12 @@ export default function TestScreen() {
         />
       </View>
       <View className="mb-2">
+        <Button
+          onPress={() => navigation.navigate("NetworkInvite")}
+          title="Network invite"
+        />
+      </View>
+      <View className="mb-2">
         <Button onPress={reload} title="Reload" />
       </View>
       <View>

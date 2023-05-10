@@ -6,3 +6,4 @@ export * from "./src/Password";
 export * from "./src/Chat";
 export * from "./src/Network";
 export * from "./src/NetworkMember";
+export * from "./src/NetworkInvite";
