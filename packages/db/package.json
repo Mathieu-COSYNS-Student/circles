@@ -17,6 +17,7 @@
   "devDependencies": {
     "dotenv-cli": "^7.2.1",
     "prisma": "^4.13.0",
+    "prisma-dbml-generator": "^0.10.0",
     "typescript": "^5.0.4"
   }
 }
