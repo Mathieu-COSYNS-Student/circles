@@ -10,6 +10,7 @@ import {
 import { Prisma } from "@acme/db";
 import {
   createNetworkSchema,
+  getAllNetworkSchema,
   networkInviteSchema,
   networkSchema,
   type Network,
@@ -43,18 +44,23 @@ const hasAccess = async (query: AccessControlQuery) => {
 };
 
 export const networksRouter = router({
-  getAll: protectedProcedure.query(async ({ ctx }) => {
-    const networks = await ctx.prisma.network.findMany({
-      where: {
-        members: {
-          some: {
-            userId: ctx.auth?.userId,
+  getAll: protectedProcedure
+    .input(getAllNetworkSchema)
+    .query(async ({ ctx, input }) => {
+      const filterCanInviteMembersQuery = input.filter.canInviteMembers
+        ? { OR: [{ role: "ADMIN" as const }, { role: "OWNER" as const }] }
+        : {};
+      const networks = await ctx.prisma.network.findMany({
+        where: {
+          members: {
+            some: {
+              AND: [{ userId: ctx.auth?.userId }, filterCanInviteMembersQuery],
+            },
           },
         },
-      },
-    });
-    return z.array(networkSchema).parse(networks);
-  }),
+      });
+      return z.array(networkSchema).parse(networks);
+    }),
   create: protectedProcedure
     .input(createNetworkSchema)
     .mutation(async ({ ctx, input }) => {

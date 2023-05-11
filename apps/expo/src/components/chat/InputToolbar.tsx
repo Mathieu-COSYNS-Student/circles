@@ -13,7 +13,7 @@ import {
 } from "react-native-gifted-chat";
 import { Ionicons } from "@expo/vector-icons";
 
-import { useThemeColor } from "~/hooks/Theme";
+import { useThemeColor, useThemeColors } from "~/hooks/Theme";
 
 export const renderInputToolbar = <TMessage extends IMessage>(
   props: InputToolbarProps<TMessage>,
@@ -106,16 +106,18 @@ export const renderComposer = (props: ComposerProps) => {
 };
 
 export const MyComposer = (props: ComposerProps) => {
-  const color = useThemeColor("chatToolbarInput");
-  const borderColor = useThemeColor("chatToolbarInputBorder");
-  const backgroundColor = useThemeColor("chatToolbarInputBackground");
+  const { text, inputBorder, inputBackground } = useThemeColors([
+    "text",
+    "inputBorder",
+    "inputBackground",
+  ]);
   return (
     <Composer
       {...props}
       textInputStyle={{
-        color,
-        backgroundColor,
-        borderColor,
+        color: text,
+        backgroundColor: inputBackground,
+        borderColor: inputBorder,
         borderWidth: 1,
         borderRadius: Platform.OS === "web" ? 15 : 22,
         paddingVertical: 8.5,

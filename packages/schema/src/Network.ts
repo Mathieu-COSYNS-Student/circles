@@ -9,9 +9,22 @@ export const networkSchema = z.object({
   members: z.array(networkMemberSchema).optional(),
 });
 
+export const getAllNetworkSchema = z
+  .object({
+    filter: z
+      .object({
+        canInviteMembers: z.boolean().optional(),
+      })
+      .optional()
+      .default({}),
+  })
+  .optional()
+  .default({});
+
 export const createNetworkSchema = networkSchema.pick({
   name: true,
 });
 
 export type Network = z.infer<typeof networkSchema>;
+export type GetAllNetworkSchema = z.infer<typeof getAllNetworkSchema>;
 export type CreateNetworkValues = z.infer<typeof createNetworkSchema>;

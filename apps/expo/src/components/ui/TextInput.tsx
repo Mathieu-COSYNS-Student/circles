@@ -9,18 +9,14 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 
 import { useThemeColors } from "~/hooks/Theme";
-import Text from "./Text";
+import { InputWrapper, type TextWrapperProps } from "./InputWrapper";
 
-export type TextInputProps = Omit<DefaultTextInputProps, "className"> & {
-  type?: "text" | "password";
-  variant?: "normal" | "modal";
-  label?: string;
-  hint?: string;
-  iconStart?: keyof typeof Ionicons.glyphMap;
-  touched?: boolean;
-  errors?: string;
-  containerClassName?: string;
-};
+export type TextInputProps = Omit<DefaultTextInputProps, "className"> &
+  Omit<TextWrapperProps, "labelId" | "children"> & {
+    type?: "text" | "password";
+    variant?: "normal" | "modal";
+    iconStart?: keyof typeof Ionicons.glyphMap;
+  };
 
 export const TextInput: FC<TextInputProps> = ({
   type = "text",
@@ -70,12 +66,14 @@ export const TextInput: FC<TextInputProps> = ({
   }
 
   return (
-    <View className={containerClassName}>
-      {label && (
-        <Text nativeID={labelId} className="mb-2 ml-2">
-          {label}
-        </Text>
-      )}
+    <InputWrapper
+      containerClassName={containerClassName}
+      labelId={labelId}
+      label={label}
+      hint={hint}
+      touched={touched}
+      errors={errors}
+    >
       <View
         className={`flex w-full flex-row items-center overflow-hidden rounded-lg
         border border-gray-300 bg-gray-50
@@ -116,17 +114,7 @@ export const TextInput: FC<TextInputProps> = ({
           </IconContainer>
         )}
       </View>
-      {touched && errors && (
-        <Text style={{ color: error }} className="mx-3 mt-1 text-sm">
-          {touched && errors}
-        </Text>
-      )}
-      {hint && (
-        <Text className="mx-3 mt-1 text-sm text-gray-500 dark:text-zinc-400">
-          {hint}
-        </Text>
-      )}
-    </View>
+    </InputWrapper>
   );
 };
 
