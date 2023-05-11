@@ -3,12 +3,10 @@ import { View } from "react-native";
 
 import ActivityIndicator from "./ActivityIndicator";
 
-const FullLoading: FC = () => {
+export const FullLoading: FC = () => {
   return (
-    <View className="h-full w-full items-center justify-center">
+    <View className="flex-grow items-center justify-center">
       <ActivityIndicator size="large" />
     </View>
   );
 };
-
-export default FullLoading;

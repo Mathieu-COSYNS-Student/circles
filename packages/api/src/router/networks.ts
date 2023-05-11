@@ -82,7 +82,7 @@ export const networksRouter = router({
     }),
   createInvite: protectedProcedure
     .input(networkInviteSchema.pick({ networkId: true }))
-    .mutation(async ({ ctx, input }) => {
+    .query(async ({ ctx, input }) => {
       const role = await getNetworkRole(ctx, input.networkId, ctx.auth.userId);
 
       if (

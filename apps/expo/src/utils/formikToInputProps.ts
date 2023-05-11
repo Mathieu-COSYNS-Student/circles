@@ -66,7 +66,6 @@ export const formikToDropdownProps = <
   ) => {
     if (typeof value === "function") {
       setValues((values) => {
-        console.log(value);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return setIn(values, field as string, value(values[field]));
       });
