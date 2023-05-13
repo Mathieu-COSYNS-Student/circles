@@ -94,7 +94,7 @@ export const DropDownPicker = <T extends ValueType>({
       >
         <View style={{ zIndex: 2 }}>
           <DefaultDropDownPicker
-            listMode={modal ? "MODAL" : undefined}
+            listMode={modal ? "MODAL" : "SCROLLVIEW"}
             ArrowDownIconComponent={() => {
               return (
                 <Ionicons size={20} color={text} name="chevron-down-outline" />
@@ -119,10 +119,6 @@ export const DropDownPicker = <T extends ValueType>({
             style={{
               borderColor: inputBorder,
               backgroundColor: inputBackground,
-            }}
-            zIndex={1000}
-            listItemContainerStyle={{
-              zIndex: 100,
             }}
             labelStyle={{
               color: text,

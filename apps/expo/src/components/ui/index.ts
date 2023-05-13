@@ -15,3 +15,4 @@ export * from "./Modal";
 export * from "./ModalForm";
 export * from "./DrawerToggleButton";
 export * from "./DropDownPicker";
+export * from "./OrSeparator";

@@ -10,9 +10,12 @@ export function useThemeColor(colorName: ColorName) {
   return Colors[theme][colorName];
 }
 
-export function useThemeColors(colorsNames: ColorName[]) {
+export function useThemeColors(
+  colorsNames?: ColorName[],
+): Partial<Record<ColorName, string>> {
   const theme = useColorScheme() ?? "light";
   const result: Partial<Record<ColorName, string>> = {};
+  if (!colorsNames) return Colors[theme];
   for (const c of colorsNames) {
     result[c] = Colors[theme][c];
   }

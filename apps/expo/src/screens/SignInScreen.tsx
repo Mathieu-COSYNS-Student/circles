@@ -8,7 +8,14 @@ import { z } from "zod";
 import { passwordSchema } from "@acme/schema";
 
 import { formikToInputProps } from "~/utils/formikToInputProps";
-import { Button, Form, SafeAreaView, Text, TextInput } from "~/components/ui";
+import {
+  Button,
+  Form,
+  OrSeparator,
+  SafeAreaView,
+  Text,
+  TextInput,
+} from "~/components/ui";
 import { useThemeColor } from "~/hooks/Theme";
 import { type RootStackParamList } from "~/navigators/RootNavigator";
 
@@ -111,11 +118,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
             </>
           )}
         </Form>
-        <View className="my-3 flex flex-row items-center">
-          <View className="flex-grow border-b border-b-brand-200"></View>
-          <Text className="mx-1 pb-1">or</Text>
-          <View className="h-0.5 flex-grow  border-b border-b-brand-200" />
-        </View>
+        <OrSeparator />
         <Button
           variant="normal-outline"
           title="Sign Up"

@@ -1,7 +1,9 @@
-import React from "react";
+import { Buffer } from "buffer";
+import React, { useMemo } from "react";
 import { View, useWindowDimensions } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { Ionicons } from "@expo/vector-icons";
+import bs58 from "bs58";
 
 import {
   type Network,
@@ -30,11 +32,16 @@ export const NetworkInvite = ({
 }: NetworkInviteProps) => {
   const { width, height } = useWindowDimensions();
 
+  const encodedName = useMemo(
+    () => (networkName ? bs58.encode(Buffer.from(networkName)) : undefined),
+    [networkName],
+  );
+
   if (isLoading || isRefetching) {
     return <FullLoading />;
   }
 
-  if (!networkInvite) return null;
+  if (!networkInvite || !networkName) return null;
 
   const locale = getPreferredLocale();
 
@@ -47,7 +54,7 @@ export const NetworkInvite = ({
         network or if he/she already have the app he/she can scan the QRcode.
       </Text>
       <Text type="heading1" className="mt-2 text-center">
-        {networkInvite?.code}
+        {networkInvite.code}
       </Text>
       <View className="items-center justify-center">
         <View
@@ -63,7 +70,7 @@ export const NetworkInvite = ({
           ) : (
             <QRCode
               quietZone={15}
-              value={networkInvite?.code}
+              value={`circles://network-invite?name=${encodedName}&id=${networkInvite.id}&code=${networkInvite.code}`}
               size={(Math.min(width, height) / 3) * 2}
             />
           )}
