@@ -1,14 +1,19 @@
 import { Buffer } from "buffer";
 import url from "url";
-import React, { useState } from "react";
-import { View } from "react-native";
+import React, { useState, type FC } from "react";
+import { Alert, View } from "react-native";
+import { type NativeStackScreenProps } from "@react-navigation/native-stack";
+import { TRPCClientError } from "@trpc/client";
 import bs58 from "bs58";
 import { z } from "zod";
 
-import { networkInviteSchema } from "@acme/schema";
+import { joinNetworkSchema, networkInviteSchema } from "@acme/schema";
 
+import { trpc } from "~/utils/trpc";
+import { NetworkJoinedModal } from "~/components/NetworkJoinedModal";
 import { QRcodeScanner } from "~/components/QRcodeScanner";
 import { Button, Modal, Text } from "~/components/ui";
+import { type RootStackParamList } from "~/navigators/RootNavigator";
 
 const querySchema = networkInviteSchema
   .pick({
@@ -24,8 +29,15 @@ const querySchema = networkInviteSchema
   );
 type Query = z.infer<typeof querySchema>;
 
-export const NetworkJoinScanScreen = () => {
+type NetworkJoinScanScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  "NetworkJoinScan"
+>;
+
+export const NetworkJoinScanScreen: FC<NetworkJoinScanScreenProps> = ({}) => {
   const [invite, setInvite] = useState<Query | null>(null);
+  const [joined, setJoined] = useState<string>("645a5a8ea997505c2b0e6219");
+  const joinNetworkMutation = trpc.networks.joinNetwork.useMutation();
 
   const handleBarCodeScanned = (data: string) => {
     if (invite) return;
@@ -43,8 +55,24 @@ export const NetworkJoinScanScreen = () => {
     }
   };
 
+  const handleJoinButtonPress = async () => {
+    if (!invite) return;
+
+    try {
+      const result = await joinNetworkMutation.mutateAsync(
+        joinNetworkSchema.parse(invite),
+      );
+      setInvite(null);
+      setJoined(result.networkId);
+    } catch (err) {
+      if (err instanceof TRPCClientError) {
+        Alert.alert("Error", err.message);
+      }
+    }
+  };
+
   return (
-    <View className="">
+    <View>
       <QRcodeScanner
         showRescan={false}
         onBarCodeScanned={handleBarCodeScanned}
@@ -60,10 +88,11 @@ export const NetworkJoinScanScreen = () => {
             onPress={() => setInvite(null)}
           />
           <View className="ml-2">
-            <Button title="Join" />
+            <Button title="Join" onPress={handleJoinButtonPress} />
           </View>
         </View>
       </Modal>
+      <NetworkJoinedModal visible={!!joined} />
     </View>
   );
 };

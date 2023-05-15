@@ -24,12 +24,13 @@ model Network {
 }
 
 model NetworkMember {
-    id        String              @id @default(auto()) @map("_id") @db.ObjectId
-    userId    String
-    networkId String              @db.ObjectId
-    network   Network             @relation(fields: [networkId], references: [id])
-    role      NetworkMemberRole   @default(USER)
-    status    NetworkMemberStatus
+    id            String              @id @default(auto()) @map("_id") @db.ObjectId
+    userId        String
+    networkId     String              @db.ObjectId
+    network       Network             @relation(fields: [networkId], references: [id])
+    role          NetworkMemberRole   @default(USER)
+    status        NetworkMemberStatus
+    NetworkInvite NetworkInvite[] // array contains one or no element: Check NetworkInvite networkMemberId comment
 
     @@unique([userId, networkId])
 }
@@ -46,12 +47,15 @@ enum NetworkMemberRole {
 }
 
 model NetworkInvite {
-    id        String   @id @default(auto()) @map("_id") @db.ObjectId
-    networkId String   @db.ObjectId
-    network   Network  @relation(fields: [networkId], references: [id])
-    code      Int
-    expireAt  DateTime
-    used      Boolean  @default(false)
+    id              String         @id @default(auto()) @map("_id") @db.ObjectId
+    networkId       String         @db.ObjectId
+    network         Network        @relation(fields: [networkId], references: [id])
+    code            Int
+    expireAt        DateTime
+    used            Boolean        @default(false)
+    networkMember   NetworkMember? @relation(fields: [networkMemberId], references: [id])
+    networkMemberId String?        @db.ObjectId // should be unique be not supported by primsa yet https://github.com/prisma/prisma/issues/6974
+    // partial index over {"networkMemberId":1} with options { unique: true, partialFilterExpression: { networkMemberId: { $type: "string" } } }
 
     @@unique([code, networkId])
 }

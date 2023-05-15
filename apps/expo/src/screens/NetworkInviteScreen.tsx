@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Alert, ScrollView, Share, View } from "react-native";
+import { Alert, Share, View } from "react-native";
 import { type NativeStackScreenProps } from "@react-navigation/native-stack";
 import { z } from "zod";
 
@@ -8,7 +8,12 @@ import { type Network } from "@acme/schema";
 import { formikToDropdownProps } from "~/utils/formikToInputProps";
 import { trpc } from "~/utils/trpc";
 import { NetworkInvite } from "~/components/NetworkInvite";
-import { Button, DropDownPicker, Form, Text } from "~/components/ui";
+import {
+  Button,
+  DropDownPicker,
+  Form,
+  ScreenContentContainer,
+} from "~/components/ui";
 import { type RootStackParamList } from "~/navigators/RootNavigator";
 import { useRootNavigation } from "~/navigators/useRootNavigation";
 
@@ -116,69 +121,66 @@ export const NetworkInviteScreen = ({}: NetworkInviteScreenProps) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <View className="h-full p-5">
-        <Text type="heading1">Invite in your network</Text>
-        <Form
-          enableReinitialize={true}
-          initialValues={initialValues}
-          submitTitle={isShared ? undefined : "Share"}
-          onSubmit={share}
-          validationSchema={z.object({
-            networkId: z.string(),
-          })}
-          validateOnChange={true}
-          validate={validate}
-        >
-          {(formik) => (
-            <View className="mt-2 flex-grow">
-              <DropDownPicker<string>
-                open={open}
-                setOpen={setOpen}
-                label={"Network"}
-                placeholder="Select a network"
-                items={
-                  getNetworksQuery.data?.map((network) => ({
-                    value: network.id,
-                    label: network.name,
-                  })) ?? []
-                }
-                loading={true}
-                mode="BADGE"
-                {...formikToDropdownProps(formik, "networkId")}
-              />
-              <View className="flex-grow">
-                {selectedNetworkId && (
-                  <NetworkInvite
-                    isLoading={networkInviteForSelectedNetworkQuery.isLoading}
-                    isRefetching={
-                      networkInviteForSelectedNetworkQuery.isRefetching
-                    }
-                    isShared={isShared}
-                    networkName={getNetworkName(selectedNetworkId)}
-                    networkInvite={networkInviteForSelectedNetworkQuery.data}
-                    onRefetch={networkInviteForSelectedNetworkQuery.refetch}
-                  />
-                )}
-              </View>
-            </View>
-          )}
-        </Form>
-        {isShared && (
-          <View className="flex-row">
-            <View className="w-1/2 pr-1">
-              <Button
-                variant="normal-outline"
-                title="New Invite"
-                onPress={() => networkInviteForSelectedNetworkQuery.refetch()}
-              />
-            </View>
-            <View className="w-1/2 pl-1">
-              <Button title="Go back" onPress={() => navigation.goBack()} />
+    <ScreenContentContainer hero="Invite in your network">
+      <Form
+        enableReinitialize={true}
+        initialValues={initialValues}
+        submitTitle={isShared ? undefined : "Share"}
+        onSubmit={share}
+        validationSchema={z.object({
+          networkId: z.string(),
+        })}
+        validateOnChange={true}
+        validate={validate}
+      >
+        {(formik) => (
+          <View className="flex-grow">
+            <DropDownPicker<string>
+              open={open}
+              setOpen={setOpen}
+              label={"Network"}
+              placeholder="Select a network"
+              items={
+                getNetworksQuery.data?.map((network) => ({
+                  value: network.id,
+                  label: network.name,
+                })) ?? []
+              }
+              loading={getNetworksQuery.isLoading}
+              mode="BADGE"
+              {...formikToDropdownProps(formik, "networkId")}
+            />
+            <View className="flex-grow">
+              {selectedNetworkId && (
+                <NetworkInvite
+                  isLoading={networkInviteForSelectedNetworkQuery.isLoading}
+                  isRefetching={
+                    networkInviteForSelectedNetworkQuery.isRefetching
+                  }
+                  isShared={isShared}
+                  networkName={getNetworkName(selectedNetworkId)}
+                  networkInvite={networkInviteForSelectedNetworkQuery.data}
+                  onRefetch={networkInviteForSelectedNetworkQuery.refetch}
+                />
+              )}
             </View>
           </View>
         )}
-      </View>
-    </ScrollView>
+      </Form>
+      {isShared && (
+        <View className="flex-row">
+          <View className="w-1/2 pr-1">
+            <Button
+              variant="normal-outline"
+              title="New Invite"
+              onPress={() => networkInviteForSelectedNetworkQuery.refetch()}
+            />
+          </View>
+          <View className="w-1/2 pl-1">
+            <Button title="Go back" onPress={() => navigation.goBack()} />
+          </View>
+        </View>
+      )}
+    </ScreenContentContainer>
   );
 };

@@ -1,8 +1,8 @@
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 import Constants from "expo-constants";
 
 import { trpc } from "~/utils/trpc";
-import { Button, Text } from "~/components/ui";
+import { Button, ScreenContentContainer, Text } from "~/components/ui";
 import { useRootNavigation } from "~/navigators/useRootNavigation";
 
 export default function TestScreen() {
@@ -27,7 +27,7 @@ export default function TestScreen() {
   };
 
   return (
-    <ScrollView className="p-2">
+    <ScreenContentContainer>
       <View className="mb-2">
         <Button
           onPress={() => navigation.navigate("NetworkCreateOrJoin")}
@@ -69,6 +69,6 @@ export default function TestScreen() {
             : JSON.stringify(usersQuery.data, undefined, 2)}
         </Text>
       </View>
-    </ScrollView>
+    </ScreenContentContainer>
   );
 }
