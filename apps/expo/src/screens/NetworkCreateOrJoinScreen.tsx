@@ -13,18 +13,16 @@ export const NetworkCreateOrJoinScreen = ({
   navigation,
 }: NetworkCreateOrJoinScreenProps) => {
   return (
-    <ScreenContentContainer>
-      <View className="h-full justify-center">
+    <ScreenContentContainer contentClassName="justify-center">
+      <Button
+        title="Create a network"
+        onPress={() => navigation.navigate("NetworkCreate")}
+      />
+      <View className="mt-2">
         <Button
-          title="Create a network"
-          onPress={() => navigation.navigate("NetworkCreate")}
+          title="Join a network"
+          onPress={() => navigation.navigate("NetworkJoin")}
         />
-        <View className="mt-2">
-          <Button
-            title="Join a network"
-            onPress={() => navigation.navigate("NetworkJoin")}
-          />
-        </View>
       </View>
     </ScreenContentContainer>
   );

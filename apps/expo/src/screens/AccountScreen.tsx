@@ -30,15 +30,15 @@ export default function AccountScreen({ navigation }: AccountScreenProps) {
           source={{ uri: user?.profileImageUrl }}
           alt={`${user?.fullName} profile picture`}
         />
-        <Text>@{user?.username}</Text>
+        <Text className="text-center">@{user?.username}</Text>
         <Text className="mt-6" type="heading2">
           First name
         </Text>
-        <Text>{user?.firstName}</Text>
+        <Text className="text-center">{user?.firstName}</Text>
         <Text className="mt-2" type="heading2">
           Last name
         </Text>
-        <Text className="mb-6">{user?.lastName}</Text>
+        <Text className="mb-6 text-center">{user?.lastName}</Text>
       </View>
 
       <View>

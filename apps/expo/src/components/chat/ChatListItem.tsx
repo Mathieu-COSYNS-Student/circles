@@ -58,7 +58,7 @@ export const ChatListItem = ({ chat }: { chat: ChatListObject }) => {
       className="border-b-2 border-gray-100 dark:border-zinc-950"
       onPress={onPress}
     >
-      <View className="flex-row p-3">
+      <View className="flex-row items-center p-3">
         <View className="w-1/6 pr-3">
           <Image
             className="w-100 aspect-square rounded-full"
@@ -85,7 +85,7 @@ export const ChatListItem = ({ chat }: { chat: ChatListObject }) => {
                 </Text>
               </>
             ) : (
-              <Text>
+              <Text numberOfLines={1}>
                 {lastMessage === false ? "No messages yet. Say hello 👋" : ""}
               </Text>
             )}

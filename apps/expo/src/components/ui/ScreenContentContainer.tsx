@@ -7,11 +7,13 @@ import Text from "./Text";
 export type ScreenContentContainerProps = {
   children: ReactNode;
   hero?: ReactNode | string;
+  contentClassName?: string;
 };
 
 export const ScreenContentContainer: FC<ScreenContentContainerProps> = ({
   children,
   hero,
+  contentClassName,
 }) => {
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -28,7 +30,7 @@ export const ScreenContentContainer: FC<ScreenContentContainerProps> = ({
           )}
         </View>
       )}
-      <View className="m-5 flex-grow">{children}</View>
+      <View className={`m-5 flex-grow ${contentClassName}`}>{children}</View>
     </ScrollView>
   );
 };

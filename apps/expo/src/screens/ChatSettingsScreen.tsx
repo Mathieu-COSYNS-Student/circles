@@ -4,7 +4,7 @@ import { type NativeStackScreenProps } from "@react-navigation/native-stack";
 import { trpc } from "~/utils/trpc";
 import { CircleSettings } from "~/components/CircleSettings";
 import { PrivateMessageSettings } from "~/components/PrivateMessageSettings";
-import { Text } from "~/components/ui";
+import { ScreenContentContainer, Text } from "~/components/ui";
 import { type RootStackParamList } from "~/navigators/RootNavigator";
 
 type ChatSettingsScreenProps = NativeStackScreenProps<
@@ -18,7 +18,7 @@ export const ChatSettingsScreen = ({ route }: ChatSettingsScreenProps) => {
     chatQuery.data?.find((chat) => chat.id === route.params.id) || route.params;
 
   return (
-    <View className="p-2">
+    <ScreenContentContainer>
       <View className="mt-2 items-center">
         <Image
           className="mb-1 aspect-square max-h-[100] w-1/3 max-w-[100] rounded-full"
@@ -33,6 +33,6 @@ export const ChatSettingsScreen = ({ route }: ChatSettingsScreenProps) => {
           <PrivateMessageSettings chat={chat} />
         )}
       </View>
-    </View>
+    </ScreenContentContainer>
   );
 };

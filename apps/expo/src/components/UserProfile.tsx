@@ -22,9 +22,11 @@ export const UserProfile = ({}) => {
           source={{ uri: user?.profileImageUrl }}
           alt={`${user?.fullName} profile picture`}
         />
-        <View className="ml-3">
-          <Text type="heading3">{user?.fullName}</Text>
-          <Text>@{user?.username}</Text>
+        <View className="ml-3 flex-shrink">
+          <Text type="heading3" numberOfLines={1}>
+            {user?.fullName}
+          </Text>
+          <Text numberOfLines={1}>@{user?.username}</Text>
         </View>
       </View>
     </PlatformPressable>

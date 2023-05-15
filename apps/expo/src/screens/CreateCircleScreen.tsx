@@ -6,7 +6,7 @@ import { createCircleSchema, type CreateCircleValues } from "@acme/schema";
 
 import { formikToInputProps } from "~/utils/formikToInputProps";
 import { trpc } from "~/utils/trpc";
-import { TextInput } from "~/components/ui";
+import { ScreenContentContainer, TextInput } from "~/components/ui";
 import { Form } from "~/components/ui/Form";
 import { type RootStackParamList } from "~/navigators/RootNavigator";
 
@@ -26,7 +26,7 @@ const CreateCircleScreen: FC<ChatScreenProps> = ({ navigation }) => {
   const initialValues: CreateCircleValues = { name: "" };
 
   return (
-    <View className="p-2">
+    <ScreenContentContainer>
       <Form
         initialValues={initialValues}
         onSubmit={onSubmit}
@@ -42,7 +42,7 @@ const CreateCircleScreen: FC<ChatScreenProps> = ({ navigation }) => {
           </View>
         )}
       </Form>
-    </View>
+    </ScreenContentContainer>
   );
 };
 

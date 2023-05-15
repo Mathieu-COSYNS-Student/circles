@@ -9,7 +9,13 @@ import {
 } from "@acme/schema";
 
 import { formikToInputProps } from "~/utils/formikToInputProps";
-import { Form, FullLoading, Text, TextInput } from "~/components/ui";
+import {
+  Form,
+  FullLoading,
+  ScreenContentContainer,
+  Text,
+  TextInput,
+} from "~/components/ui";
 import { useThemeColor } from "~/hooks/Theme";
 import { type RootStackParamList } from "~/navigators/RootNavigator";
 
@@ -57,14 +63,14 @@ export default function ChangePasswordScreen({
   };
 
   return (
-    <View className="h-full justify-between p-2">
+    <ScreenContentContainer contentClassName="justify-between">
       <Form
         initialValues={initialValues}
         onSubmit={onSubmit}
         validationSchema={updatePasswordFormSchema}
         validate={removeSignInError}
         submitTitle="Change password"
-        submitClassName="mx-3 mb-4 mt-2"
+        submitClassName="mt-2"
       >
         {(formik) => (
           <View>
@@ -98,6 +104,6 @@ export default function ChangePasswordScreen({
           </View>
         )}
       </Form>
-    </View>
+    </ScreenContentContainer>
   );
 }
