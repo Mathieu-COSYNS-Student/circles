@@ -36,7 +36,7 @@ type NetworkJoinScanScreenProps = NativeStackScreenProps<
 
 export const NetworkJoinScanScreen: FC<NetworkJoinScanScreenProps> = ({}) => {
   const [invite, setInvite] = useState<Query | null>(null);
-  const [joined, setJoined] = useState<string>("645a5a8ea997505c2b0e6219");
+  const [joined, setJoined] = useState<string>();
   const joinNetworkMutation = trpc.networks.joinNetwork.useMutation();
 
   const handleBarCodeScanned = (data: string) => {
