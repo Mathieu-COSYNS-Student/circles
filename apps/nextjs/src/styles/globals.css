@@ -3,9 +3,51 @@
 @tailwind utilities;
 
 body {
-  @apply bg-brand-600 text-gray-900 dark:bg-brand-900 dark:text-zinc-300;
+  @apply bg-white text-gray-900 dark:bg-zinc-900 dark:text-zinc-100;
+}
+
+body > #__next {
+  @apply flex min-h-screen flex-col;
 }
 
 h1 {
   @apply text-4xl font-extrabold;
+}
+
+main > section {
+  @apply relative isolate z-10 mx-auto max-w-screen-xl px-6;
+}
+
+main > section::before {
+  z-index: -1;
+  content: "";
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  position: absolute;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.hero > div:nth-of-type(2) {
+  grid-row: 1 / 1;
+  aspect-ratio: 1200/1080;
+  max-height: 400px;
+}
+
+@media screen(lg) {
+  .hero {
+    grid-template-columns: 45ch 1fr;
+  }
+  .hero > div:nth-of-type(2) {
+    grid-row: initial;
+    max-height: 500px;
+  }
 }
