@@ -41,12 +41,12 @@ const Button: FC<ButtonProps> = ({
   if (variant === "normal") {
     pressableClass =
       "bg-brand-700 hover:bg-brand-800 focus:ring-brand-300 " +
-      "dark:bg-brand-600 dark:hover:bg-brand-700 dark:focus:ring-brand-800";
+      "dark:bg-brand-600 dark:hover:bg-brand-700 dark:focus:ring-brand-400";
   }
   if (variant === "normal-outline") {
     pressableClass =
       "border border-brand-700 hover:border-brand-800 focus:ring-brand-300 " +
-      "dark:border-brand-600 dark:hover:border-brand-700 dark:focus:ring-brand-800";
+      "dark:border-brand-600 dark:hover:border-brand-700 dark:focus:ring-brand-400";
     textColor = primary ?? "";
     useBorder = true;
   }
