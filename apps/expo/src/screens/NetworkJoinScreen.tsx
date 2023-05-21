@@ -10,7 +10,7 @@ import {
   type JoinNetworkFormValues,
 } from "@acme/schema";
 
-import { formikToInputProps } from "~/utils/formikToInputProps";
+import { formikToInputProps } from "~/utils/formikUtils";
 import { trpc } from "~/utils/trpc";
 import { NetworkJoinedModal } from "~/components/NetworkJoinedModal";
 import {
@@ -18,10 +18,8 @@ import {
   Form,
   OrSeparator,
   ScreenContentContainer,
-  Text,
   TextInput,
 } from "~/components/ui";
-import { useThemeColors } from "~/hooks/Theme";
 import { useBarCodeScannerPermission } from "~/hooks/useBarCodeScannerPermission";
 import { type RootStackParamList } from "~/navigators/RootNavigator";
 
@@ -31,7 +29,6 @@ type NetworkJoinScreenProps = NativeStackScreenProps<
 >;
 
 export const NetworkJoinScreen = ({ navigation }: NetworkJoinScreenProps) => {
-  const { error: errorColor } = useThemeColors();
   const { hasBarcodeScannerPermission, askBarcodeScannerPermission } =
     useBarCodeScannerPermission();
   const [joined, setJoined] = useState<string>();
@@ -53,7 +50,7 @@ export const NetworkJoinScreen = ({ navigation }: NetworkJoinScreenProps) => {
       setJoined(result.networkId);
     } catch (err) {
       if (err instanceof TRPCClientError) {
-        formikHelpers.setStatus(err.message);
+        formikHelpers.setStatus({ errors: err.message });
       }
     }
   };
@@ -75,7 +72,7 @@ export const NetworkJoinScreen = ({ navigation }: NetworkJoinScreenProps) => {
         onSubmit={onSubmit}
         validationSchema={joinNetworkFormSchema}
         submitTitle="Join network"
-        submitClassName="mt-3 mb-6"
+        submitClassName="mb-6"
       >
         {(formik) => (
           <>
@@ -86,14 +83,10 @@ export const NetworkJoinScreen = ({ navigation }: NetworkJoinScreenProps) => {
             <TextInput
               containerClassName="mt-2"
               label="Network code"
+              keyboardType="numeric"
+              maxLength={8}
               {...formikToInputProps(formik, "code")}
             />
-
-            {formik.status && (
-              <Text style={{ color: errorColor }} className="mb-4">
-                {formik.status}
-              </Text>
-            )}
           </>
         )}
       </Form>

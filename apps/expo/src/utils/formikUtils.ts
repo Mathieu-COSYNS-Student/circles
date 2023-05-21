@@ -1,4 +1,4 @@
-import { type Dispatch, type SetStateAction } from "react";
+import { type ChangeEvent, type Dispatch, type SetStateAction } from "react";
 import { setIn, type FormikProps } from "formik";
 
 type NoFunctionValue =
@@ -27,14 +27,25 @@ export const formikToInputProps = <
     values,
     touched,
     errors,
+    setStatus,
+    validateOnChange,
   }: Pick<
     FormikProps<T>,
-    "handleChange" | "handleBlur" | "values" | "touched" | "errors"
+    | "handleChange"
+    | "handleBlur"
+    | "values"
+    | "touched"
+    | "errors"
+    | "setStatus"
+    | "validateOnChange"
   >,
   key: keyof T,
 ) => {
   return {
-    onChangeText: handleChange(key),
+    onChangeText: (e: string | ChangeEvent<never>) => {
+      handleChange(key)(e);
+      if (validateOnChange) setStatus(null);
+    },
     onBlur: handleBlur(key),
     value: values[key] as Value,
     touched: touched[key],
@@ -53,9 +64,17 @@ export const formikToDropdownProps = <
     values,
     touched,
     errors,
+    setStatus,
+    validateOnChange,
   }: Pick<
     FormikProps<T>,
-    "setValues" | "setFieldValue" | "values" | "touched" | "errors"
+    | "setValues"
+    | "setFieldValue"
+    | "values"
+    | "touched"
+    | "errors"
+    | "setStatus"
+    | "validateOnChange"
   >,
   field: keyof T,
 ) => {
@@ -72,6 +91,7 @@ export const formikToDropdownProps = <
     } else {
       setFieldValue(field as string, value);
     }
+    if (validateOnChange) setStatus(null);
   };
 
   return {

@@ -20,7 +20,7 @@ export default function AccountScreen({ navigation }: AccountScreenProps) {
   };
 
   return (
-    <ScreenContentContainer>
+    <ScreenContentContainer contentClassName="justify-between">
       <View className="mt-2 items-center">
         <Text className="mb-4" type="heading1">
           Profile

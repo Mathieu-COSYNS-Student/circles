@@ -1,22 +1,20 @@
-import { useState } from "react";
 import { View } from "react-native";
 import { useUser } from "@clerk/clerk-expo";
 import { type NativeStackScreenProps } from "@react-navigation/native-stack";
+import { type FormikHelpers } from "formik";
 
 import {
   updatePasswordFormSchema,
   type UpdatePasswordFormSchema,
 } from "@acme/schema";
 
-import { formikToInputProps } from "~/utils/formikToInputProps";
+import { formikToInputProps } from "~/utils/formikUtils";
 import {
   Form,
   FullLoading,
   ScreenContentContainer,
-  Text,
   TextInput,
 } from "~/components/ui";
-import { useThemeColor } from "~/hooks/Theme";
 import { type RootStackParamList } from "~/navigators/RootNavigator";
 
 type AccountScreenProps = NativeStackScreenProps<
@@ -28,14 +26,8 @@ export default function ChangePasswordScreen({
   navigation,
 }: AccountScreenProps) {
   const { user } = useUser();
-  const errorColor = useThemeColor("error");
-  const [signInError, setSignInError] = useState<string | undefined>();
 
   if (!user) return <FullLoading />;
-
-  const removeSignInError = () => {
-    setSignInError(undefined);
-  };
 
   const initialValues: UpdatePasswordFormSchema = {
     currentPassword: "",
@@ -44,7 +36,10 @@ export default function ChangePasswordScreen({
     signOutOfOtherSessions: false,
   };
 
-  const onSubmit = async (values: UpdatePasswordFormSchema) => {
+  const onSubmit = async (
+    values: UpdatePasswordFormSchema,
+    formikHelpers: FormikHelpers<UpdatePasswordFormSchema>,
+  ) => {
     try {
       await user.updatePassword({
         currentPassword: values.currentPassword,
@@ -53,12 +48,14 @@ export default function ChangePasswordScreen({
       });
       navigation.goBack();
     } catch (err) {
-      setSignInError(
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument
-        err && Object.hasOwn(err, "errors") ? err.errors[0].message : err,
-      );
+      formikHelpers.setStatus({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        errors:
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          err && Object.hasOwn(err, "errors") ? err.errors[0].message : err,
+      });
     }
   };
 
@@ -68,9 +65,7 @@ export default function ChangePasswordScreen({
         initialValues={initialValues}
         onSubmit={onSubmit}
         validationSchema={updatePasswordFormSchema}
-        validate={removeSignInError}
         submitTitle="Change password"
-        submitClassName="mt-2"
       >
         {(formik) => (
           <View>
@@ -98,9 +93,6 @@ export default function ChangePasswordScreen({
               iconStart="lock-closed-outline"
               {...formikToInputProps(formik, "confirmNewPassword")}
             />
-            <Text style={{ color: errorColor }} className="mb-2">
-              {signInError}
-            </Text>
           </View>
         )}
       </Form>

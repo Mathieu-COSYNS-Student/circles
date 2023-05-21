@@ -5,7 +5,7 @@ import { z } from "zod";
 
 import { type Network } from "@acme/schema";
 
-import { formikToDropdownProps } from "~/utils/formikToInputProps";
+import { formikToDropdownProps } from "~/utils/formikUtils";
 import { trpc } from "~/utils/trpc";
 import { NetworkInvite } from "~/components/NetworkInvite";
 import {
@@ -47,6 +47,10 @@ export const NetworkInviteScreen = ({}: NetworkInviteScreenProps) => {
       });
   }, [getNetworksQuery.data]);
 
+  useEffect(() => {
+    setSelectedNetworkId((value) => (!value ? initialNetworkId : value));
+  }, [initialNetworkId]);
+
   const getNetworkName = (networkId: Network["id"]) => {
     return (
       getNetworksQuery.data?.find((network) => network.id === networkId)
@@ -74,6 +78,7 @@ export const NetworkInviteScreen = ({}: NetworkInviteScreenProps) => {
       selectedNetworkId !== networkInviteForSelectedNetworkQuery.data?.networkId
     ) {
       Alert.alert(
+        "Error",
         "An error happened while preparing to share. Try again or contact Circle if the error persist.",
       );
       return;
@@ -96,6 +101,7 @@ export const NetworkInviteScreen = ({}: NetworkInviteScreenProps) => {
         if (id) setSharedInviteId((list) => [id, ...list]);
       } else if (result.action === Share.dismissedAction) {
         Alert.alert(
+          "Info",
           "We have detected than you didn't shared the code correctly.",
         );
       }
@@ -150,7 +156,7 @@ export const NetworkInviteScreen = ({}: NetworkInviteScreenProps) => {
               mode="BADGE"
               {...formikToDropdownProps(formik, "networkId")}
             />
-            <View className="flex-grow">
+            <View className="mt-2 flex-grow">
               {selectedNetworkId && (
                 <NetworkInvite
                   isLoading={networkInviteForSelectedNetworkQuery.isLoading}

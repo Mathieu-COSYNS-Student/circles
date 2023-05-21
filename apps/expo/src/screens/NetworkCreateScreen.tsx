@@ -1,10 +1,12 @@
 import { View } from "react-native";
 import { useUser } from "@clerk/clerk-expo";
 import { type NativeStackScreenProps } from "@react-navigation/native-stack";
+import { TRPCClientError } from "@trpc/client";
+import { type FormikHelpers } from "formik";
 
 import { createNetworkSchema, type CreateNetworkValues } from "@acme/schema";
 
-import { formikToInputProps } from "~/utils/formikToInputProps";
+import { formikToInputProps } from "~/utils/formikUtils";
 import { trpc } from "~/utils/trpc";
 import { Form, ScreenContentContainer, TextInput } from "~/components/ui";
 import { type RootStackParamList } from "~/navigators/RootNavigator";
@@ -24,12 +26,21 @@ export const NetworkCreateScreen = ({
     name: user?.fullName || "",
   };
 
-  const onSubmit = async (values: CreateNetworkValues) => {
-    await createNetwork.mutateAsync(values);
-    navigation.navigate("DrawerNavigator", {
-      screen: "Main",
-      params: { screen: "Home" },
-    });
+  const onSubmit = async (
+    values: CreateNetworkValues,
+    formikHelpers: FormikHelpers<CreateNetworkValues>,
+  ) => {
+    try {
+      await createNetwork.mutateAsync(values);
+      navigation.navigate("DrawerNavigator", {
+        screen: "Main",
+        params: { screen: "Home" },
+      });
+    } catch (err) {
+      if (err instanceof TRPCClientError) {
+        formikHelpers.setStatus({ errors: err.message });
+      }
+    }
   };
 
   return (
@@ -39,7 +50,6 @@ export const NetworkCreateScreen = ({
         onSubmit={onSubmit}
         validationSchema={createNetworkSchema}
         submitTitle="Create your network"
-        submitClassName="mt-2"
       >
         {(formik) => (
           <View className="flex-grow">

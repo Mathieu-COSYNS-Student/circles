@@ -6,6 +6,7 @@ import { Item } from "react-navigation-header-buttons";
 import { type ChatListObject } from "@acme/schema";
 
 import { HeaderButtons } from "~/components/ui";
+import { useSafeAreaStyle } from "~/hooks/useSafeAreaStyle";
 import AccountScreen from "~/screens/AccountScreen";
 import ChangePasswordScreen from "~/screens/ChangePasswordScreen";
 import { ChatScreen } from "~/screens/ChatScreen";
@@ -20,6 +21,7 @@ import { NetworkJoinScreen } from "~/screens/NetworkJoinScreen";
 import OnboardingScreen from "~/screens/OnboardingScreen";
 import ResetPasswordScreen from "~/screens/ResetPasswordScreen";
 import SignInScreen from "~/screens/SignInScreen";
+import { SignUpEmailVerifyScreen } from "~/screens/SignUpEmailVerifyScreen";
 import SignUpScreen from "~/screens/SignUpScreen";
 import TestScreen from "~/screens/TestScreen";
 import { DrawerNavigator, type DrawerParamList } from "./DrawerNavigator";
@@ -29,6 +31,7 @@ export type RootStackParamList = {
   Onboarding: undefined;
   SignIn: undefined;
   SignUp: undefined;
+  SignUpEmailVerify: undefined;
   ForgotPassword: undefined;
   ResetPassword: undefined;
   Circles: undefined;
@@ -49,6 +52,7 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const RootNavigator = () => {
+  const safeAreaStyle = useSafeAreaStyle();
   const { isSignedIn } = useUser();
   const navigation = useRootNavigation();
 
@@ -122,31 +126,40 @@ export const RootNavigator = () => {
         </>
       ) : (
         <>
-          <Stack.Screen
-            name="Onboarding"
-            component={OnboardingScreen}
-            options={{ title: "Onboarding", headerShown: false }}
-          />
-          <Stack.Screen
-            name="SignIn"
-            component={SignInScreen}
-            options={{ title: "Sign In", headerShown: false }}
-          />
-          <Stack.Screen
-            name="SignUp"
-            component={SignUpScreen}
-            options={{ title: "Sign Up", headerShown: false }}
-          />
-          <Stack.Screen
-            name="ForgotPassword"
-            component={ForgotPasswordScreen}
-            options={{ title: "ForgotPassword", headerShown: false }}
-          />
-          <Stack.Screen
-            name="ResetPassword"
-            component={ResetPasswordScreen}
-            options={{ title: "ResetPassword", headerShown: false }}
-          />
+          <Stack.Group
+            screenOptions={{ headerShown: false, contentStyle: safeAreaStyle }}
+          >
+            <Stack.Screen
+              name="Onboarding"
+              component={OnboardingScreen}
+              options={{ title: "Onboarding" }}
+            />
+            <Stack.Screen
+              name="SignIn"
+              component={SignInScreen}
+              options={{ title: "Sign In" }}
+            />
+            <Stack.Screen
+              name="SignUp"
+              component={SignUpScreen}
+              options={{ title: "Sign Up" }}
+            />
+            <Stack.Screen
+              name="SignUpEmailVerify"
+              component={SignUpEmailVerifyScreen}
+              options={{ title: "Sign Up" }}
+            />
+            <Stack.Screen
+              name="ForgotPassword"
+              component={ForgotPasswordScreen}
+              options={{ title: "ForgotPassword" }}
+            />
+            <Stack.Screen
+              name="ResetPassword"
+              component={ResetPasswordScreen}
+              options={{ title: "ResetPassword" }}
+            />
+          </Stack.Group>
           <Stack.Screen name="Test" component={TestScreen} />
         </>
       )}

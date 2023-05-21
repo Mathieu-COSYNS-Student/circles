@@ -16,31 +16,24 @@ export const ModalForm = <
   visible,
   onRequestClose,
   submitTitle,
-  children,
   ...props
 }: ModalFormProps<SchemaOutput, Values>) => {
   return (
     <Modal visible={visible} onRequestClose={onRequestClose}>
-      <Form {...props}>
-        {(formik) => (
-          <>
-            {typeof children === "function" ? (
-              children(formik)
-            ) : (
-              <>{children}</>
-            )}
-            <ModalButtons
-              primaryButtonText={submitTitle}
-              primaryButtonProps={{
-                isLoading: formik.isSubmitting,
-                onPress: () => formik.handleSubmit(),
-              }}
-              secondaryButtonText="Cancel"
-              onRequestClose={onRequestClose}
-            />
-          </>
+      <Form
+        {...props}
+        submitComponent={(formik) => (
+          <ModalButtons
+            primaryButtonText={submitTitle}
+            primaryButtonProps={{
+              isLoading: formik.isSubmitting,
+              onPress: () => formik.handleSubmit(),
+            }}
+            secondaryButtonText="Cancel"
+            onRequestClose={onRequestClose}
+          />
         )}
-      </Form>
+      />
     </Modal>
   );
 };

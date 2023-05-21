@@ -4,7 +4,7 @@ import { type NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { createCircleSchema, type CreateCircleValues } from "@acme/schema";
 
-import { formikToInputProps } from "~/utils/formikToInputProps";
+import { formikToInputProps } from "~/utils/formikUtils";
 import { trpc } from "~/utils/trpc";
 import { ScreenContentContainer, TextInput } from "~/components/ui";
 import { Form } from "~/components/ui/Form";

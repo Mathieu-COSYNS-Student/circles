@@ -36,7 +36,7 @@ export const ModalButtons: FC<ModalButtonsProps> = ({
   const useSecondaryButton = typeof secondaryButtonText === "string";
 
   return (
-    <View className="mt-6 w-full flex-row justify-end ">
+    <View className="mt-2 w-full flex-row justify-end ">
       {useSecondaryButton && (
         <View className={usePrimaryButton ? "mr-1" : ""}>
           <Button
