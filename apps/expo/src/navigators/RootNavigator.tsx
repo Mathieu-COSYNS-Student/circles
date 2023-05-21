@@ -19,6 +19,7 @@ import { NetworkInviteScreen } from "~/screens/NetworkInviteScreen";
 import { NetworkJoinScanScreen } from "~/screens/NetworkJoinScanScreen";
 import { NetworkJoinScreen } from "~/screens/NetworkJoinScreen";
 import OnboardingScreen from "~/screens/OnboardingScreen";
+import { ResetPasswordCodeScreen } from "~/screens/ResetPasswordCodeScreen";
 import ResetPasswordScreen from "~/screens/ResetPasswordScreen";
 import SignInScreen from "~/screens/SignInScreen";
 import { SignUpEmailVerifyScreen } from "~/screens/SignUpEmailVerifyScreen";
@@ -33,6 +34,7 @@ export type RootStackParamList = {
   SignUp: undefined;
   SignUpEmailVerify: undefined;
   ForgotPassword: undefined;
+  ResetPasswordCode: undefined;
   ResetPassword: undefined;
   Circles: undefined;
   CreateCircle: undefined;
@@ -152,12 +154,17 @@ export const RootNavigator = () => {
             <Stack.Screen
               name="ForgotPassword"
               component={ForgotPasswordScreen}
-              options={{ title: "ForgotPassword" }}
+              options={{ title: "Forgot Password" }}
+            />
+            <Stack.Screen
+              name="ResetPasswordCode"
+              component={ResetPasswordCodeScreen}
+              options={{ title: "Reset Password" }}
             />
             <Stack.Screen
               name="ResetPassword"
               component={ResetPasswordScreen}
-              options={{ title: "ResetPassword" }}
+              options={{ title: "Reset Password" }}
             />
           </Stack.Group>
           <Stack.Screen name="Test" component={TestScreen} />

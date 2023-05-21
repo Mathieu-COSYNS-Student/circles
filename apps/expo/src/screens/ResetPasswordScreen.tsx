@@ -1,16 +1,15 @@
-import { useState } from "react";
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import * as Animatable from "react-native-animatable";
-import { Ionicons } from "@expo/vector-icons";
+import { View } from "react-native";
+import { useSignIn } from "@clerk/clerk-expo";
 import { type NativeStackScreenProps } from "@react-navigation/native-stack";
+import { type FormikHelpers } from "formik";
 
+import {
+  resetPasswordFormSchema,
+  type ResetPasswordFormSchema,
+} from "@acme/schema";
+
+import { formikToInputProps } from "~/utils/formikUtils";
+import { Form, ScreenContentContainer, Text, TextInput } from "~/components/ui";
 import { type RootStackParamList } from "~/navigators/RootNavigator";
 
 type ResetPasswordScreenProps = NativeStackScreenProps<
@@ -19,220 +18,89 @@ type ResetPasswordScreenProps = NativeStackScreenProps<
 >;
 
 const ResetPasswordScreen = ({ navigation }: ResetPasswordScreenProps) => {
-  const [data, setData] = useState({
+  const { isLoaded, signIn, setSession } = useSignIn();
+
+  const initialValues: ResetPasswordFormSchema = {
     newPassword: "",
     confirmNewPassword: "",
-    secureTextEntry: true,
-    confirmSecureTextEntry: true,
-    isValidPassword: true,
-    IsValidConfirmPassword: true,
-  });
-
-  const handlePasswordChange = (passwordInput: string) => {
-    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
-    if (passwordRegex.test(passwordInput)) {
-      setData({
-        ...data,
-        newPassword: passwordInput,
-        isValidPassword: true,
-      });
-    } else {
-      setData({
-        ...data,
-        newPassword: passwordInput,
-        isValidPassword: false,
-      });
-    }
+    signOutOfOtherSessions: false,
   };
-  const handleConfirmPasswordChange = (confirmInput: string) => {
-    if (data.newPassword == confirmInput) {
-      setData({
-        ...data,
-        confirmNewPassword: confirmInput,
-        IsValidConfirmPassword: true,
+
+  const onSubmit = async (
+    values: ResetPasswordFormSchema,
+    formikHelpers: FormikHelpers<ResetPasswordFormSchema>,
+  ) => {
+    if (!isLoaded) {
+      return;
+    }
+
+    try {
+      const { createdSessionId } = await signIn.resetPassword({
+        password: values.newPassword,
+        signOutOfOtherSessions: values.signOutOfOtherSessions,
       });
-    } else {
-      setData({
-        ...data,
-        confirmNewPassword: confirmInput,
-        IsValidConfirmPassword: false,
+
+      await setSession(createdSessionId);
+
+      navigation.navigate("DrawerNavigator", {
+        screen: "Main",
+        params: { screen: "Home" },
+      });
+    } catch (err) {
+      formikHelpers.setStatus({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        errors:
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          err && Object.hasOwn(err, "errors") ? err.errors[0].message : err,
       });
     }
   };
 
-  const updateSecureTextEntry = () => {
-    setData({
-      ...data,
-      secureTextEntry: !data.secureTextEntry,
-    });
-  };
-
-  const updateConfirmSecureTextEntry = () => {
-    setData({
-      ...data,
-      confirmSecureTextEntry: !data.confirmSecureTextEntry,
-    });
-  };
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.text_header}>Reset Your Password</Text>
-      </View>
-      <Animatable.View style={styles.footer} animation="fadeInUpBig">
-        <Text style={[styles.text_footer]}>Type your new password</Text>
-        <View style={styles.action}>
-          <Ionicons name="lock-closed-outline" color="#05375a" size={20} />
-          <TextInput
-            placeholder="Your New Password"
-            style={styles.textInput}
-            autoCapitalize="none"
-            secureTextEntry={data.secureTextEntry ? true : false}
-            value={data.newPassword}
-            onChangeText={(password) => handlePasswordChange(password)}
-          />
-          <TouchableOpacity onPress={updateSecureTextEntry}>
-            {data.secureTextEntry ? (
-              <Ionicons name="eye-off-outline" color="grey" size={20} />
-            ) : (
-              <Ionicons name="eye-outline" color="grey" size={20} />
-            )}
-          </TouchableOpacity>
-        </View>
-        {data.isValidPassword ? null : (
-          <Animatable.View animation="fadeInLeft" duration={500}>
-            <Text style={styles.errorMsg}>
-              Password must be at least 6 characters long and contain at least
-              one uppercase letter, one lowercase letter, and one digit
-            </Text>
-          </Animatable.View>
-        )}
-
-        <Text
-          style={[
-            styles.text_footer,
-            {
-              marginTop: 35,
-            },
-          ]}
+    <ScreenContentContainer
+      hero="Reset Your Password"
+      contentTopRounded={true}
+      contentAnimate={true}
+      heroGrow={1}
+      contentGrow={4}
+      contentClassName="justify-between"
+    >
+      <Text className="mt-4 text-center text-lg">
+        Choose a new password that you will remenber
+      </Text>
+      <View className="mt-10 flex-grow justify-between">
+        <Form
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          validationSchema={resetPasswordFormSchema}
+          submitTitle="Reset password"
         >
-          Confirm New Password
-        </Text>
-        <View style={styles.action}>
-          <Ionicons name="lock-closed-outline" color="#05375a" size={20} />
-          <TextInput
-            placeholder="Retype your new password"
-            style={styles.textInput}
-            autoCapitalize="none"
-            secureTextEntry={data.confirmSecureTextEntry ? true : false}
-            onChangeText={(val) => handleConfirmPasswordChange(val)}
-          />
-          <TouchableOpacity onPress={updateConfirmSecureTextEntry}>
-            {data.confirmSecureTextEntry ? (
-              <Ionicons name="eye-off-outline" color="grey" size={20} />
-            ) : (
-              <Ionicons name="eye-off" color="grey" size={20} />
-            )}
-          </TouchableOpacity>
-        </View>
-        {data.IsValidConfirmPassword ? null : (
-          <Animatable.View animation="fadeInLeft" duration={500}>
-            <Text style={styles.errorMsg}>Password must be identical</Text>
-          </Animatable.View>
-        )}
-
-        <View style={styles.button}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack} // TODO
-            style={[
-              styles.signIn,
-              { borderColor: "#3c7aad", borderWidth: 1, marginTop: 15 },
-            ]}
-          >
-            <Text style={[styles.textSign, { color: "#3c7aad" }]}>
-              Change & Sign in
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </Animatable.View>
-    </View>
+          {(formik) => (
+            <View>
+              <TextInput
+                containerClassName="mt-2"
+                type="password"
+                label="New password"
+                placeholder="Your new Password"
+                iconStart="lock-closed-outline"
+                {...formikToInputProps(formik, "newPassword")}
+              />
+              <TextInput
+                containerClassName="mt-2"
+                type="password"
+                label="Confirm new password"
+                placeholder="Your new Password"
+                iconStart="lock-closed-outline"
+                {...formikToInputProps(formik, "confirmNewPassword")}
+              />
+            </View>
+          )}
+        </Form>
+      </View>
+    </ScreenContentContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#963baf",
-  },
-  header: {
-    flex: 1,
-    justifyContent: "flex-end",
-    paddingHorizontal: 20,
-    paddingBottom: 50,
-  },
-  footer: {
-    flex: Platform.OS === "ios" ? 3 : 5,
-    backgroundColor: "#dfdbee",
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-  },
-  text_header: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 30,
-  },
-  text_footer: {
-    color: "#05375a",
-    fontSize: 18,
-  },
-  action: {
-    flexDirection: "row",
-    marginTop: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f2f2f2",
-    paddingBottom: 5,
-  },
-  textInput: {
-    flex: 1,
-    marginTop: Platform.OS === "ios" ? 0 : -12,
-    paddingLeft: 10,
-    color: "#05375a",
-  },
-  button: {
-    alignItems: "center",
-    marginTop: 50,
-  },
-  logIn: {
-    width: "100%",
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-  },
-  textSign: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  textPrivate: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginTop: 20,
-  },
-  color_textPrivate: {
-    color: "grey",
-  },
-  signIn: {
-    width: "100%",
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-  },
-  errorMsg: {
-    color: "#FF0000",
-    fontSize: 14,
-  },
-});
 
 export default ResetPasswordScreen;

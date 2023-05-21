@@ -1,52 +1,48 @@
 import { View } from "react-native";
-import { useSignUp } from "@clerk/clerk-expo";
+import { useSignIn } from "@clerk/clerk-expo";
 import { type NativeStackScreenProps } from "@react-navigation/native-stack";
 import { type FormikHelpers } from "formik";
 
 import {
-  signUpEmailVerifySchema,
-  type SignUpEmailVerifyValues,
+  resetPasswordEmailCodeSchema,
+  type ResetPasswordEmailCodeValues,
 } from "@acme/schema";
 
 import { formikToInputProps } from "~/utils/formikUtils";
 import { Form, ScreenContentContainer, Text, TextInput } from "~/components/ui";
 import { type RootStackParamList } from "~/navigators/RootNavigator";
 
-type SignUpEmailVerifyScreenProps = NativeStackScreenProps<
+type ResetPasswordScreenProps = NativeStackScreenProps<
   RootStackParamList,
-  "SignUpEmailVerify"
+  "ResetPasswordCode"
 >;
 
-export const SignUpEmailVerifyScreen = ({
+export const ResetPasswordCodeScreen = ({
   navigation,
-}: SignUpEmailVerifyScreenProps) => {
-  const { isLoaded, signUp, setSession } = useSignUp();
+}: ResetPasswordScreenProps) => {
+  const { isLoaded, signIn, setSession } = useSignIn();
 
-  const initialValues: SignUpEmailVerifyValues = {
+  const initialValues: ResetPasswordEmailCodeValues = {
     code: "",
   };
 
-  console.log(JSON.stringify(signUp, undefined, 2));
-
   const onSubmit = async (
-    values: SignUpEmailVerifyValues,
-    formikHelpers: FormikHelpers<SignUpEmailVerifyValues>,
+    values: ResetPasswordEmailCodeValues,
+    formikHelpers: FormikHelpers<ResetPasswordEmailCodeValues>,
   ) => {
     if (!isLoaded) {
       return;
     }
 
     try {
-      const completeSignUp = await signUp.attemptEmailAddressVerification({
+      const { createdSessionId } = await signIn.attemptFirstFactor({
+        strategy: "reset_password_email_code",
         code: values.code,
       });
 
-      await setSession(completeSignUp.createdSessionId);
+      await setSession(createdSessionId);
 
-      navigation.navigate("DrawerNavigator", {
-        screen: "Main",
-        params: { screen: "Home" },
-      });
+      navigation.replace("ResetPassword");
     } catch (err) {
       formikHelpers.setStatus({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -59,25 +55,27 @@ export const SignUpEmailVerifyScreen = ({
     }
   };
 
-  const email = signUp?.emailAddress;
+  const email = signIn?.identifier;
 
   return (
     <ScreenContentContainer
-      hero="Create your Circles account"
+      hero="Reset Your Password"
       contentTopRounded={true}
       contentAnimate={true}
       heroGrow={1}
       contentGrow={4}
+      contentClassName="justify-between"
     >
       <Text className="mt-4 text-center text-lg">
-        We have sent you a verification code by email to verify that the address{" "}
-        <Text className="font-extrabold">{email}</Text> is yours.
+        Check your inbox a mail has been sent to{" "}
+        <Text className="font-extrabold">{email}</Text> with a unique code that
+        you can use to reset your password.
       </Text>
       <View className="mt-10 flex-grow justify-between">
         <Form
           initialValues={initialValues}
           onSubmit={onSubmit}
-          validationSchema={signUpEmailVerifySchema}
+          validationSchema={resetPasswordEmailCodeSchema}
           submitTitle="Submit code"
         >
           {(formik) => (
