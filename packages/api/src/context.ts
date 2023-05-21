@@ -14,7 +14,7 @@ import { firestore } from "./firebase";
 export type AuthObject<
   T extends Pick<SignedInAuthObject | SignedOutAuthObject, "userId">,
 > = Pick<T, "userId"> & {
-  user?: Pick<User, "id" | "username" | "firstName" | "lastName"> | null;
+  user?: Pick<User, "id" | "firstName" | "lastName"> | null;
 };
 
 /**

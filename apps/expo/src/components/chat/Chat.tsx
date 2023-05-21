@@ -52,7 +52,7 @@ const Chat = ({ chatId }: ChatProps) => {
         ...message,
         user: {
           _id: message.user._id,
-          name: usersData ? usersData[message.user._id]?.username ?? "" : "",
+          name: usersData ? usersData[message.user._id]?.firstName ?? "" : "",
           avatar: usersData
             ? usersData[message.user._id]?.profileImageUrl ?? ""
             : "",
@@ -92,7 +92,7 @@ const Chat = ({ chatId }: ChatProps) => {
         user
           ? {
               _id: user.id,
-              name: user.username ?? "",
+              name: user.firstName ?? "",
               avatar: user.profileImageUrl,
             }
           : undefined

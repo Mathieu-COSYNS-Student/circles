@@ -15,7 +15,6 @@ export const usersRouter = router({
         users.map((user) => [
           user.id,
           {
-            username: user.username,
             firstName: user.firstName,
             lastName: user.lastName,
             profileImageUrl: user.profileImageUrl,

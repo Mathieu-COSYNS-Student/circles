@@ -26,7 +26,6 @@ export const UserProfile = ({}) => {
           <Text type="heading3" numberOfLines={1}>
             {user?.fullName}
           </Text>
-          <Text numberOfLines={1}>@{user?.username}</Text>
         </View>
       </View>
     </PlatformPressable>
