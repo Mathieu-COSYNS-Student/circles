@@ -8,8 +8,6 @@ import { DrawerToggleButton } from "~/components/ui/DrawerToggleButton";
 import { useThemeColors } from "~/hooks/Theme";
 import { ChatsScreen } from "~/screens/MainTabNavigator/ChatsScreen";
 import { HomeScreen } from "~/screens/MainTabNavigator/HomeScreen";
-import { TasksScreen } from "~/screens/MainTabNavigator/TasksScreen";
-import TestScreen from "~/screens/TestScreen";
 import { type DrawerParamList } from "./DrawerNavigator";
 import { useRootNavigation } from "./useRootNavigation";
 
@@ -79,8 +77,8 @@ const MainTabNavigator = ({}: MainTabNavigatorProps) => {
           ),
         }}
       />
-      <Tab.Screen name="Tasks" component={TasksScreen} />
-      <Tab.Screen name="Test" component={TestScreen} />
+      {/* <Tab.Screen name="Tasks" component={TasksScreen} /> */}
+      {/* <Tab.Screen name="Test" component={TestScreen} /> */}
     </Tab.Navigator>
   );
 };

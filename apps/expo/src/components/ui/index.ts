@@ -16,3 +16,4 @@ export * from "./DrawerToggleButton";
 export * from "./DropDownPicker";
 export * from "./OrSeparator";
 export * from "./ScreenContentContainer";
+export * from "./DrawerSeparator";

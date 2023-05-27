@@ -3,10 +3,8 @@ import Constants from "expo-constants";
 
 import { trpc } from "~/utils/trpc";
 import { Button, ScreenContentContainer, Text } from "~/components/ui";
-import { useRootNavigation } from "~/navigators/useRootNavigation";
 
 export default function TestScreen() {
-  const navigation = useRootNavigation();
   const testQuery = trpc.health.check.useQuery({ firebase: true });
   const testAuthQuery = trpc.auth.getSession.useQuery();
   const usersQuery = trpc.users.getByIds.useQuery([
@@ -28,18 +26,6 @@ export default function TestScreen() {
 
   return (
     <ScreenContentContainer>
-      <View className="mb-2">
-        <Button
-          onPress={() => navigation.navigate("NetworkCreateOrJoin")}
-          title="Network steps"
-        />
-      </View>
-      <View className="mb-2">
-        <Button
-          onPress={() => navigation.navigate("NetworkInvite")}
-          title="Network invite"
-        />
-      </View>
       <View className="mb-2">
         <Button onPress={reload} title="Reload" />
       </View>

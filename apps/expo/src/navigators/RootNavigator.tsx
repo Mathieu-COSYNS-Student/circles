@@ -13,11 +13,7 @@ import { ChatScreen } from "~/screens/ChatScreen";
 import { ChatSettingsScreen } from "~/screens/ChatSettingsScreen";
 import CreateCircleScreen from "~/screens/CreateCircleScreen";
 import ForgotPasswordScreen from "~/screens/ForgotPasswordScreen";
-import { NetworkCreateOrJoinScreen } from "~/screens/NetworkCreateOrJoinScreen";
-import { NetworkCreateScreen } from "~/screens/NetworkCreateScreen";
-import { NetworkInviteScreen } from "~/screens/NetworkInviteScreen";
 import { NetworkJoinScanScreen } from "~/screens/NetworkJoinScanScreen";
-import { NetworkJoinScreen } from "~/screens/NetworkJoinScreen";
 import OnboardingScreen from "~/screens/OnboardingScreen";
 import { ResetPasswordCodeScreen } from "~/screens/ResetPasswordCodeScreen";
 import ResetPasswordScreen from "~/screens/ResetPasswordScreen";
@@ -44,11 +40,7 @@ export type RootStackParamList = {
   Account: undefined;
   DrawerNavigator: NavigatorScreenParams<DrawerParamList>;
   ChangePassword: undefined;
-  NetworkCreate: undefined;
-  NetworkJoin: undefined;
   NetworkJoinScan: undefined;
-  NetworkInvite: undefined;
-  NetworkCreateOrJoin: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -101,25 +93,6 @@ export const RootNavigator = () => {
           <Stack.Screen
             name="ChangePassword"
             component={ChangePasswordScreen}
-          />
-          <Stack.Screen
-            name="NetworkCreateOrJoin"
-            component={NetworkCreateOrJoinScreen}
-          />
-          <Stack.Screen
-            name="NetworkCreate"
-            component={NetworkCreateScreen}
-            options={{ title: "" }}
-          />
-          <Stack.Screen
-            name="NetworkInvite"
-            component={NetworkInviteScreen}
-            options={{ title: "" }}
-          />
-          <Stack.Screen
-            name="NetworkJoin"
-            component={NetworkJoinScreen}
-            options={{ title: "" }}
           />
           <Stack.Screen
             name="NetworkJoinScan"

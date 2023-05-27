@@ -9,10 +9,10 @@ import { createNetworkSchema, type CreateNetworkValues } from "@acme/schema";
 import { formikToInputProps } from "~/utils/formikUtils";
 import { trpc } from "~/utils/trpc";
 import { Form, ScreenContentContainer, TextInput } from "~/components/ui";
-import { type RootStackParamList } from "~/navigators/RootNavigator";
+import { type DrawerParamList } from "~/navigators/DrawerNavigator";
 
 type NetworkCreateScreenProps = NativeStackScreenProps<
-  RootStackParamList,
+  DrawerParamList,
   "NetworkCreate"
 >;
 
@@ -32,10 +32,7 @@ export const NetworkCreateScreen = ({
   ) => {
     try {
       await createNetwork.mutateAsync(values);
-      navigation.navigate("DrawerNavigator", {
-        screen: "Main",
-        params: { screen: "Home" },
-      });
+      navigation.navigate("Main", { screen: "Home" });
     } catch (err) {
       if (err instanceof TRPCClientError) {
         formikHelpers.setStatus({ errors: err.message });

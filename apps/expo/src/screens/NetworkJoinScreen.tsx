@@ -21,10 +21,10 @@ import {
   TextInput,
 } from "~/components/ui";
 import { useBarCodeScannerPermission } from "~/hooks/useBarCodeScannerPermission";
-import { type RootStackParamList } from "~/navigators/RootNavigator";
+import { type DrawerParamList } from "~/navigators/DrawerNavigator";
 
 type NetworkJoinScreenProps = NativeStackScreenProps<
-  RootStackParamList,
+  DrawerParamList,
   "NetworkJoin"
 >;
 

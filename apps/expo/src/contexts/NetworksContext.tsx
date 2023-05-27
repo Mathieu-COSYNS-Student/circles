@@ -18,6 +18,7 @@ export type StatefulSimpleNetworks = {
 type NetworksContextType = {
   networks: (SimpleNetwork & { active: boolean })[];
   activeNetworks: SimpleNetwork[];
+  isNetworkOwner: boolean;
   toggleAllNetworks: () => void;
   toggleNetwork: (networkId: string) => void;
 };
@@ -102,6 +103,7 @@ export const NetworksContextProvider = ({
         activeNetworks,
         toggleAllNetworks,
         toggleNetwork,
+        isNetworkOwner: false,
       }}
     >
       {children}

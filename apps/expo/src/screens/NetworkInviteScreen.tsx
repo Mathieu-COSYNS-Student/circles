@@ -14,11 +14,11 @@ import {
   Form,
   ScreenContentContainer,
 } from "~/components/ui";
-import { type RootStackParamList } from "~/navigators/RootNavigator";
+import { type DrawerParamList } from "~/navigators/DrawerNavigator";
 import { useRootNavigation } from "~/navigators/useRootNavigation";
 
 type NetworkInviteScreenProps = NativeStackScreenProps<
-  RootStackParamList,
+  DrawerParamList,
   "NetworkInvite"
 >;
 
