@@ -16,21 +16,23 @@ datasource db {
 }
 
 model Network {
-    id            String          @id @default(auto()) @map("_id") @db.ObjectId
-    name          String          @unique
-    pictureUrl    String?
-    members       NetworkMember[]
-    NetwortInvite NetworkInvite[]
+    id         String          @id @default(auto()) @map("_id") @db.ObjectId
+    name       String          @unique
+    pictureUrl String?
+    owner      String          @unique
+    members    NetworkMember[]
+    invites    NetworkInvite[]
+    roles      NetworkRole[]
 }
 
 model NetworkMember {
-    id            String              @id @default(auto()) @map("_id") @db.ObjectId
-    userId        String
-    networkId     String              @db.ObjectId
-    network       Network             @relation(fields: [networkId], references: [id])
-    role          NetworkMemberRole   @default(USER)
-    status        NetworkMemberStatus
-    NetworkInvite NetworkInvite[] // array contains one or no element: Check NetworkInvite networkMemberId comment
+    id        String                       @id @default(auto()) @map("_id") @db.ObjectId
+    userId    String
+    networkId String                       @db.ObjectId
+    network   Network                      @relation(fields: [networkId], references: [id])
+    status    NetworkMemberStatus
+    invite    NetworkInvite[] // array contains one or no element: Check NetworkInvite networkMemberId comment
+    roles     NetworkMemberToNetworkRole[]
 
     @@unique([userId, networkId])
 }
@@ -40,24 +42,54 @@ enum NetworkMemberStatus {
     JOINED
 }
 
-enum NetworkMemberRole {
-    USER
-    ADMIN
-    OWNER
-}
-
 model NetworkInvite {
-    id              String         @id @default(auto()) @map("_id") @db.ObjectId
-    networkId       String         @db.ObjectId
-    network         Network        @relation(fields: [networkId], references: [id])
-    code            Int
-    expireAt        DateTime
-    used            Boolean        @default(false)
-    networkMember   NetworkMember? @relation(fields: [networkMemberId], references: [id])
-    networkMemberId String?        @db.ObjectId // should be unique be not supported by primsa yet https://github.com/prisma/prisma/issues/6974
+    id        String         @id @default(auto()) @map("_id") @db.ObjectId
+    networkId String         @db.ObjectId
+    network   Network        @relation(fields: [networkId], references: [id])
+    code      Int
+    expireAt  DateTime
+    used      Boolean        @default(false)
+    member    NetworkMember? @relation(fields: [memberId], references: [id])
+    memberId  String?        @db.ObjectId // should be unique be not supported by primsa yet https://github.com/prisma/prisma/issues/6974
     // partial index over {"networkMemberId":1} with options { unique: true, partialFilterExpression: { networkMemberId: { $type: "string" } } }
 
     @@unique([code, networkId])
+}
+
+model NetworkMemberToNetworkRole {
+    id       String        @id @default(auto()) @map("_id") @db.ObjectId
+    memberId String        @db.ObjectId
+    member   NetworkMember @relation(fields: [memberId], references: [id])
+    roleId   String        @db.ObjectId
+    role     NetworkRole   @relation(fields: [roleId], references: [id])
+
+    @@unique([memberId, roleId])
+}
+
+model NetworkRole {
+    id                String                       @id @default(auto()) @map("_id") @db.ObjectId
+    name              String
+    hasAllPermissions Boolean
+    permissions       NetworkPermission[]
+    networkId         String                       @db.ObjectId
+    network           Network                      @relation(fields: [networkId], references: [id])
+    members           NetworkMemberToNetworkRole[]
+}
+
+model NetworkPermission {
+    id        String      @id @default(auto()) @map("_id") @db.ObjectId
+    roleId    String      @db.ObjectId
+    role      NetworkRole @relation(fields: [roleId], references: [id])
+    resource  String
+    action    Action
+    ownership Boolean
+}
+
+enum Action {
+    CREATE
+    READ
+    UPDATE
+    DELETE
 }
 
 model Circle {

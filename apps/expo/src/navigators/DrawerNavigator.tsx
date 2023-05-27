@@ -8,7 +8,7 @@ import {
 import { type NavigatorScreenParams } from "@react-navigation/native";
 
 import { UserProfile } from "~/components/UserProfile";
-import { DrawerSeparator, OrSeparator, Text } from "~/components/ui";
+import { DrawerSeparator, Text } from "~/components/ui";
 import { DrawerCheckboxItem } from "~/components/ui/DrawerCheckboxItem";
 import { DrawerToggleButton } from "~/components/ui/DrawerToggleButton";
 import { useNetworksContext } from "~/contexts/NetworksContext";

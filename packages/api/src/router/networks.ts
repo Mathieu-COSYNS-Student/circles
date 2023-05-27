@@ -2,11 +2,7 @@ import { TRPCError } from "@trpc/server";
 import moment from "moment";
 import { z } from "zod";
 
-import {
-  NETWORK_INVITE,
-  grantedWithCustomRoles,
-  type AccessControlQuery,
-} from "@acme/accesscontrol";
+import { NETWORK_INVITE } from "@acme/accesscontrol";
 import { Prisma, type NetworkMember } from "@acme/db";
 import {
   createNetworkSchema,
@@ -15,35 +11,10 @@ import {
   networkInviteSchema,
   networkMemberSchema,
   networkSchema,
-  type Network,
-  type User,
 } from "@acme/schema";
 
-import { type Context } from "../context";
 import { protectedProcedure, router } from "../trpc";
-
-const getNetworkRole = async (
-  ctx: Context,
-  networkId: Network["id"],
-  userId: User["id"],
-) => {
-  const networkMember = await ctx.prisma.networkMember.findFirst({
-    where: {
-      networkId,
-      userId,
-    },
-  });
-  if (!networkMember) return null;
-  if (networkMember.status !== "JOINED") return null;
-  return networkMember.role;
-};
-
-const hasAccess = async (query: AccessControlQuery) => {
-  // eslint-disable-next-line @typescript-eslint/require-await, @typescript-eslint/no-unused-vars
-  return grantedWithCustomRoles(query, async (query) => {
-    return {};
-  });
-};
+import { permissionFilter } from "../utils/prisma";
 
 export const networksRouter = router({
   getAll: protectedProcedure
@@ -51,8 +22,16 @@ export const networksRouter = router({
     .query(async ({ ctx, input }) => {
       const filterCanInviteMembersQuery = input.filter.canInviteMembers
         ? {
-            OR: [{ role: "ADMIN" as const }, { role: "OWNER" as const }],
             status: "JOINED" as const,
+            roles: {
+              some: {
+                ...permissionFilter({
+                  userId: ctx.auth?.userId,
+                  action: "CREATE",
+                  resource: NETWORK_INVITE,
+                }),
+              },
+            },
           }
         : {};
       const networks = await ctx.prisma.network.findMany({
@@ -69,35 +48,81 @@ export const networksRouter = router({
   create: protectedProcedure
     .input(createNetworkSchema)
     .mutation(async ({ ctx, input }) => {
-      const network = await ctx.prisma.network.create({
-        data: {
-          name: input.name,
-          members: {
-            create: [
-              {
-                userId: ctx.auth.userId,
-                status: "JOINED",
-                role: "OWNER",
+      try {
+        const network = await ctx.prisma.$transaction(async (tx) => {
+          const network = await tx.network.create({
+            data: {
+              name: input.name,
+              owner: ctx.auth.userId,
+              members: {
+                create: [
+                  {
+                    userId: ctx.auth.userId,
+                    status: "JOINED",
+                  },
+                ],
               },
-            ],
-          },
-        },
-      });
-      return networkSchema.omit({ members: true }).parse(network);
+              roles: {
+                create: {
+                  name: "Admin",
+                  hasAllPermissions: true,
+                },
+              },
+            },
+            include: {
+              members: {
+                select: {
+                  id: true,
+                },
+              },
+              roles: {
+                select: {
+                  id: true,
+                },
+              },
+            },
+          });
+
+          await tx.networkMemberToNetworkRole.create({
+            data: {
+              roleId: network.roles[0]?.id ?? "",
+              memberId: network.members[0]?.id ?? "",
+            },
+          });
+
+          return network;
+        });
+        return networkSchema.omit({ members: true }).parse(network);
+      } catch (err) {
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
+          if (err.code === "P2002") {
+            if (err.meta?.target === "Network_owner_key")
+              throw new TRPCError({
+                code: "CONFLICT",
+                message:
+                  "You already have a network. You can only have one network.",
+                cause: err,
+              });
+            if (err.meta?.target === "Network_name_key")
+              throw new TRPCError({
+                code: "CONFLICT",
+                message:
+                  "A network with the same name already exist in Circles. Pick a unique name.",
+                cause: err,
+              });
+          }
+        }
+
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          cause: err,
+        });
+      }
     }),
   createInvite: protectedProcedure
     .input(networkInviteSchema.pick({ networkId: true }))
     .query(async ({ ctx, input }) => {
-      const role = await getNetworkRole(ctx, input.networkId, ctx.auth.userId);
-
-      if (
-        !role ||
-        !(await hasAccess({
-          action: "create",
-          resource: NETWORK_INVITE,
-          role,
-        }))
-      ) {
+      if (!(await ctx.ac.in(input.networkId).create(NETWORK_INVITE))) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
         });
@@ -123,12 +148,12 @@ export const networksRouter = router({
             ) {
               continue;
             }
-
-            throw new TRPCError({
-              code: "INTERNAL_SERVER_ERROR",
-              cause: err,
-            });
           }
+
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            cause: err,
+          });
         }
       }
       return networkInviteSchema.parse(networkInvite);
@@ -179,7 +204,7 @@ export const networksRouter = router({
             where: { id: networkInvite.id },
             data: {
               used: true,
-              networkMemberId: networkMember.id,
+              memberId: networkMember.id,
             },
           });
           return networkMember;
