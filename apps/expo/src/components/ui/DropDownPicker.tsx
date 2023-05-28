@@ -148,6 +148,9 @@ export const DropDownPicker = <T extends ValueType>({
             itemSeparatorStyle={{
               backgroundColor: inputBorder,
             }}
+            listMessageTextStyle={{
+              color: text,
+            }}
             {...props}
           />
         </View>
