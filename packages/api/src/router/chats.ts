@@ -1,7 +1,6 @@
 import { chatListSchema, type ChatListObject } from "@acme/schema";
 
 import { protectedProcedure, router } from "../trpc";
-import { getCirclePictureOrDefault } from "./circles";
 
 export const chatsRouter = router({
   getChatList: protectedProcedure //
@@ -14,12 +13,17 @@ export const chatsRouter = router({
             },
           },
         },
+        select: {
+          name: true,
+          pictureUrl: true,
+          chatId: true,
+        },
       });
       const chats = dbCircles.map((circle): ChatListObject => {
         return {
           id: circle.chatId,
           name: circle.name,
-          pictureUrl: getCirclePictureOrDefault(circle),
+          pictureUrl: circle.pictureUrl,
           type: "circle",
         };
       });

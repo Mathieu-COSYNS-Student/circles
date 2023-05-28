@@ -5,7 +5,7 @@ import { chatMemberSchema } from "./ChatMember";
 export const chatSchema = z.object({
   id: z.string(),
   name: z.string().min(2),
-  pictureUrl: z.string().url(),
+  pictureUrl: z.string().url().or(z.null()),
   type: z.enum(["private_message", "circle"]),
   members: z.array(chatMemberSchema),
 });

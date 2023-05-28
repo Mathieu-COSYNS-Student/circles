@@ -5,7 +5,7 @@ import { circleMemberSchema } from "./CircleMember";
 export const circleSchema = z.object({
   id: z.string().min(24).max(24),
   name: z.string().min(2, "name must contain at least 2 character"),
-  pictureUrl: z.string().url(),
+  pictureUrl: z.string().url().or(z.null()),
   chatId: z.string(),
   members: z.array(circleMemberSchema).optional(),
 });

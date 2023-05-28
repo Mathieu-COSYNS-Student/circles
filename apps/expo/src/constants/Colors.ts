@@ -25,6 +25,7 @@ const tailwindColors = fullConfig.theme.colors as {
 const theme = {
   light: {
     primary: tailwindColors.brand[700],
+    neutral: tailwindColors.gray[200],
     background: "#fafaff", //tailwindColors.brand[50],
     card: tailwindColors.brand[50],
     text: tailwindColors.gray["900"],
@@ -53,6 +54,7 @@ const theme = {
   },
   dark: {
     primary: tailwindColors.brand[600],
+    neutral: tailwindColors.zinc[800],
     background: "#000",
     card: tailwindColors.zinc[950],
     text: "#fff",

@@ -1,10 +1,11 @@
-import { Image, View } from "react-native";
+import { View } from "react-native";
 import { type NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { trpc } from "~/utils/trpc";
 import { CircleSettings } from "~/components/CircleSettings";
 import { PrivateMessageSettings } from "~/components/PrivateMessageSettings";
 import { ScreenContentContainer, Text } from "~/components/ui";
+import { Avatar } from "~/components/ui/Avatar";
 import { type RootStackParamList } from "~/navigators/RootNavigator";
 
 type ChatSettingsScreenProps = NativeStackScreenProps<
@@ -20,11 +21,12 @@ export const ChatSettingsScreen = ({ route }: ChatSettingsScreenProps) => {
   return (
     <ScreenContentContainer>
       <View className="mt-2 items-center">
-        <Image
-          className="mb-1 aspect-square max-h-[100] w-1/3 max-w-[100] rounded-full"
-          source={{ uri: chat.pictureUrl }}
-          alt={`${chat.name} icon`}
-        />
+        <View className="mb-1 max-h-[100] w-1/3 max-w-[100]">
+          <Avatar
+            source={chat.pictureUrl ? { uri: chat.pictureUrl } : undefined}
+            alt={chat.name}
+          />
+        </View>
         <Text className="mb-8 mt-4" type="heading2">
           {chat.name}
         </Text>

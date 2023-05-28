@@ -5,7 +5,6 @@ import { mockDeep } from "jest-mock-extended";
 import { appRouter } from ".";
 import { authMock } from "../__test__/mocks";
 import { createInnerTRPCContext } from "../context";
-import { getCirclePictureOrDefault } from "./circles";
 
 describe("circles get test", () => {
   it("should get all", async () => {
@@ -35,12 +34,7 @@ describe("circles get test", () => {
     const result = await caller.circles.getAll();
 
     expect(result).toHaveLength(mockFindMany.length);
-    expect(result).toStrictEqual(
-      mockFindMany.map((circle) => {
-        circle.pictureUrl = getCirclePictureOrDefault(circle);
-        return circle;
-      }),
-    );
+    expect(result).toStrictEqual(mockFindMany);
   });
 
   it("should get one", async () => {
@@ -92,7 +86,7 @@ describe("circles create test", () => {
     expect(result).toStrictEqual(mockOutput);
   });
 
-  it("should create a cricle with a random image", async () => {
+  it("should create a circle without a image", async () => {
     const mockOutput = {
       id: "circle-id_00000000000001",
       name: "test circle",
@@ -101,10 +95,6 @@ describe("circles create test", () => {
     };
 
     const result = await create(mockOutput);
-    expect(result).toStrictEqual({
-      ...mockOutput,
-      pictureUrl:
-        "https://ui-avatars.com/api/?name=test+circle&background=random",
-    });
+    expect(result).toStrictEqual(mockOutput);
   });
 });

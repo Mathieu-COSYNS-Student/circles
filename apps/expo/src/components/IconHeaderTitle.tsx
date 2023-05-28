@@ -1,21 +1,24 @@
-import { Image, View } from "react-native";
+import { View } from "react-native";
 import { HeaderTitle, type HeaderTitleProps } from "@react-navigation/elements";
+
+import { Avatar } from "./ui/Avatar";
 
 export const renderIconHeaderTitle = ({
   name,
   pictureUrl,
 }: {
   name: string;
-  pictureUrl: string;
+  pictureUrl?: string | null;
 }) => {
   const IconHeaderTitle = ({ ...props }: HeaderTitleProps) => {
     return (
-      <View className="flex flex-row">
-        <Image
-          className="mr-2 aspect-square h-full rounded-full"
-          source={{ uri: pictureUrl }}
-          alt={`${name} icon`}
-        />
+      <View className="flex-row items-center">
+        <View className="my-2 mr-2 h-9 w-9">
+          <Avatar
+            source={pictureUrl ? { uri: pictureUrl } : undefined}
+            alt={name}
+          />
+        </View>
         <HeaderTitle {...props} />
       </View>
     );

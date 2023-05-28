@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { Prisma, type Circle as DbCircle } from "@acme/db";
+import { Prisma } from "@acme/db";
 import {
   circleSchema,
   createCircleSchema,
@@ -11,15 +11,6 @@ import {
 } from "@acme/schema";
 
 import { protectedProcedure, router } from "../trpc";
-
-export const getCirclePictureOrDefault = (circle: DbCircle) => {
-  if (circle.pictureUrl) {
-    return circle.pictureUrl;
-  }
-
-  const name = circle.name.replace(" ", "+");
-  return `https://ui-avatars.com/api/?name=${name}&background=random`;
-};
 
 export const circlesRouter = router({
   getAll: protectedProcedure //
@@ -34,7 +25,7 @@ export const circlesRouter = router({
         },
       });
       const circles = dbCircles.map((circle) => {
-        circle.pictureUrl = getCirclePictureOrDefault(circle);
+        circle.pictureUrl = circle.pictureUrl;
         return circle;
       });
       return z.array(circleSchema).parse(circles);
@@ -58,7 +49,6 @@ export const circlesRouter = router({
           code: "NOT_FOUND",
         });
       }
-      circle.pictureUrl = getCirclePictureOrDefault(circle);
       return circleSchema.omit({ members: true }).parse(circle);
     }),
   create: protectedProcedure
@@ -90,7 +80,6 @@ export const circlesRouter = router({
           members: true,
         },
       });
-      newCircle.pictureUrl = getCirclePictureOrDefault(newCircle);
       return circleSchema.omit({ members: true }).parse(newCircle);
     }),
   update: protectedProcedure
@@ -105,7 +94,6 @@ export const circlesRouter = router({
             name: input.name,
           },
         });
-        updatedCircle.pictureUrl = getCirclePictureOrDefault(updatedCircle);
         return circleSchema.omit({ members: true }).parse(updatedCircle);
       } catch (err) {
         if (err instanceof Prisma.PrismaClientKnownRequestError) {

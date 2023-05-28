@@ -4,6 +4,7 @@ import * as Animatable from "react-native-animatable";
 import { ScrollView } from "react-native-gesture-handler";
 
 import { useThemeColors } from "~/hooks/Theme";
+import RefreshControl, { type RefreshControlProps } from "./RefreshControl";
 import Text from "./Text";
 
 export type ScreenContentContainerProps = {
@@ -14,7 +15,7 @@ export type ScreenContentContainerProps = {
   contentTopRounded?: boolean;
   contentAnimate?: boolean;
   contentClassName?: string;
-};
+} & Partial<Pick<RefreshControlProps, "onRefresh" | "refreshing">>;
 
 export const ScreenContentContainer: FC<ScreenContentContainerProps> = ({
   children,
@@ -24,12 +25,22 @@ export const ScreenContentContainer: FC<ScreenContentContainerProps> = ({
   contentTopRounded = false,
   contentAnimate = false,
   contentClassName,
+  refreshing,
+  onRefresh,
 }) => {
   const { primary, background } = useThemeColors();
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1, backgroundColor: primary }}
       keyboardShouldPersistTaps="handled"
+      refreshControl={
+        onRefresh ? (
+          <RefreshControl
+            refreshing={refreshing || false}
+            onRefresh={onRefresh}
+          />
+        ) : undefined
+      }
     >
       {hero && (
         <View

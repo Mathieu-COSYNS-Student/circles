@@ -8,7 +8,11 @@ export type TextProps = DefaultTextProps & {
   type?: "normal" | "heading1" | "heading2" | "heading3" | "heading4" | "link";
 };
 
-const Text: FC<TextProps> = ({ className, type = "normal", ...props }) => {
+export const Text: FC<TextProps> = ({
+  className,
+  type = "normal",
+  ...props
+}) => {
   switch (type) {
     case "heading1":
       className += " text-4xl font-extrabold";

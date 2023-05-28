@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Image, PixelRatio, TouchableOpacity, View } from "react-native";
+import { PixelRatio, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import firestore from "@react-native-firebase/firestore";
 
@@ -13,6 +13,7 @@ import {
 import { Text } from "~/components/ui";
 import { useThemeColors } from "~/hooks/Theme";
 import { useRootNavigation } from "~/navigators/useRootNavigation";
+import { Avatar } from "../ui/Avatar";
 
 export const ChatListItem = ({ chat }: { chat: ChatListObject }) => {
   const { text } = useThemeColors(["text"]);
@@ -60,10 +61,9 @@ export const ChatListItem = ({ chat }: { chat: ChatListObject }) => {
     >
       <View className="flex-row items-center p-3">
         <View className="w-1/6 pr-3">
-          <Image
-            className="w-100 aspect-square rounded-full"
-            source={{ uri: chat.pictureUrl }}
-            alt={`${chat.name} icon`}
+          <Avatar
+            source={chat.pictureUrl ? { uri: chat.pictureUrl } : undefined}
+            alt={chat.name}
           />
         </View>
         <View className="flex w-5/6 justify-evenly">
