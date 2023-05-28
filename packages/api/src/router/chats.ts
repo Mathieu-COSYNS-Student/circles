@@ -9,7 +9,9 @@ export const chatsRouter = router({
         where: {
           members: {
             some: {
-              userId: ctx.auth?.userId,
+              networkMember: {
+                userId: ctx.auth?.userId,
+              },
             },
           },
         },

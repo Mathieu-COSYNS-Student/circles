@@ -13,12 +13,14 @@ describe("circles get test", () => {
     const mockFindMany = [
       {
         id: "test-user-id_00000000001",
+        networkId: "test-network-id_00000001",
         name: "test-name",
         pictureUrl: "https://www.gravatar.com/avatar?d=mp",
         chatId: "1",
       },
       {
         id: "test-user-id_00000000002",
+        networkId: "test-network-id_00000001",
         name: "test-name-2",
         pictureUrl: null,
         chatId: "2",
@@ -42,6 +44,7 @@ describe("circles get test", () => {
 
     const mockOutput = {
       id: "test-user-id_00000000001",
+      networkId: "test-network-id_00000001",
       name: "test-name",
       pictureUrl: "https://www.gravatar.com/avatar?d=mp",
       chatId: "1",
@@ -67,16 +70,24 @@ describe("circles create test", () => {
       createInnerTRPCContext({ prisma: prismaMock, auth: authMock }),
     );
 
+    prismaMock.networkMember.findFirst.mockResolvedValue({
+      id: "1",
+      networkId: "1",
+      userId: authMock.userId,
+      status: "JOINED",
+    });
     prismaMock.circle.create.mockResolvedValue(mockCircle);
 
     return await caller.circles.create({
       name: mockCircle.name,
+      networkId: "test-network-id_00000001",
     });
   };
 
   it("should create a circle", async () => {
     const mockOutput = {
       id: "circle-id_00000000000001",
+      networkId: "test-network-id_00000001",
       name: "test circle",
       pictureUrl: "https://www.gravatar.com/avatar?d=mp",
       chatId: "1",
@@ -89,6 +100,7 @@ describe("circles create test", () => {
   it("should create a circle without a image", async () => {
     const mockOutput = {
       id: "circle-id_00000000000001",
+      networkId: "test-network-id_00000001",
       name: "test circle",
       pictureUrl: null,
       chatId: "1",

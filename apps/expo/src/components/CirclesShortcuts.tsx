@@ -1,6 +1,6 @@
 import { FlatList } from "react-native";
 
-import { NETWORK_CREATE_CIRCLES } from "@acme/accesscontrol";
+import { NETWORK_CIRCLES } from "@acme/accesscontrol";
 import { type Circle } from "@acme/schema";
 
 import { Shortcut } from "~/components/ui";
@@ -25,7 +25,7 @@ export const CirclesShortcuts = ({ circles }: { circles?: Circle[] }) => {
       horizontal={true}
       renderItem={_renderItem}
       ListHeaderComponent={
-        ac?.create(NETWORK_CREATE_CIRCLES) ? (
+        ac?.create(NETWORK_CIRCLES) ? (
           <Shortcut
             text="Create circle"
             source="add-outline"

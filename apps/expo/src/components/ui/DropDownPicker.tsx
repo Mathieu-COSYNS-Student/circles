@@ -1,4 +1,9 @@
-import React, { useId, type Dispatch, type PropsWithoutRef } from "react";
+import React, {
+  useId,
+  useState,
+  type Dispatch,
+  type PropsWithoutRef,
+} from "react";
 import { View } from "react-native";
 import DefaultDropDownPicker, {
   type DropDownPickerProps as DefaultDropDownPickerProps,
@@ -32,7 +37,6 @@ interface DropDownPickerMultipleProps<T> {
 export type DropDownPickerProps<T> = Pick<
   DefaultDropDownPickerProps<T>,
   | "items"
-  | "open"
   | "placeholder"
   | "closeAfterSelecting"
   | "disabled"
@@ -45,7 +49,6 @@ export type DropDownPickerProps<T> = Pick<
   | "loading"
   | "min"
   | "max"
-  | "setOpen"
   | "setItems"
   | "onPress"
   | "onOpen"
@@ -72,6 +75,7 @@ export const DropDownPicker = <T extends ValueType>({
   modal,
   ...props
 }: PropsWithoutRef<DropDownPickerProps<T>>) => {
+  const [open, setOpen] = useState(false);
   const labelId = useId();
   const { text, background, inputBorder, inputBackground, inputPlaceholder } =
     useThemeColors([
@@ -94,6 +98,8 @@ export const DropDownPicker = <T extends ValueType>({
       >
         <View style={{ zIndex: 2 }}>
           <DefaultDropDownPicker
+            open={open}
+            setOpen={setOpen}
             listMode={modal ? "MODAL" : "SCROLLVIEW"}
             ArrowDownIconComponent={() => {
               return (

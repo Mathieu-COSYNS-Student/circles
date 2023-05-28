@@ -1,4 +1,4 @@
-import React, { type FC } from "react";
+import React, { forwardRef } from "react";
 import {
   RefreshControl as DefaultRefreshControl,
   type RefreshControlProps as DefaultRefreshControlProps,
@@ -8,17 +8,19 @@ import { useThemeColors } from "~/hooks/Theme";
 
 export type RefreshControlProps = Omit<DefaultRefreshControlProps, "className">;
 
-const RefreshControl: FC<RefreshControlProps> = ({ ...props }) => {
-  const { refreshControlBackground, refreshControlForeground } = useThemeColors(
-    ["refreshControlBackground", "refreshControlForeground"],
-  );
-  return (
-    <DefaultRefreshControl
-      {...props}
-      colors={[refreshControlForeground || "black"]}
-      progressBackgroundColor={refreshControlBackground}
-    />
-  );
-};
+const RefreshControl = forwardRef<DefaultRefreshControl, RefreshControlProps>(
+  function RefreshControl({ ...props }, ref) {
+    const { refreshControlBackground, refreshControlForeground } =
+      useThemeColors(["refreshControlBackground", "refreshControlForeground"]);
+    return (
+      <DefaultRefreshControl
+        ref={ref}
+        {...props}
+        colors={[refreshControlForeground || "black"]}
+        progressBackgroundColor={refreshControlBackground}
+      />
+    );
+  },
+);
 
 export default RefreshControl;

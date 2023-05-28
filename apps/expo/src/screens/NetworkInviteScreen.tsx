@@ -28,7 +28,6 @@ type Values = {
 
 export const NetworkInviteScreen = ({}: NetworkInviteScreenProps) => {
   const navigation = useRootNavigation();
-  const [open, setOpen] = useState(false);
   const [initialNetworkId, setInitialNetworkId] = useState<string | null>(null);
   const [selectedNetworkId, setSelectedNetworkId] = useState<string | null>(
     null,
@@ -136,14 +135,11 @@ export const NetworkInviteScreen = ({}: NetworkInviteScreenProps) => {
         validationSchema={z.object({
           networkId: z.string(),
         })}
-        validateOnChange={true}
         validate={validate}
       >
         {(formik) => (
           <View className="flex-grow">
             <DropDownPicker<string>
-              open={open}
-              setOpen={setOpen}
               label={"Network"}
               placeholder="Select a network"
               items={
@@ -153,7 +149,6 @@ export const NetworkInviteScreen = ({}: NetworkInviteScreenProps) => {
                 })) ?? []
               }
               loading={getNetworksQuery.isLoading}
-              mode="BADGE"
               {...formikToDropdownProps(formik, "networkId")}
             />
             <View className="mt-2 flex-grow">

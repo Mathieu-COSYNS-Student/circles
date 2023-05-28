@@ -23,16 +23,18 @@ model Network {
     members    NetworkMember[]
     invites    NetworkInvite[]
     roles      NetworkRole[]
+    circles    Circle[]
 }
 
 model NetworkMember {
-    id        String                       @id @default(auto()) @map("_id") @db.ObjectId
-    userId    String
-    networkId String                       @db.ObjectId
-    network   Network                      @relation(fields: [networkId], references: [id])
-    status    NetworkMemberStatus
-    invite    NetworkInvite[] // array contains one or no element: Check NetworkInvite networkMemberId comment
-    roles     NetworkMemberToNetworkRole[]
+    id           String                       @id @default(auto()) @map("_id") @db.ObjectId
+    userId       String
+    networkId    String                       @db.ObjectId
+    network      Network                      @relation(fields: [networkId], references: [id])
+    status       NetworkMemberStatus
+    invite       NetworkInvite[] // array contains one or no element: Check NetworkInvite networkMemberId comment
+    roles        NetworkMemberToNetworkRole[]
+    CircleMember CircleMember[]
 
     @@unique([userId, networkId])
 }
@@ -87,7 +89,7 @@ model NetworkPermission {
 
 enum Resource {
     NETWORK_INVITE
-    NETWORK_CREATE_CIRCLES
+    NETWORK_CIRCLES
 }
 
 enum Action {
@@ -101,19 +103,22 @@ model Circle {
     id         String         @id @default(auto()) @map("_id") @db.ObjectId
     name       String
     pictureUrl String?
+    networkId  String         @db.ObjectId
+    network    Network        @relation(fields: [networkId], references: [id])
     chatId     String         @unique
     members    CircleMember[]
 }
 
 model CircleMember {
-    id       String             @id @default(auto()) @map("_id") @db.ObjectId
-    userId   String
-    circleId String             @db.ObjectId
-    circle   Circle             @relation(fields: [circleId], references: [id])
-    role     CircleMemberRole   @default(USER)
-    status   CircleMemberStatus
+    id              String             @id @default(auto()) @map("_id") @db.ObjectId
+    networkMemberId String             @db.ObjectId
+    networkMember   NetworkMember      @relation(fields: [networkMemberId], references: [id])
+    circleId        String             @db.ObjectId
+    circle          Circle             @relation(fields: [circleId], references: [id])
+    role            CircleMemberRole   @default(USER)
+    status          CircleMemberStatus
 
-    @@unique([userId, circleId])
+    @@unique([networkMemberId, circleId])
 }
 
 enum CircleMemberStatus {

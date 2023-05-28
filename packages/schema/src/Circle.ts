@@ -6,6 +6,7 @@ export const circleSchema = z.object({
   id: z.string().min(24).max(24),
   name: z.string().min(2, "name must contain at least 2 character"),
   pictureUrl: z.string().url().or(z.null()),
+  networkId: z.string(),
   chatId: z.string(),
   members: z.array(circleMemberSchema).optional(),
 });
@@ -27,6 +28,7 @@ export const getCircleSchema = circleSchema
 
 export const createCircleSchema = circleSchema.pick({
   name: true,
+  networkId: true,
 });
 
 export const updateCircleSchema = circleSchema

@@ -2,7 +2,11 @@ import { TRPCError } from "@trpc/server";
 import moment from "moment";
 import { z } from "zod";
 
-import { NETWORK_INVITE } from "@acme/accesscontrol";
+import {
+  NETWORK_CIRCLES,
+  NETWORK_INVITE,
+  type Permission,
+} from "@acme/accesscontrol";
 import { Prisma, type NetworkMember } from "@acme/db";
 import {
   createNetworkSchema,
@@ -14,33 +18,50 @@ import {
 } from "@acme/schema";
 
 import { protectedProcedure, router } from "../trpc";
+import { assertAccess } from "../utils/accesscontrol";
 import { permissionFilter } from "../utils/prisma";
 
 export const networksRouter = router({
   getAll: protectedProcedure
     .input(getAllNetworkSchema)
     .query(async ({ ctx, input }) => {
-      const filterCanInviteMembersQuery = input.filter.canInviteMembers
-        ? {
-            status: "JOINED" as const,
-            roles: {
-              some: {
-                ...permissionFilter({
-                  userId: ctx.auth?.userId,
-                  permission: {
-                    action: "CREATE",
-                    resource: NETWORK_INVITE,
-                  },
-                }),
+      const createFilter = (enable: boolean, permission: Permission) =>
+        enable
+          ? {
+              status: "JOINED" as const,
+              roles: {
+                some: {
+                  ...permissionFilter({
+                    userId: ctx.auth?.userId,
+                    permission,
+                  }),
+                },
               },
-            },
-          }
-        : {};
+            }
+          : {};
+      const filterCanInviteMembersQuery = createFilter(
+        input.filter.canInviteMembers,
+        {
+          action: "CREATE",
+          resource: NETWORK_INVITE,
+        },
+      );
+      const filterCanCreateCirclesMembersQuery = createFilter(
+        input.filter.canCreateCircles,
+        {
+          action: "CREATE",
+          resource: NETWORK_CIRCLES,
+        },
+      );
       const networks = await ctx.prisma.network.findMany({
         where: {
           members: {
             some: {
-              AND: [{ userId: ctx.auth?.userId }, filterCanInviteMembersQuery],
+              AND: [
+                { userId: ctx.auth?.userId },
+                filterCanInviteMembersQuery,
+                filterCanCreateCirclesMembersQuery,
+              ],
             },
           },
         },
@@ -124,11 +145,7 @@ export const networksRouter = router({
   createInvite: protectedProcedure
     .input(networkInviteSchema.pick({ networkId: true }))
     .query(async ({ ctx, input }) => {
-      if (!(await ctx.ac.in(input.networkId).create(NETWORK_INVITE))) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-        });
-      }
+      assertAccess(ctx.ac.in(input.networkId).create(NETWORK_INVITE));
 
       const expireAt = moment().add(2, "days").toDate();
       let networkInvite;

@@ -14,7 +14,8 @@ export const getAllNetworkSchema = z
   .object({
     filter: z
       .object({
-        canInviteMembers: z.boolean().optional(),
+        canInviteMembers: z.boolean().optional().default(false),
+        canCreateCircles: z.boolean().optional().default(false),
       })
       .optional()
       .default({}),

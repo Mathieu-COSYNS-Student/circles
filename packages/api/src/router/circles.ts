@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
+import { NETWORK_CIRCLES } from "@acme/accesscontrol";
 import { Prisma } from "@acme/db";
 import {
   circleSchema,
@@ -11,6 +12,7 @@ import {
 } from "@acme/schema";
 
 import { protectedProcedure, router } from "../trpc";
+import { assertAccess } from "../utils/accesscontrol";
 
 export const circlesRouter = router({
   getAll: protectedProcedure //
@@ -19,7 +21,9 @@ export const circlesRouter = router({
         where: {
           members: {
             some: {
-              userId: ctx.auth?.userId,
+              networkMember: {
+                userId: ctx.auth?.userId,
+              },
             },
           },
         },
@@ -39,7 +43,9 @@ export const circlesRouter = router({
           OR: [{ id: id }, { chatId: chatId }],
           members: {
             some: {
-              userId: ctx.auth?.userId,
+              networkMember: {
+                userId: ctx.auth?.userId,
+              },
             },
           },
         },
@@ -54,6 +60,24 @@ export const circlesRouter = router({
   create: protectedProcedure
     .input(createCircleSchema)
     .mutation(async ({ ctx, input }) => {
+      assertAccess(ctx.ac.in(input.networkId).create(NETWORK_CIRCLES));
+
+      const networkMember = await ctx.prisma.networkMember.findFirst({
+        select: {
+          id: true,
+        },
+        where: {
+          networkId: input.networkId,
+          userId: ctx.auth.userId,
+        },
+      });
+
+      if (!networkMember) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+        });
+      }
+
       const chatRoles: ChatRole = {};
       chatRoles[ctx.auth.userId] = "writer";
       const chatFirebaseDocument = await ctx
@@ -62,14 +86,20 @@ export const circlesRouter = router({
         .add({
           roles: chatRoles,
         });
+
       const newCircle = await ctx.prisma.circle.create({
         data: {
           name: input.name,
           chatId: chatFirebaseDocument.id,
+          networkId: input.networkId,
           members: {
             create: [
               {
-                userId: ctx.auth.userId,
+                networkMember: {
+                  connect: {
+                    id: networkMember.id,
+                  },
+                },
                 status: "JOINED",
                 role: "ADMIN",
               },
