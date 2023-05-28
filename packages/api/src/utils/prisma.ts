@@ -1,17 +1,14 @@
-import { type Action, type Prisma } from "@acme/db";
+import { type Permission } from "@acme/accesscontrol";
+import { type Prisma } from "@acme/db";
 
 export const permissionFilter = ({
   userId,
   networkId,
-  resource,
-  action,
-  ownership,
+  permission,
 }: {
   userId: string;
   networkId?: string;
-  action: Action;
-  resource: string;
-  ownership?: boolean;
+  permission: Permission;
 }): Prisma.NetworkMemberToNetworkRoleWhereInput => ({
   member: {
     userId,
@@ -25,9 +22,9 @@ export const permissionFilter = ({
       {
         permissions: {
           some: {
-            resource,
-            action,
-            ownership: ownership || undefined,
+            resource: permission.resource,
+            action: permission.action,
+            ownership: permission.ownership || undefined,
           },
         },
       },

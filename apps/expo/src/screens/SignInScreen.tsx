@@ -5,6 +5,7 @@ import { type FormikHelpers } from "formik";
 import { signInSchema, type SignInValues } from "@acme/schema";
 
 import { formikToInputProps } from "~/utils/formikUtils";
+import { trpc } from "~/utils/trpc";
 import {
   Button,
   Form,
@@ -19,6 +20,7 @@ type SignInScreenProps = NativeStackScreenProps<RootStackParamList, "SignIn">;
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const { signIn, setSession, isLoaded } = useSignIn();
+  const trpcContext = trpc.useContext();
 
   const initialValues: SignInValues = {
     email: "",
@@ -40,6 +42,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
       });
 
       await setSession(completeSignIn.createdSessionId);
+      trpcContext.invalidate();
       navigation.navigate("DrawerNavigator", {
         screen: "Main",
         params: { screen: "Home" },

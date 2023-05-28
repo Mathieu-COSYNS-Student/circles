@@ -4,6 +4,7 @@ import { chatsRouter } from "./chats";
 import { circlesRouter } from "./circles";
 import { healthRouter } from "./health";
 import { networksRouter } from "./networks";
+import { permissionsRouter } from "./permissions";
 import { usersRouter } from "./users";
 
 export const appRouter = router({
@@ -13,6 +14,7 @@ export const appRouter = router({
   users: usersRouter,
   chats: chatsRouter,
   networks: networksRouter,
+  permissions: permissionsRouter,
 });
 
 // export type definition of API

@@ -31,15 +31,13 @@ const isAuthed = t.middleware(({ ctx, next }) => {
     ctx: {
       auth: ctx.auth as AuthObject<SignedInAuthObject>,
       ac: new AccessControl<string, string>({
-        grants: async ({ user, context, resource, ownership, action }) => {
+        grants: async ({ user, context, permission }) => {
           const allowed = await ctx.prisma.networkMemberToNetworkRole.findFirst(
             {
               where: permissionFilter({
                 userId: user,
                 networkId: context,
-                resource,
-                ownership,
-                action,
+                permission,
               }),
             },
           );

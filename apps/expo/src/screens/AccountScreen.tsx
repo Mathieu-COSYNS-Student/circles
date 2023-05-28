@@ -2,6 +2,7 @@ import { Image, View } from "react-native";
 import { useAuth, useUser } from "@clerk/clerk-expo";
 import { type NativeStackScreenProps } from "@react-navigation/native-stack";
 
+import { trpc } from "~/utils/trpc";
 import { Button, ScreenContentContainer, Text } from "~/components/ui";
 import { type RootStackParamList } from "~/navigators/RootNavigator";
 
@@ -10,6 +11,7 @@ type AccountScreenProps = NativeStackScreenProps<RootStackParamList, "Account">;
 export default function AccountScreen({ navigation }: AccountScreenProps) {
   const { signOut } = useAuth();
   const { user } = useUser();
+  const trpcContext = trpc.useContext();
 
   const onChangePasswordPress = () => {
     navigation.navigate("ChangePassword");
@@ -17,6 +19,7 @@ export default function AccountScreen({ navigation }: AccountScreenProps) {
 
   const onSignOutPress = async () => {
     await signOut();
+    trpcContext.invalidate();
   };
 
   return (

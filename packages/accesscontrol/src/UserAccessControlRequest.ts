@@ -1,14 +1,12 @@
 import { AccessControlRequest } from "./AccessControlRequest";
-import { type Action } from "./Action";
+import { type Permission } from "./Permission";
 
 export type UserAccessControlRequestOptions<User, Context> = {
   grants: (data: {
     user: User;
     context?: Context;
-    action: Action;
-    resource: string;
-    ownership: boolean;
-  }) => Promise<boolean>;
+    permission: Permission;
+  }) => boolean | Promise<boolean>;
 };
 
 export class UserAccessControlRequest<
@@ -35,16 +33,10 @@ export class UserAccessControlRequest<
     return this._options;
   }
 
-  protected query(
-    action: Action,
-    resource: string,
-    ownership: boolean,
-  ): Promise<boolean> {
+  protected query(permission: Permission): boolean | Promise<boolean> {
     return this.options.grants({
       user: this.user,
-      action,
-      resource,
-      ownership,
+      permission,
     });
   }
 
@@ -76,17 +68,11 @@ export class UserInContextAccessControlRequest<
     return this._context;
   }
 
-  protected query(
-    action: Action,
-    resource: string,
-    ownership: boolean,
-  ): Promise<boolean> {
+  protected query(permission: Permission): boolean | Promise<boolean> {
     return this.options.grants({
       user: this.user,
       context: this.context,
-      action,
-      resource,
-      ownership,
+      permission,
     });
   }
 }

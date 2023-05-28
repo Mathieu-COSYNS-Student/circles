@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useUser } from "@clerk/clerk-expo";
 
 import { trpc } from "~/utils/trpc";
 import { createCtx } from "./utils";
@@ -11,6 +12,7 @@ export type SimpleNetwork = {
 export type StatefulSimpleNetworks = {
   [id: string]: {
     name: string;
+    owner: string;
     active: boolean;
   };
 };
@@ -31,6 +33,7 @@ export const NetworksContextProvider = ({
 }: {
   children: ReactNode;
 }) => {
+  const { user } = useUser();
   const networksQuery = trpc.networks.getAll.useQuery();
   const fetchedNetworks = networksQuery.data;
   const [storedNetworks, setNetworks] = useState<StatefulSimpleNetworks>({});
@@ -40,6 +43,7 @@ export const NetworksContextProvider = ({
     fetchedNetworks?.forEach((network) => {
       networks[network.id] = {
         name: network.name,
+        owner: network.owner,
         active: true,
       };
     });
@@ -86,6 +90,7 @@ export const NetworksContextProvider = ({
       Object.keys(storedNetworks).map((networkId) => ({
         id: networkId,
         name: storedNetworks[networkId]?.name as string,
+        owner: storedNetworks[networkId]?.owner,
         active: storedNetworks[networkId]?.active ?? false,
       })),
     [storedNetworks],
@@ -96,14 +101,19 @@ export const NetworksContextProvider = ({
     [networks],
   );
 
+  const isNetworkOwner = useMemo(
+    () => networks.find((network) => network.owner === user?.id) !== undefined,
+    [networks, user?.id],
+  );
+
   return (
     <Provider
       value={{
         networks,
         activeNetworks,
+        isNetworkOwner,
         toggleAllNetworks,
         toggleNetwork,
-        isNetworkOwner: false,
       }}
     >
       {children}

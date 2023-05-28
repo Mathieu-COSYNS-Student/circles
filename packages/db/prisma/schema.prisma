@@ -80,9 +80,13 @@ model NetworkPermission {
     id        String      @id @default(auto()) @map("_id") @db.ObjectId
     roleId    String      @db.ObjectId
     role      NetworkRole @relation(fields: [roleId], references: [id])
-    resource  String
+    resource  Resource
     action    Action
     ownership Boolean
+}
+
+enum Resource {
+    network_invite
 }
 
 enum Action {

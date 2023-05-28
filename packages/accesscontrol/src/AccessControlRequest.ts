@@ -1,57 +1,55 @@
-import { CREATE, DELETE, READ, UPDATE, type Action } from "./Action";
+import { CREATE, DELETE, READ, UPDATE } from "./Action";
+import { type Permission } from "./Permission";
+import { type Resource } from "./Resource";
 
 export abstract class AccessControlRequest {
-  protected abstract query(
-    action: Action,
-    resource: string,
-    ownership: boolean,
-  ): Promise<boolean>;
+  protected abstract query(permission: Permission): boolean | Promise<boolean>;
 
-  public create(resource: string, ownership = false) {
-    return this.query(CREATE, resource, ownership);
+  public create(resource: Resource, ownership = false) {
+    return this.query({ action: CREATE, resource, ownership });
   }
 
-  public createAny(resource: string) {
+  public createAny(resource: Resource) {
     return this.create(resource, false);
   }
 
-  public createOwn(resource: string) {
+  public createOwn(resource: Resource) {
     return this.create(resource, true);
   }
 
-  public read(resource: string, ownership = false) {
-    return this.query(READ, resource, ownership);
+  public read(resource: Resource, ownership = false) {
+    return this.query({ action: READ, resource, ownership });
   }
 
-  public readAny(resource: string) {
+  public readAny(resource: Resource) {
     return this.read(resource, false);
   }
 
-  public readOwn(resource: string) {
+  public readOwn(resource: Resource) {
     return this.read(resource, true);
   }
 
-  public update(resource: string, ownership = false) {
-    return this.query(UPDATE, resource, ownership);
+  public update(resource: Resource, ownership = false) {
+    return this.query({ action: UPDATE, resource, ownership });
   }
 
-  public updateAny(resource: string) {
+  public updateAny(resource: Resource) {
     return this.update(resource, false);
   }
 
-  public updateOwn(resource: string) {
+  public updateOwn(resource: Resource) {
     return this.update(resource, true);
   }
 
-  public delete(resource: string, ownership = false) {
-    return this.query(DELETE, resource, ownership);
+  public delete(resource: Resource, ownership = false) {
+    return this.query({ action: DELETE, resource, ownership });
   }
 
-  public deleteAny(resource: string) {
+  public deleteAny(resource: Resource) {
     return this.delete(resource, false);
   }
 
-  public deleteOwn(resource: string) {
+  public deleteOwn(resource: Resource) {
     return this.delete(resource, true);
   }
 }

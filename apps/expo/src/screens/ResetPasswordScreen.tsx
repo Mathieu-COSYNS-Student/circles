@@ -9,6 +9,7 @@ import {
 } from "@acme/schema";
 
 import { formikToInputProps } from "~/utils/formikUtils";
+import { trpc } from "~/utils/trpc";
 import { Form, ScreenContentContainer, Text, TextInput } from "~/components/ui";
 import { type RootStackParamList } from "~/navigators/RootNavigator";
 
@@ -19,6 +20,7 @@ type ResetPasswordScreenProps = NativeStackScreenProps<
 
 const ResetPasswordScreen = ({ navigation }: ResetPasswordScreenProps) => {
   const { isLoaded, signIn, setSession } = useSignIn();
+  const trpcContext = trpc.useContext();
 
   const initialValues: ResetPasswordFormSchema = {
     newPassword: "",
@@ -41,7 +43,7 @@ const ResetPasswordScreen = ({ navigation }: ResetPasswordScreenProps) => {
       });
 
       await setSession(createdSessionId);
-
+      trpcContext.invalidate();
       navigation.navigate("DrawerNavigator", {
         screen: "Main",
         params: { screen: "Home" },

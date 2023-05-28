@@ -27,8 +27,10 @@ export const networksRouter = router({
               some: {
                 ...permissionFilter({
                   userId: ctx.auth?.userId,
-                  action: "CREATE",
-                  resource: NETWORK_INVITE,
+                  permission: {
+                    action: "CREATE",
+                    resource: NETWORK_INVITE,
+                  },
                 }),
               },
             },

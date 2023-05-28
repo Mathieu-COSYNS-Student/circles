@@ -41,7 +41,7 @@ export const NetworkCreateScreen = ({
   };
 
   return (
-    <ScreenContentContainer hero="Create Your Network">
+    <ScreenContentContainer hero="Create Your Own Network">
       <Form
         initialValues={initialValues}
         onSubmit={onSubmit}

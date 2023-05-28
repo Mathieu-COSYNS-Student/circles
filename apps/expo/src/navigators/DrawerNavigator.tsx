@@ -7,11 +7,14 @@ import {
 } from "@react-navigation/drawer";
 import { type NavigatorScreenParams } from "@react-navigation/native";
 
+import { NETWORK_INVITE } from "@acme/accesscontrol";
+
 import { UserProfile } from "~/components/UserProfile";
 import { DrawerSeparator, Text } from "~/components/ui";
 import { DrawerCheckboxItem } from "~/components/ui/DrawerCheckboxItem";
 import { DrawerToggleButton } from "~/components/ui/DrawerToggleButton";
 import { useNetworksContext } from "~/contexts/NetworksContext";
+import { usePermissionContext } from "~/contexts/PermissionContext";
 import { useThemeColors } from "~/hooks/Theme";
 import { NetworkCreateScreen } from "~/screens/NetworkCreateScreen";
 import { NetworkInviteScreen } from "~/screens/NetworkInviteScreen";
@@ -36,6 +39,7 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
     toggleNetwork,
     toggleAllNetworks,
   } = useNetworksContext();
+  const { ac } = usePermissionContext();
 
   const focusedRoute = props.state.routeNames[props.state.index];
   const subFocusedRoute =
@@ -72,13 +76,15 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
           props.navigation.navigate("NetworkJoin");
         }}
       />
-      <DrawerItem
-        label={"Invite someone in your Network"}
-        focused={focusedRoute === "NetworkInvite"}
-        onPress={() => {
-          props.navigation.navigate("NetworkInvite");
-        }}
-      />
+      {ac?.create(NETWORK_INVITE) && (
+        <DrawerItem
+          label={"Invite someone in a Network"}
+          focused={focusedRoute === "NetworkInvite"}
+          onPress={() => {
+            props.navigation.navigate("NetworkInvite");
+          }}
+        />
+      )}
       {!isNetworkOwner && (
         <DrawerItem
           label={"Create your own Network"}

@@ -9,6 +9,7 @@ import {
 } from "@acme/schema";
 
 import { formikToInputProps } from "~/utils/formikUtils";
+import { trpc } from "~/utils/trpc";
 import { Form, ScreenContentContainer, Text, TextInput } from "~/components/ui";
 import { type RootStackParamList } from "~/navigators/RootNavigator";
 
@@ -21,6 +22,7 @@ export const SignUpEmailVerifyScreen = ({
   navigation,
 }: SignUpEmailVerifyScreenProps) => {
   const { isLoaded, signUp, setSession } = useSignUp();
+  const trpcContext = trpc.useContext();
 
   const initialValues: SignUpEmailVerifyValues = {
     code: "",
@@ -42,7 +44,7 @@ export const SignUpEmailVerifyScreen = ({
       });
 
       await setSession(completeSignUp.createdSessionId);
-
+      trpcContext.invalidate();
       navigation.navigate("DrawerNavigator", {
         screen: "Main",
         params: { screen: "Home" },

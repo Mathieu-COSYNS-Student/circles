@@ -127,7 +127,7 @@ export const NetworkInviteScreen = ({}: NetworkInviteScreenProps) => {
   };
 
   return (
-    <ScreenContentContainer hero="Invite in your network">
+    <ScreenContentContainer hero="Invite someone in a network">
       <Form
         enableReinitialize={true}
         initialValues={initialValues}

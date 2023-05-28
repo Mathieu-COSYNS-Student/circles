@@ -16,6 +16,7 @@ import { z } from "zod";
 import { AuthProvider } from "~/utils/AuthProvider";
 import { TRPCProvider } from "~/utils/trpc";
 import { NetworksContextProvider } from "~/contexts/NetworksContext";
+import { PermissionContextProvider } from "~/contexts/PermissionContext";
 import {
   useNavigationTheme,
   useThemeColor,
@@ -160,15 +161,17 @@ const App = () => {
 
   return (
     <TRPCProvider>
-      <NetworksContextProvider>
-        <SafeAreaProvider style={{ backgroundColor }}>
-          <NavigationContainer theme={navigationTheme}>
-            <OverflowMenuProvider>
-              <RootNavigator />
-            </OverflowMenuProvider>
-          </NavigationContainer>
-        </SafeAreaProvider>
-      </NetworksContextProvider>
+      <PermissionContextProvider>
+        <NetworksContextProvider>
+          <SafeAreaProvider style={{ backgroundColor }}>
+            <NavigationContainer theme={navigationTheme}>
+              <OverflowMenuProvider>
+                <RootNavigator />
+              </OverflowMenuProvider>
+            </NavigationContainer>
+          </SafeAreaProvider>
+        </NetworksContextProvider>
+      </PermissionContextProvider>
     </TRPCProvider>
   );
 };

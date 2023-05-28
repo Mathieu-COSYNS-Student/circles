@@ -6,6 +6,7 @@ export const networkSchema = z.object({
   id: z.string().min(24).max(24),
   name: z.string().min(2, "name must contain at least 2 character"),
   pictureUrl: z.string().url().or(z.null()),
+  owner: z.string(),
   members: z.array(networkMemberSchema).optional(),
 });
 
