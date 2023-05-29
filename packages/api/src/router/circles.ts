@@ -60,7 +60,7 @@ export const circlesRouter = router({
   create: protectedProcedure
     .input(createCircleSchema)
     .mutation(async ({ ctx, input }) => {
-      assertAccess(ctx.ac.in(input.networkId).create(NETWORK_CIRCLES));
+      await assertAccess(ctx.ac.in(input.networkId).create(NETWORK_CIRCLES));
 
       const networkMember = await ctx.prisma.networkMember.findFirst({
         select: {

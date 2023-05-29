@@ -24,7 +24,7 @@ export const permissionFilter = ({
           some: {
             resource: permission.resource,
             action: permission.action,
-            ownership: permission.ownership || undefined,
+            ownership: permission.ownership ? undefined : false,
           },
         },
       },

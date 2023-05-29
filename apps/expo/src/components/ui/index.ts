@@ -18,3 +18,5 @@ export * from "./OrSeparator";
 export * from "./ScreenContentContainer";
 export * from "./DrawerSeparator";
 export * from "./Shortcut";
+export * from "./Avatar";
+export * from "./DataFlatList";

@@ -5,18 +5,26 @@ import { z } from "zod";
 import {
   NETWORK_CIRCLES,
   NETWORK_INVITE,
+  NETWORK_MEMBERS,
+  NETWORK_ROLES,
   type Permission,
 } from "@acme/accesscontrol";
 import { Prisma, type NetworkMember } from "@acme/db";
 import {
+  circleSchema,
   createNetworkSchema,
   getAllNetworkSchema,
+  getCirclesInputSchema,
+  getMembersInputSchema,
+  getMembersOutputSchema,
+  getRolesInputSchema,
   joinNetworkSchema,
   networkInviteSchema,
-  networkMemberSchema,
   networkSchema,
+  roleSchema,
 } from "@acme/schema";
 
+import { getUsers } from "../data/users";
 import { protectedProcedure, router } from "../trpc";
 import { assertAccess } from "../utils/accesscontrol";
 import { permissionFilter } from "../utils/prisma";
@@ -24,6 +32,7 @@ import { permissionFilter } from "../utils/prisma";
 export const networksRouter = router({
   getAll: protectedProcedure
     .input(getAllNetworkSchema)
+    .output(z.array(networkSchema))
     .query(async ({ ctx, input }) => {
       const createFilter = (enable: boolean, permission: Permission) =>
         enable
@@ -66,10 +75,108 @@ export const networksRouter = router({
           },
         },
       });
-      return z.array(networkSchema).parse(networks);
+      return networks;
+    }),
+  getCircles: protectedProcedure
+    .input(getCirclesInputSchema)
+    .output(
+      z.array(
+        circleSchema.pick({ id: true, name: true, pictureUrl: true }).merge(
+          z.object({
+            membersCount: z.number(),
+          }),
+        ),
+      ),
+    )
+    .query(async ({ ctx, input }) => {
+      await assertAccess(ctx.ac.in(input.networkId).read(NETWORK_CIRCLES));
+
+      const circles = await ctx.prisma.circle.findMany({
+        select: {
+          id: true,
+          name: true,
+          pictureUrl: true,
+          _count: {
+            select: {
+              members: true,
+            },
+          },
+        },
+        where: {
+          networkId: input.networkId,
+        },
+      });
+
+      return circles.map((circle) => ({
+        ...circle,
+        membersCount: circle._count.members,
+      }));
+    }),
+  getMembers: protectedProcedure
+    .input(getMembersInputSchema)
+    .output(getMembersOutputSchema)
+    .query(async ({ ctx, input }) => {
+      await assertAccess(ctx.ac.in(input.networkId).read(NETWORK_MEMBERS));
+
+      const members = await ctx.prisma.networkMember.findMany({
+        select: {
+          userId: true,
+          roles: {
+            select: {
+              role: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+        where: {
+          networkId: input.networkId,
+        },
+      });
+
+      const users = await getUsers(members.map((member) => member.userId));
+
+      return members.map((member) => {
+        const user = users[member.userId];
+        if (user === undefined) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: `Can not find user with id ${member.userId}`,
+          });
+        }
+        return {
+          id: member.userId,
+          ...user,
+          roles: member.roles.map(({ role }) => ({
+            ...role,
+          })),
+        };
+      });
+    }),
+  getRoles: protectedProcedure
+    .input(getRolesInputSchema)
+    .output(z.array(roleSchema))
+    .query(async ({ ctx, input }) => {
+      await assertAccess(ctx.ac.in(input.networkId).read(NETWORK_ROLES));
+
+      const roles = await ctx.prisma.networkRole.findMany({
+        select: {
+          id: true,
+          name: true,
+        },
+        where: {
+          networkId: input.networkId,
+        },
+      });
+
+      return roles;
     }),
   create: protectedProcedure
     .input(createNetworkSchema)
+    .output(networkSchema)
     .mutation(async ({ ctx, input }) => {
       try {
         const network = await ctx.prisma.$transaction(async (tx) => {
@@ -115,7 +222,7 @@ export const networksRouter = router({
 
           return network;
         });
-        return networkSchema.omit({ members: true }).parse(network);
+        return network;
       } catch (err) {
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err.code === "P2002") {
@@ -145,7 +252,7 @@ export const networksRouter = router({
   createInvite: protectedProcedure
     .input(networkInviteSchema.pick({ networkId: true }))
     .query(async ({ ctx, input }) => {
-      assertAccess(ctx.ac.in(input.networkId).create(NETWORK_INVITE));
+      await assertAccess(ctx.ac.in(input.networkId).create(NETWORK_INVITE));
 
       const expireAt = moment().add(2, "days").toDate();
       let networkInvite;
@@ -245,8 +352,7 @@ export const networksRouter = router({
           cause: err,
         });
       }
-      console.log({ networkMember });
 
-      return networkMemberSchema.parse(networkMember);
+      return networkMember;
     }),
 });

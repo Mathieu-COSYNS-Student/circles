@@ -1,4 +1,3 @@
-import { View } from "react-native";
 import {
   DrawerContentScrollView,
   DrawerItem,
@@ -10,8 +9,7 @@ import { type NavigatorScreenParams } from "@react-navigation/native";
 import { NETWORK_INVITE } from "@acme/accesscontrol";
 
 import { UserProfile } from "~/components/UserProfile";
-import { DrawerSeparator, Text } from "~/components/ui";
-import { DrawerCheckboxItem } from "~/components/ui/DrawerCheckboxItem";
+import { DrawerSeparator } from "~/components/ui";
 import { DrawerToggleButton } from "~/components/ui/DrawerToggleButton";
 import { useNetworksContext } from "~/contexts/NetworksContext";
 import { usePermissionContext } from "~/contexts/PermissionContext";
@@ -20,6 +18,7 @@ import { NetworkCreateScreen } from "~/screens/NetworkCreateScreen";
 import { NetworkInviteScreen } from "~/screens/NetworkInviteScreen";
 import { NetworkJoinScreen } from "~/screens/NetworkJoinScreen";
 import MainTabNavigator, { type MainTabParamList } from "./MainTabNavigator";
+import { NetworkSettingsNavigator } from "./NetworkSettingsNavigator";
 
 export type DrawerParamList = {
   Main: NavigatorScreenParams<MainTabParamList>;
@@ -27,18 +26,13 @@ export type DrawerParamList = {
   NetworkJoin: undefined;
   NetworkJoinScan: undefined;
   NetworkInvite: undefined;
+  NetworkSettings: { network: { id: string; name: string } };
 };
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
 
 function CustomDrawerContent(props: DrawerContentComponentProps) {
-  const {
-    networks,
-    activeNetworks,
-    isNetworkOwner,
-    toggleNetwork,
-    toggleAllNetworks,
-  } = useNetworksContext();
+  const { networks, isNetworkOwner } = useNetworksContext();
   const { ac } = usePermissionContext();
 
   const focusedRoute = props.state.routeNames[props.state.index];
@@ -49,6 +43,17 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
           props.state.routes[props.state.index]?.state?.index || 0
         ]
       : undefined;
+
+  const focusedNetworkId = (() => {
+    if (focusedRoute !== "NetworkSettings") return;
+    const params = props.state.routes[props.state.index]?.params;
+    if (params === undefined) return;
+    if (!("network" in params)) return;
+    const network = params.network;
+    if (typeof network !== "object" || network === null) return;
+    if (!("id" in network)) return;
+    return network.id as string;
+  })();
 
   return (
     <DrawerContentScrollView {...props}>
@@ -69,6 +74,51 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
         }}
       />
       <DrawerSeparator />
+      {!!networks.length && (
+        <>
+          {/* <Text className="m-3 mb-1">Filter Networks</Text>
+          <DrawerCheckboxItem
+            key="all"
+            label="All Networks"
+            checked={
+              networks.length === activeNetworks.length
+                ? true
+                : activeNetworks.length === 0
+                ? false
+                : "intermediate"
+            }
+            onPress={() => toggleAllNetworks()}
+          />
+          <View className="ml-6"> */}
+          {networks.map(({ id, name }) => (
+            /* <DrawerCheckboxItem
+                key={id}
+                label={name}
+                checked={active}
+                onPress={() => {
+                  props.navigation.navigate("NetworkSettings", {
+                    networkId: id,
+                  });
+                  toggleNetwork(id);
+                }}
+              /> */
+            <DrawerItem
+              key={id}
+              label={name}
+              focused={
+                focusedRoute === "NetworkSettings" && focusedNetworkId === id
+              }
+              onPress={() => {
+                props.navigation.navigate("NetworkSettings", {
+                  network: { id, name },
+                });
+              }}
+            />
+          ))}
+          {/* </View> */}
+          <DrawerSeparator />
+        </>
+      )}
       <DrawerItem
         label={"Join a Network"}
         focused={focusedRoute === "NetworkJoin"}
@@ -93,34 +143,6 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
             props.navigation.navigate("NetworkCreate");
           }}
         />
-      )}
-      <DrawerSeparator />
-      {!!networks.length && (
-        <>
-          <Text className="m-3 mb-1">Filter Networks</Text>
-          <DrawerCheckboxItem
-            key="all"
-            label="All Networks"
-            checked={
-              networks.length === activeNetworks.length
-                ? true
-                : activeNetworks.length === 0
-                ? false
-                : "intermediate"
-            }
-            onPress={() => toggleAllNetworks()}
-          />
-          <View className="ml-6">
-            {networks.map(({ id, name, active }) => (
-              <DrawerCheckboxItem
-                key={id}
-                label={name}
-                checked={active}
-                onPress={() => toggleNetwork(id)}
-              />
-            ))}
-          </View>
-        </>
       )}
     </DrawerContentScrollView>
   );
@@ -165,6 +187,13 @@ export const DrawerNavigator = () => {
         name="NetworkJoin"
         component={NetworkJoinScreen}
         options={{ title: "" }}
+      />
+      <Drawer.Screen
+        name="NetworkSettings"
+        component={NetworkSettingsNavigator}
+        options={({ route }) => ({
+          title: route.params?.network?.name || "",
+        })}
       />
     </Drawer.Navigator>
   );

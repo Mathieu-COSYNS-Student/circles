@@ -4,8 +4,7 @@ import { type NativeStackScreenProps } from "@react-navigation/native-stack";
 import { trpc } from "~/utils/trpc";
 import { CircleSettings } from "~/components/CircleSettings";
 import { PrivateMessageSettings } from "~/components/PrivateMessageSettings";
-import { ScreenContentContainer, Text } from "~/components/ui";
-import { Avatar } from "~/components/ui/Avatar";
+import { Avatar, ScreenContentContainer, Text } from "~/components/ui";
 import { type RootStackParamList } from "~/navigators/RootNavigator";
 
 type ChatSettingsScreenProps = NativeStackScreenProps<

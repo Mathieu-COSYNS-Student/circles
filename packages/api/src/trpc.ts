@@ -34,6 +34,9 @@ const isAuthed = t.middleware(({ ctx, next }) => {
         grants: async ({ user, context, permission }) => {
           const allowed = await ctx.prisma.networkMemberToNetworkRole.findFirst(
             {
+              select: {
+                roleId: true,
+              },
               where: permissionFilter({
                 userId: user,
                 networkId: context,

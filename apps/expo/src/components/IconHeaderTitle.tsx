@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { HeaderTitle, type HeaderTitleProps } from "@react-navigation/elements";
 
-import { Avatar } from "./ui/Avatar";
+import { Avatar } from "~/components/ui";
 
 export const renderIconHeaderTitle = ({
   name,

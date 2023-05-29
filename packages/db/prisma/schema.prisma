@@ -90,6 +90,8 @@ model NetworkPermission {
 enum Resource {
     NETWORK_INVITE
     NETWORK_CIRCLES
+    NETWORK_MEMBERS
+    NETWORK_ROLES
 }
 
 enum Action {
