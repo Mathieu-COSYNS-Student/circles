@@ -1,30 +1,33 @@
-import { FlatList, View, type FlatListProps } from "react-native";
+import { FlatList, type FlatListProps } from "react-native";
 
-import ActivityIndicator from "./ActivityIndicator";
+import { FullLoading } from "./FullLoading";
 import RefreshControl from "./RefreshControl";
+import { Text } from "./Text";
 
 export type DataFlatListProps<Item> = {
   isLoading?: boolean;
   isRefreshing?: boolean;
+  emptyText?: string;
 } & FlatListProps<Item>;
 
 export const DataFlatList = <Item,>({
   isLoading = false,
   isRefreshing = false,
   onRefresh,
+  emptyText,
   ...props
 }: DataFlatListProps<Item>) => {
-  if (isLoading)
-    return (
-      <View className="flex-1 items-center justify-center">
-        <ActivityIndicator size="large" />
-      </View>
-    );
+  if (isLoading) return <FullLoading />;
   return (
     <FlatList
       refreshControl={
         onRefresh ? (
           <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+        ) : undefined
+      }
+      ListEmptyComponent={
+        emptyText ? (
+          <Text className="mt-8 text-center">{emptyText}</Text>
         ) : undefined
       }
       {...props}

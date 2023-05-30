@@ -18,6 +18,7 @@ export type StatefulSimpleNetworks = {
 };
 
 type NetworksContextType = {
+  isLoading?: boolean;
   networks: (SimpleNetwork & { active: boolean })[];
   activeNetworks: SimpleNetwork[];
   isNetworkOwner: boolean;
@@ -109,6 +110,7 @@ export const NetworksContextProvider = ({
   return (
     <Provider
       value={{
+        isLoading: networksQuery.isLoading,
         networks,
         activeNetworks,
         isNetworkOwner,

@@ -18,6 +18,7 @@ import {
   Form,
   OrSeparator,
   ScreenContentContainer,
+  Text,
   TextInput,
 } from "~/components/ui";
 import { useBarCodeScannerPermission } from "~/hooks/useBarCodeScannerPermission";
@@ -67,6 +68,11 @@ export const NetworkJoinScreen = ({ navigation }: NetworkJoinScreenProps) => {
 
   return (
     <ScreenContentContainer hero="Join a Network">
+      <Text className="mb-6">
+        To join a network, you can either enter a network name and an invitation
+        code shared with you, or scan a QRCode on the device of the person who
+        wishes to invite you.
+      </Text>
       <Form
         initialValues={initialValues}
         onSubmit={onSubmit}

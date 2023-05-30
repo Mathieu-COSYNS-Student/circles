@@ -8,7 +8,7 @@ import { type ChatListObject, type Role } from "@acme/schema";
 import { HeaderButtons } from "~/components/ui";
 import { useSafeAreaStyle } from "~/hooks/useSafeAreaStyle";
 import AccountScreen from "~/screens/AccountScreen";
-import ChangePasswordScreen from "~/screens/ChangePasswordScreen";
+import { ChangePasswordScreen } from "~/screens/ChangePasswordScreen";
 import { ChatScreen } from "~/screens/ChatScreen";
 import { ChatSettingsScreen } from "~/screens/ChatSettingsScreen";
 import CreateCircleScreen from "~/screens/CreateCircleScreen";
@@ -95,6 +95,7 @@ export const RootNavigator = () => {
           <Stack.Screen
             name="ChangePassword"
             component={ChangePasswordScreen}
+            options={{ title: "Change Password" }}
           />
           <Stack.Screen
             name="NetworkJoinScan"

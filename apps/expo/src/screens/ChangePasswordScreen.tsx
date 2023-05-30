@@ -22,9 +22,7 @@ type AccountScreenProps = NativeStackScreenProps<
   "ChangePassword"
 >;
 
-export default function ChangePasswordScreen({
-  navigation,
-}: AccountScreenProps) {
+export const ChangePasswordScreen = ({ navigation }: AccountScreenProps) => {
   const { user } = useUser();
 
   if (!user) return <FullLoading />;
@@ -78,7 +76,7 @@ export default function ChangePasswordScreen({
               {...formikToInputProps(formik, "currentPassword")}
             />
             <TextInput
-              containerClassName="mt-2"
+              containerClassName="mt-4"
               type="password"
               label="New password"
               placeholder="Your new Password"
@@ -86,7 +84,7 @@ export default function ChangePasswordScreen({
               {...formikToInputProps(formik, "newPassword")}
             />
             <TextInput
-              containerClassName="mt-2"
+              containerClassName="mt-4"
               type="password"
               label="Confirm new password"
               placeholder="Your new Password"
@@ -98,4 +96,4 @@ export default function ChangePasswordScreen({
       </Form>
     </ScreenContentContainer>
   );
-}
+};

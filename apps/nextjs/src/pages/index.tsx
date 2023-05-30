@@ -6,11 +6,11 @@ const IndexPage = () => {
       <section className="hero py-8 before:bg-brand-600 before:dark:bg-brand-900 lg:py-16">
         <div>
           <h2 className="text-6xl font-semibold">
-            Stay connected with everyone around you
+            Stay connected and organized with Circles
           </h2>
           <p className="my-4 text-xl">
             Circles helps you to stay in touch with your friends, family and
-            caregivers. With Circles you can ask for help around you, manage
+            caregivers. With Circles you can chat, ask for help, manage
             appointments and improve the work of your caregivers.
           </p>
           <a

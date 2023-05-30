@@ -80,6 +80,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
               {...formikToInputProps(formik, "firstName")}
             />
             <TextInput
+              containerClassName="mt-4"
               label="Last name"
               placeholder="Your last name"
               iconStart="person-outline"
@@ -88,6 +89,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
               {...formikToInputProps(formik, "lastName")}
             />
             <TextInput
+              containerClassName="mt-4"
               label="Email"
               placeholder="Your Email"
               iconStart="mail-outline"

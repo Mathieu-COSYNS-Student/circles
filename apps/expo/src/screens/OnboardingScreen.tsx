@@ -32,7 +32,11 @@ const OnboardingScreen = ({ navigation }: OnboardingScreenProps) => {
     >
       <View>
         <Text type="heading1">Stay connected and organized with Circles</Text>
-        <Text className="mb-3 mt-1">Sign in with an account</Text>
+        <Text className="mb-3 mt-1">
+          Circles helps you to stay in touch with your friends, family and
+          caregivers. With Circles you can chat, ask for help, manage
+          appointments and improve the work of your caregivers.
+        </Text>
       </View>
       <Button
         title="Get Started"

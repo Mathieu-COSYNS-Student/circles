@@ -89,11 +89,11 @@ export const NetworkInviteScreen = ({}: NetworkInviteScreenProps) => {
             selectedNetworkId,
           )}" ` +
           "in the app Circles. It's an app to exchange messages and help. " +
-          "To do so you need to have an account on the app then go to Add a network " +
-          `and enter ${getNetworkName(
+          "To do so you need to have an account on the app then go to Join a network " +
+          `and enter "${getNetworkName(
             selectedNetworkId,
-          )} as the network name ` +
-          `and ${networkInviteForSelectedNetworkQuery.data.code} as the network unique code.`,
+          )}" as the network name ` +
+          `and "${networkInviteForSelectedNetworkQuery.data.code}" as the network unique code.`,
       });
       if (result.action === Share.sharedAction) {
         const id = networkInviteForSelectedNetworkQuery.data.id;
