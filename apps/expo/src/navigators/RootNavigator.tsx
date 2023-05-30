@@ -100,6 +100,7 @@ export const RootNavigator = () => {
           <Stack.Screen
             name="NetworkJoinScan"
             component={NetworkJoinScanScreen}
+            options={{ title: "Join a Network" }}
           />
           <Stack.Screen name="Permissions" component={PermissionsScreen} />
         </>
