@@ -51,6 +51,9 @@ const theme = {
     activityIndicatorColor: tailwindColors.brand[700],
     error: tailwindColors.red[500],
     valid: tailwindColors.green[500],
+    switchTrack: tailwindColors.gray[300],
+    switchThumbOff: tailwindColors.gray[200],
+    switchThumbOn: tailwindColors.brand[500],
   },
   dark: {
     primary: tailwindColors.brand[600],
@@ -80,6 +83,9 @@ const theme = {
     activityIndicatorColor: tailwindColors.brand[700],
     error: tailwindColors.red[500],
     valid: tailwindColors.green[500],
+    switchTrack: tailwindColors.zinc[700],
+    switchThumbOff: tailwindColors.zinc[500],
+    switchThumbOn: tailwindColors.brand[400],
   },
 };
 

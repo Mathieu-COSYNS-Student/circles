@@ -5,15 +5,34 @@ import {
 } from "react-native";
 
 export type TextProps = DefaultTextProps & {
-  type?: "normal" | "heading1" | "heading2" | "heading3" | "heading4" | "link";
+  type?:
+    | "normal"
+    | "brand"
+    | "heading1"
+    | "heading2"
+    | "heading3"
+    | "heading4"
+    | "link";
+  faded?: boolean;
 };
 
 export const Text: FC<TextProps> = ({
   className,
   type = "normal",
+  faded = false,
   ...props
 }) => {
+  if (faded)
+    className = `text-gray-500 dark:text-zinc-400 ${
+      className ? className : ""
+    }`;
+  else
+    className = `text-gray-900 dark:text-white ${className ? className : ""}`;
+
   switch (type) {
+    case "brand":
+      className += " text-brand-800 dark:text-brand-300";
+      break;
     case "heading1":
       className += " text-4xl font-extrabold";
       break;
@@ -31,12 +50,7 @@ export const Text: FC<TextProps> = ({
         " font-medium text-brand-600 dark:text-brand-400 hover:underline";
       break;
   }
-  return (
-    <DefaultText
-      className={`text-gray-900 dark:text-white ${className}`}
-      {...props}
-    />
-  );
+  return <DefaultText className={className} {...props} />;
 };
 
 export default Text;

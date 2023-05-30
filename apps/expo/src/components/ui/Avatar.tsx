@@ -64,7 +64,7 @@ export const Avatar: FC<AvatarProps> = ({
         <Text
           numberOfLines={1}
           adjustsFontSizeToFit={true}
-          style={{ fontSize: 1000 }}
+          style={{ fontSize: 1000, color }}
           className="p-[15%]"
         >
           {textTo2Letters(alt)}

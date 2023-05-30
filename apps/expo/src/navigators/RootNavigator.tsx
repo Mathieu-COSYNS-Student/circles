@@ -3,7 +3,7 @@ import { type NavigatorScreenParams } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Item } from "react-navigation-header-buttons";
 
-import { type ChatListObject } from "@acme/schema";
+import { type ChatListObject, type Role } from "@acme/schema";
 
 import { HeaderButtons } from "~/components/ui";
 import { useSafeAreaStyle } from "~/hooks/useSafeAreaStyle";
@@ -15,6 +15,7 @@ import CreateCircleScreen from "~/screens/CreateCircleScreen";
 import ForgotPasswordScreen from "~/screens/ForgotPasswordScreen";
 import { NetworkJoinScanScreen } from "~/screens/NetworkJoinScanScreen";
 import OnboardingScreen from "~/screens/OnboardingScreen";
+import { PermissionsScreen } from "~/screens/PermissionsScreen";
 import { ResetPasswordCodeScreen } from "~/screens/ResetPasswordCodeScreen";
 import ResetPasswordScreen from "~/screens/ResetPasswordScreen";
 import SignInScreen from "~/screens/SignInScreen";
@@ -41,6 +42,7 @@ export type RootStackParamList = {
   DrawerNavigator: NavigatorScreenParams<DrawerParamList>;
   ChangePassword: undefined;
   NetworkJoinScan: undefined;
+  Permissions: { role: Role; networkName: string };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -98,6 +100,7 @@ export const RootNavigator = () => {
             name="NetworkJoinScan"
             component={NetworkJoinScanScreen}
           />
+          <Stack.Screen name="Permissions" component={PermissionsScreen} />
         </>
       ) : (
         <>
