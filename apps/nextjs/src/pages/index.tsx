@@ -27,8 +27,8 @@ const IndexPage = () => {
         </div>
         <div className="relative w-full">
           <Image
-            className="drop-shadow-[0_16px_25px_rgba(0,0,0,0.3)] filter dark:drop-shadow-[0_16px_25px_rgba(255,255,255,0.3)]"
-            src="/mobile_template_empty.svg"
+            className="object-contain drop-shadow-[0_16px_25px_rgba(0,0,0,0.3)] filter dark:drop-shadow-[0_16px_25px_rgba(255,255,255,0.1)]"
+            src="/circles.png"
             alt="circle-logo"
             fill={true}
           />
