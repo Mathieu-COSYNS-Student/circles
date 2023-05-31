@@ -11,7 +11,7 @@ const IndexPage = () => {
           <p className="my-4 text-xl">
             Circles helps you to stay in touch with your friends, family and
             caregivers. With Circles you can chat, ask for help, manage
-            appointments and improve the work of your caregivers.
+            appointments and easily care for your loved ones.
           </p>
           <a
             href="#"

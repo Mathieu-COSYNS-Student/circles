@@ -35,7 +35,7 @@ const OnboardingScreen = ({ navigation }: OnboardingScreenProps) => {
         <Text className="mb-3 mt-1">
           Circles helps you to stay in touch with your friends, family and
           caregivers. With Circles you can chat, ask for help, manage
-          appointments and improve the work of your caregivers.
+          appointments and easily care for your loved ones.
         </Text>
       </View>
       <Button
