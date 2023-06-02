@@ -70,17 +70,21 @@ describe("circles create test", () => {
       createInnerTRPCContext({ prisma: prismaMock, auth: authMock }),
     );
 
-    prismaMock.networkMember.findFirst.mockResolvedValue({
+    const networkMember = {
       id: "1",
       networkId: "1",
       userId: authMock.userId,
-      status: "JOINED",
-    });
+      status: "JOINED" as const,
+    };
+
+    prismaMock.networkMember.findFirst.mockResolvedValue(networkMember);
     prismaMock.circle.create.mockResolvedValue(mockCircle);
+    prismaMock.networkMember.findMany.mockResolvedValue([networkMember]);
 
     return await caller.circles.create({
       name: mockCircle.name,
       networkId: "test-network-id_00000001",
+      members: [],
     });
   };
 
