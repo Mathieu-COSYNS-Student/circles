@@ -121,6 +121,7 @@ model CircleMember {
     status          CircleMemberStatus
 
     @@unique([networkMemberId, circleId])
+    @@index([circleId])
 }
 
 enum CircleMemberStatus {

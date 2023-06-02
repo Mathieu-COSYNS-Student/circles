@@ -22,3 +22,4 @@ export * from "./Avatar";
 export * from "./DataFlatList";
 export * from "./ListItem";
 export * from "./Switch";
+export * from "./Checkbox";

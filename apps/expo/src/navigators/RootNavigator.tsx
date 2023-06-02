@@ -11,6 +11,7 @@ import AccountScreen from "~/screens/AccountScreen";
 import { ChangePasswordScreen } from "~/screens/ChangePasswordScreen";
 import { ChatScreen } from "~/screens/ChatScreen";
 import { ChatSettingsScreen } from "~/screens/ChatSettingsScreen";
+import { CircleMembersScreen } from "~/screens/CircleMembersScreen";
 import CreateCircleScreen from "~/screens/CreateCircleScreen";
 import ForgotPasswordScreen from "~/screens/ForgotPasswordScreen";
 import { NetworkJoinScanScreen } from "~/screens/NetworkJoinScanScreen";
@@ -37,6 +38,7 @@ export type RootStackParamList = {
   CreateCircle: undefined;
   Chat: ChatListObject;
   ChatSettings: ChatListObject;
+  CircleMembers: { circleId: string; circleName: string };
   Test: undefined;
   Account: undefined;
   DrawerNavigator: NavigatorScreenParams<DrawerParamList>;
@@ -66,31 +68,36 @@ export const RootNavigator = () => {
             component={CreateCircleScreen}
             options={{ title: "Create a new circle" }}
           />
-          <Stack.Group>
-            <Stack.Screen
-              name="Chat"
-              component={ChatScreen}
-              options={({ route }) => ({
-                headerBackTitleVisible: false,
-                headerRight: () => (
-                  <HeaderButtons fixStack>
-                    <Item
-                      title={`${route.params.name} settings`}
-                      iconName="settings-outline"
-                      onPress={() =>
-                        navigation.navigate("ChatSettings", route.params)
-                      }
-                    />
-                  </HeaderButtons>
-                ),
-              })}
-            />
-            <Stack.Screen
-              name="ChatSettings"
-              component={ChatSettingsScreen}
-              options={{ title: "" }}
-            />
-          </Stack.Group>
+          <Stack.Screen
+            name="Chat"
+            component={ChatScreen}
+            options={({ route }) => ({
+              headerBackTitleVisible: false,
+              headerRight: () => (
+                <HeaderButtons fixStack>
+                  <Item
+                    title={`${route.params.name} settings`}
+                    iconName="settings-outline"
+                    onPress={() =>
+                      navigation.navigate("ChatSettings", route.params)
+                    }
+                  />
+                </HeaderButtons>
+              ),
+            })}
+          />
+          <Stack.Screen
+            name="ChatSettings"
+            component={ChatSettingsScreen}
+            options={{ title: "" }}
+          />
+          <Stack.Screen
+            name="CircleMembers"
+            component={CircleMembersScreen}
+            options={({ route }) => ({
+              title: `${route.params.circleName} members`,
+            })}
+          />
           <Stack.Screen name="Account" component={AccountScreen} />
           <Stack.Screen
             name="ChangePassword"

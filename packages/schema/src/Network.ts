@@ -36,7 +36,7 @@ export const getMemberOutputSchema = z.object({
   id: z.string(),
   firstName: z.string(),
   lastName: z.string(),
-  profileImageUrl: z.string().or(z.null()).optional(),
+  profileImageUrl: z.string().optional(),
   roles: z.array(
     roleSchema.pick({
       id: true,

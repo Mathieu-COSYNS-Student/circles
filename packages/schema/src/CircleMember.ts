@@ -3,7 +3,7 @@ import { z } from "zod";
 import { userSchema } from "./User";
 
 export const circleMemberSchema = z.object({
-  user: userSchema.pick({ id: true }),
+  user: userSchema,
   status: z.enum(["INVITED", "JOINED"]),
   role: z.enum(["USER", "ADMIN"]),
 });

@@ -4,6 +4,9 @@ import { addPasswordMismatch, passwordSchema } from "./Password";
 
 export const userSchema = z.object({
   id: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  profileImageUrl: z.string(),
 });
 
 export const signInSchema = z.object({

@@ -139,22 +139,20 @@ export const networksRouter = router({
 
       const users = await getUsers(members.map((member) => member.userId));
 
-      return members.map((member) => {
-        const user = users[member.userId];
-        if (user === undefined) {
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: `Can not find user with id ${member.userId}`,
-          });
-        }
-        return {
-          id: member.userId,
-          ...user,
-          roles: member.roles.map(({ role }) => ({
-            ...role,
-          })),
-        };
-      });
+      return members
+        .map((member) => {
+          const user = users[member.userId];
+          return {
+            ...user,
+            roles: member.roles.map(({ role }) => ({
+              ...role,
+            })),
+          };
+        })
+        .filter(
+          (member): member is z.infer<typeof getMembersOutputSchema.element> =>
+            !!member.id,
+        );
     }),
   getRoles: protectedProcedure
     .input(getRolesInputSchema)

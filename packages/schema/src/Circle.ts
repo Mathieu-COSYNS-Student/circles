@@ -1,14 +1,11 @@
 import { z } from "zod";
 
-import { circleMemberSchema } from "./CircleMember";
-
 export const circleSchema = z.object({
   id: z.string().min(24).max(24),
   name: z.string().min(2, "name must contain at least 2 character"),
   pictureUrl: z.string().url().or(z.null()),
   networkId: z.string(),
   chatId: z.string(),
-  members: z.array(circleMemberSchema).optional(),
 });
 
 export const getCircleSchema = circleSchema
@@ -29,7 +26,9 @@ export const getCircleSchema = circleSchema
 export const createCircleSchema = circleSchema.pick({
   name: true,
   networkId: true,
-});
+}).merge(z.object({
+  members: z.array(z.string()),
+}));
 
 export const updateCircleSchema = circleSchema
   .pick({
@@ -42,6 +41,15 @@ export const updateCircleSchema = circleSchema
 
 export const deleteCircleSchema = circleSchema.pick({
   id: true,
+});
+
+export const getCircleMembersSchema = z.object({
+  id: z.string(),
+});
+
+export const addOrRemoveCircleMembersSchema = z.object({
+  id: z.string(),
+  members: z.array(z.string()),
 });
 
 export type Circle = z.infer<typeof circleSchema>;
