@@ -85,8 +85,12 @@ export const circlesRouter = router({
         });
       }
 
-      const chatRoles: ChatRole = {};
-      chatRoles[ctx.auth.userId] = "writer";
+      const chatRoles: ChatRole = {
+        [ctx.auth.userId]: "writer",
+        ...Object.fromEntries(
+          input.members.map((userId) => [userId, "writer"]),
+        ),
+      };
       const chatFirebaseDocument = await ctx
         .firestore()
         .collection("chats")
