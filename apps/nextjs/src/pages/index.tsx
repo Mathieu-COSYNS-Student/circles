@@ -14,13 +14,14 @@ const IndexPage = () => {
             appointments and easily care for your loved ones.
           </p>
           <a
-            href="#"
             className={`my-6 inline-block rounded-lg border border-white bg-white px-4
             py-2 text-center text-sm font-medium text-brand-700
             hover:border-brand-800 hover:bg-brand-800 hover:text-white
             focus:outline-none focus:ring-4 focus:ring-brand-300
             dark:border-white dark:text-brand-600 dark:hover:border-brand-700 dark:hover:bg-brand-700
             dark:focus:ring-brand-400`}
+            href="https://github.com/Mathieu-COSYNS-Student/circles/releases"
+            target="_blank"
           >
             Download Circles
           </a>
